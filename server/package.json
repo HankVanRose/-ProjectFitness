@@ -10,6 +10,12 @@
     "db:seedAll": "npx sequelize db:seed:all",
     "db:drop": "npx sequelize db:drop",
     "db:remigrate": "npx sequelize db:migrate:undo:all && npx sequelize db:migrate && npx sequelize db:seed:all",
+    "db:user": "npx sequelize-cli model:generate --name User --attributes username:string,email:string,password:string",
+    "db:exercise": "npx sequelize-cli model:generate --name Exercise --attributes name:string,description:string,muscleGroup:string,type:string,equipment:string,points:integer,calories:string",
+    "db:plan": "npx sequelize-cli model:generate --name Plan --attributes name:string,image:string,description:string,equipment:string,points:integer,calories:string",
+    "db:planExercise": "npx sequelize-cli model:generate --name PlanExercise --attributes planId:integer,exerciseId:integer",
+    "db:session": "npx sequelize-cli model:generate --name Session --attributes planId:integer,userId:integer",
+
     "dev": "nodemon --env-file=.env ./src/app.js --ext js,jsx"
   },
   "keywords": [],
