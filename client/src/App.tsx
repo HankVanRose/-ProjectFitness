@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom"
 import NavBar from "./components/NavBar"
 import SignInPage from "./components/SignInPage/SignInPage"
 import SignUpPage from "./components/SignUpPage/SignUpPage"
+import HomePage from "./components/HomePage"
 
  
 
