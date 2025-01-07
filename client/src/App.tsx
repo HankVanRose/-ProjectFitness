@@ -1,3 +1,11 @@
+ 
+import './App.css';
+ 
+ 
+import PersonalPage from './components/PersonalPage/PersonalPage';
+ 
+ 
+ 
 import { Route, Routes } from 'react-router-dom';
  
  
@@ -11,6 +19,7 @@ import SignInPage from './components/SignInPage/SignInPage';
 import SignUpPage from './components/SignUpPage/SignUpPage';
 import HomePage from './components/HomePage';
 import PlansBlock from './components/plansBlock/PlansBlock';
+ 
  
 
 const fitnessPlans = [
@@ -57,6 +66,8 @@ const fitnessPlans = [
 ];
 function App() {
   return (
+ 
+ 
     <>
  
       
@@ -68,10 +79,12 @@ function App() {
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/card" element={<PlansBlock plans={fitnessPlans} />} />
+          <Route path='/account' element={<PersonalPage />} />
           </Route>
       </Routes>
  
     </>
+ 
   );
 }
 
