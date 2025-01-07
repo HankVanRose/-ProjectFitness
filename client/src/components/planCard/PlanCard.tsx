@@ -14,7 +14,7 @@ function PlanCard({
   const navigate = useNavigate();
 
   const handleNavigate = useCallback(() => {
-    navigate(`/plan/${id}`);
+    navigate(`/plans/${id}`);
   }, [navigate, id]);
 
   return (
