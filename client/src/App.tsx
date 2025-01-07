@@ -19,6 +19,7 @@ import ExercisePage from './components/ExercisePage/ExercisePage';
 import { useEffect } from 'react';
 import { useAppDispatch } from './store/hooks/hooks';
 import { fetchUserCheck } from './store/thunkActions';
+import ExerciseCard from './components/ExercisePage/ExerciseCard';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -36,6 +37,7 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/card" element={<PlansBlock />} />
           <Route path="/exercises" element={<ExercisePage />} />
+          <Route path="/exercises/:id" element={<ExerciseCard />} />
           <Route path="/account" element={<PersonalPage />} />
           <Route path="/plans/:id" element={<PlanPage />} />
 

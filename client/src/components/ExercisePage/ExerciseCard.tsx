@@ -4,12 +4,15 @@ import { ExerciseType } from '../../types';
 import { useNavigate } from 'react-router-dom';
 
 export default function ExerciseCard({
+  image,
   id,
   name,
   description,
   equipment,
-
-  image,
+  muscleGroup,
+  type,
+  points,
+  calories,
 }: ExerciseType) {
   const navigate = useNavigate();
 
@@ -24,6 +27,7 @@ export default function ExerciseCard({
           margin: '10px',
           backgroundImage: `url(${image})`,
           backgroundColor: 'black',
+          color: 'white',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           height: '100%',
@@ -38,7 +42,11 @@ export default function ExerciseCard({
           </Card.Text>
 
           <Card.Text>Необходимое снаряжение: {equipment}</Card.Text>
+          <Card.Text> {muscleGroup}</Card.Text>
           <Card.Text>{description}</Card.Text>
+          <Card.Text>{type}</Card.Text>
+          <Card.Text>{points}</Card.Text>
+          <Card.Text>{calories}</Card.Text>
         </Card.Body>
       </Card>
     </>
