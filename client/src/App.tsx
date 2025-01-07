@@ -11,6 +11,7 @@ import SignInPage from './components/SignInPage/SignInPage';
 import SignUpPage from './components/SignUpPage/SignUpPage';
 import HomePage from './components/HomePage';
 import PlansBlock from './components/plansBlock/PlansBlock';
+import PlanPage from './components/planPage/PlanPage';
 
 const fitnessPlans = [
   {
@@ -66,13 +67,16 @@ function App() {
   return (
     <>
       <Routes>
+ 
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/card" element={<PlansBlock plans={fitnessPlans} />} />
           <Route path="/account" element={<PersonalPage />} />
+                <Route path="/plans/:id" element={<PlanPage  />} />
         </Route>
+ 
       </Routes>
     </>
   );
