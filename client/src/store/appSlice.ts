@@ -38,8 +38,8 @@ const appSlice = createSlice({
           state.error = action.payload.error;
           state.loading = false;
         } else {
-          if (action.payload.user) {
-            state.user = action.payload.user;
+          if (action.payload) {
+            state.user = action.payload;
             state.loading = false;
             state.error = null;
           }
@@ -57,8 +57,8 @@ const appSlice = createSlice({
           state.error = action.payload.error;
           state.loading = false;
         } else {
-          if (action.payload.user) {
-            state.user = action.payload.user;
+          if (action.payload) {
+            state.user = action.payload;
             state.loading = false;
             state.error = null;
           }

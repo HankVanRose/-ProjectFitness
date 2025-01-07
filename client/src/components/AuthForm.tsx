@@ -7,8 +7,8 @@ import {
   import styles from './Auth.module.css'; // Импортируем стили
   import { useNavigate } from "react-router-dom";
   import {  Form, Toast } from "react-bootstrap";
-  import { fetchUserSignin, fetchUserSignup } from '../../redux/thunkActions';
-  import { useAppDispatch } from '../../redux/hooks';
+  import { fetchUserSignin, fetchUserSignup } from '../store/thunkActions';
+  import { useAppDispatch } from '../store/hooks/hooks';
   
   type AuthFormProps = {
     title: string;

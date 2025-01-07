@@ -3,7 +3,7 @@ import appSlice from './appSlice';
 
 const storeOptions = {
   reducer: {
-    user: appSlice,
+    appSlice,
   },
 };
 
