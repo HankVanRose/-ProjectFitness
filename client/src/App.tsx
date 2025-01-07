@@ -1,9 +1,17 @@
 import { Route, Routes } from 'react-router-dom';
+ 
+ 
+ 
+ 
+import Layout from './components/Layout';
+ 
+ 
 import NavBar from './components/NavBar';
 import SignInPage from './components/SignInPage/SignInPage';
 import SignUpPage from './components/SignUpPage/SignUpPage';
 import HomePage from './components/HomePage';
 import PlansBlock from './components/plansBlock/PlansBlock';
+ 
 
 const fitnessPlans = [
   {
@@ -50,13 +58,19 @@ const fitnessPlans = [
 function App() {
   return (
     <>
-      <NavBar />
+ 
+      
+ 
+      
       <Routes>
+        <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/card" element={<PlansBlock plans={fitnessPlans} />} />
+          </Route>
       </Routes>
+ 
     </>
   );
 }
