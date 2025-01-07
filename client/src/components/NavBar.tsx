@@ -26,7 +26,7 @@ export default function NavBar() {
       style={{ backgroundColor: '#16a34a' }}
     >
       <Container>
-        <Navbar.Brand href="#home" className="fw-bold fs-4">
+        <Navbar.Brand href="/" className="fw-bold fs-4">
           BE FIT
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -45,9 +45,7 @@ export default function NavBar() {
           ) : (
             <>
               <Nav className="me-auto">
-                <Nav.Link as={RouterNavLink} to="signin">
-                  ПРИВЕТ, {user?.username.toUpperCase()}
-                </Nav.Link>
+                
                 <Nav.Link as={RouterNavLink} to="/exercises">
                   УПРАЖНЕНИЯ
                 </Nav.Link>

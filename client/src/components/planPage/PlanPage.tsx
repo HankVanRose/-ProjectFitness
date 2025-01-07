@@ -13,7 +13,7 @@ export default function PlanPage() {
     const fetchPlan = async () => {
       try {
         const response = await axiosInstance.get(
-          `/${import.meta.env.VITE_API}/plans/${id}`
+          `${import.meta.env.VITE_API}/plans/${id}`
         );
         setPlan(response.data);
       } catch (error) {
