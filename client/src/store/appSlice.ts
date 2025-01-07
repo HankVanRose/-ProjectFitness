@@ -1,20 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Exercises, Plans, User } from '../types';
+import { ExercisesType, PlansType, UserType } from '../types';
+import { fetchUserCheck, fetchUserLogout, fetchUserSignin, fetchUserSignup } from './thunkActions';
 // import { fetchAddTask, fetchDeleteTask, fetchTasks } from './thunkActions';
 
 type InitialState = {
-  user: User;
-  exercises: Exercises;
-  plans: Plans;
-  isLoading: boolean;
-  error: string;
+  user: UserType;
+  exercises: ExercisesType;
+  plans: PlansType;
+  loading: boolean;
+  error: string | null;
 };
 
 const initialState: InitialState = {
-  user: {} as User,
-  exercises: [],
-  plans: [],
-  isLoading: false,
+  user: {} as UserType,
+  exercises: [] as ExercisesType,
+  plans: [] as PlansType,
+  loading: false,
   error: '',
 };
 
@@ -25,22 +26,52 @@ const appSlice = createSlice({
    
   },
   extraReducers: (builder) => {
-    // builder.addCase(fetchTasks.pending, (state) => {
-    //   state.isLoading = true;
-    // });
-    // builder.addCase(fetchTasks.rejected, (state) => {
-    //   state.error = 'Не удалось получить все записи';
-    // });
-    // builder.addCase(fetchTasks.fulfilled, (state, action) => {
-    //   state.tasks = action.payload;
-    //   state.isLoading = false;
-    // });
-    // builder.addCase(fetchDeleteTask.fulfilled, (state, action) => {
-    //   state.tasks = state.tasks.filter((task) => task.id !== action.payload);
-    // });
-    // builder.addCase(fetchAddTask.fulfilled, (state, action) => {
-    //   state.tasks.push(action.payload);
-    // });
+    builder
+    .addCase(fetchUserSignup.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(
+      fetchUserSignup.fulfilled,
+      (state, action) => {
+        if ('error' in action.payload && action.payload.error) {
+          state.error = action.payload.error;
+          state.loading = false;
+        } else {
+          if (action.payload.user) {
+            state.user = action.payload.user;
+            state.loading = false;
+            state.error = null;
+          }
+        }
+      }
+    )
+    .addCase(fetchUserSignin.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(
+      fetchUserSignin.fulfilled,
+      (state, action) => {
+        if ('error' in action.payload && action.payload.error) {
+          state.error = action.payload.error;
+          state.loading = false;
+        } else {
+          if (action.payload.user) {
+            state.user = action.payload.user;
+            state.loading = false;
+            state.error = null;
+          }
+        }
+      }
+    )
+    .addCase(fetchUserLogout.fulfilled, (state) => {
+      state.user = initialState.user;
+    })
+    .addCase(fetchUserCheck.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+    });
   },
 });
 

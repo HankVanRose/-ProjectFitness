@@ -1,30 +1,40 @@
-export type User = {
+export type UserType = {
   id: number;
   username: string;
   email: string;
-  avatar: string;
-  weight: number;
-  height: number;
+  avatar?: string;
+  weight?: number;
+  height?: number;
+  password?: string;
+  gender?: string;
+  points?: number;
+  age?: number;
 };
 
-export type Exercise = {
+export type ExerciseType = {
   id: number;
   name: string;
   description: string;
-  userId: number;
-  createdAt: Date;
-  updatedAt: Date;
+  muscleGroup: string;
+  calories: string;
+  type: string;
+  points: number;
+  equipment: string;
 };
 
-export type Exercises = Exercise[];
+export type ExercisesType = ExerciseType[];
 
-export type Plan = {
+export type PlanType = {
   id: number;
   name: string;
   description: string;
-  userId: number;
-  createdAt: Date;
-  updatedAt: Date;
+  equipment: string;
+  difficulty: string;
+  image: string;
 };
 
-export type Plans = Plan[];
+export type UserResponseType = {
+  user: UserType;
+  accessToken: string;
+};
+export type PlansType = PlanType[];
