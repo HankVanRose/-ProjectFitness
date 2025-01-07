@@ -11,17 +11,17 @@ export default function NavBar() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            {!user?.id ? (
+         
               <>
                 <Nav.Link href="#login">ВОЙТИ</Nav.Link>
                 <Nav.Link href="#reg">РЕГИСТРАЦИЯ</Nav.Link>
               </>
-            ) : (
+           
               <>
                 <Nav.Link href="#exercises">УПРАЖНЕНИЯ</Nav.Link>
                 <Nav.Link href="#logout">ВЫЙТИ</Nav.Link>
               </>
-            )}
+           
           </Nav>
         </Navbar.Collapse>
       </Container>

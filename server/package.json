@@ -15,6 +15,7 @@
     "db:plan": "npx sequelize-cli model:generate --name Plan --attributes name:string,image:string,description:string,equipment:string,points:integer,calories:string",
     "db:planExercise": "npx sequelize-cli model:generate --name PlanExercise --attributes planId:integer,exerciseId:integer",
     "db:session": "npx sequelize-cli model:generate --name Session --attributes planId:integer,userId:integer",
+    "db:seed:generateUser": "npx sequelize-cli seed:generate --name User",
 
     "dev": "nodemon --env-file=.env ./src/app.js --ext js,jsx"
   },
