@@ -6,7 +6,7 @@ const cookieConfig = require('../../configs/cookieConfig');
 
 router.post('/signup', async (req, res) => {
   try {
-    const { username, email, password, image } = req.body;
+    const { username, email, password } = req.body;
 
     if (!(username && email && password)) {
       return res
@@ -20,7 +20,7 @@ router.post('/signup', async (req, res) => {
         username,
         email,
         password: await bcrypt.hash(password, 10),
-        image,
+        
       },
     });
 
@@ -75,7 +75,7 @@ router.post('/signin', async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.sendStatus(500); // Можно использовать статус 500 вместо 400 для обработки ошибок
+    res.sendStatus(500);  
   }
 });
 
