@@ -17,6 +17,7 @@ module.exports = {
           height: 178,
           weight: 90,
           points: 10,
+          calories: 0,
         },
       ],
       {}
