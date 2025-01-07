@@ -19,12 +19,26 @@ function PlanCard({
 
   return (
     <>
-      <Card>
-        <img src={image} alt={name} className="card-img-top" />
-        <Card.Body>
-          <Card.Text onClick={handleNavigate}>{name}</Card.Text>
-          <Card.Text>{difficulty}</Card.Text>
-          <Card.Text>{equipment}</Card.Text>
+      <Card
+        style={{
+          border: 'none',
+          margin: '10px',
+          backgroundImage: `url(${image})`,
+          backgroundColor: 'black',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          height: '100%',
+        }}
+      >
+        <Card.Body
+          className="text-white"
+          style={{ backdropFilter: 'blur(1px) brightness(0.7)' }}
+        >
+          <Card.Text onClick={handleNavigate}>
+            <b>{name}</b>
+          </Card.Text>
+          <Card.Text>Сложность: {difficulty}</Card.Text>
+          <Card.Text>Необходимое снаряжение: {equipment}</Card.Text>
           <Card.Text>{description}</Card.Text>
         </Card.Body>
       </Card>
