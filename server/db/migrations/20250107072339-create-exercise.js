@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       description: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       muscleGroup: {
         type: Sequelize.STRING,
@@ -28,7 +28,7 @@ module.exports = {
         allowNull: true,
       },
       points: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: true,
       },
       calories: {
