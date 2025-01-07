@@ -52,7 +52,7 @@ export default function NavBar() {
  
                   УПРАЖНЕНИЯ
                 </Nav.Link>
-                <Nav.Link as={RouterNavLink} to="profile" className="px-3">
+                <Nav.Link as={RouterNavLink} to="account" className="px-3">
                   {user.username.toUpperCase()}
                 </Nav.Link>
                 <Image
