@@ -9,11 +9,11 @@ module.exports = (sequelize, DataTypes) => {
   Exercise.init(
     {
       name: DataTypes.STRING,
-      description: DataTypes.STRING,
+      description: DataTypes.TEXT,
       muscleGroup: DataTypes.STRING,
       type: DataTypes.STRING,
       equipment: DataTypes.STRING,
-      points: DataTypes.INTEGER,
+      points: DataTypes.STRING,
       calories: DataTypes.STRING,
     },
     {
