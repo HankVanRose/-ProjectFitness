@@ -1,27 +1,25 @@
-import { Route, Routes } from "react-router-dom"
-import NavBar from "./components/NavBar"
-import SignInPage from "./components/SignInPage/SignInPage"
-import SignUpPage from "./components/SignUpPage/SignUpPage"
-import HomePage from "./components/HomePage"
-
+import { Route, Routes } from 'react-router-dom';
+ 
+import SignInPage from './components/SignInPage/SignInPage';
+import SignUpPage from './components/SignUpPage/SignUpPage';
+import HomePage from './components/HomePage';
+ 
+import Layout from './components/Layout';
  
 
 function App() {
-   
-
   return (
     <>
-    <NavBar/>
-       <Routes>
-          <Route path="/" element={<HomePage/>} />
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
-
-
-       </Routes>
+        </Route>
+      </Routes>
       
     </>
-  )
+  );
 }
 
-export default App
+export default App;
