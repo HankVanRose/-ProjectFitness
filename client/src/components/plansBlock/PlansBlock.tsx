@@ -1,19 +1,37 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import PlanCard from '../planCard/PlanCard';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import axiosInstance from '../../axiosInstance';
 
-export default function PlansBlock({ plans }) {
+export default function PlansBlock() {
+  const { VITE_API } = import.meta.env;
+
+  const [plans, setPlans] = useState([]);
+
+  useEffect(() => {
+    const wholePlans = async () => {
+      try {
+        const res = await axiosInstance.get(`${VITE_API}/plans`);
+        setPlans(res.data);
+      } catch (error) {
+        console.error(error, 'Ошибка');
+      }
+    };
+    wholePlans();
+  }, []);
+
   return (
     <>
       <Container fluid>
         <Row>
           {plans.map((plan) => (
             <Col
-              style={{ marginBottom: '30px'}}
+              style={{ marginBottom: '30px' }}
               xs={12}
               md={6}
               lg={4}
               key={plan.id}
-
             >
               <PlanCard
                 image={plan.image}
