@@ -5,7 +5,7 @@ function App() {
 
   return (
     <>
-      <div>
+      <div style={{color: "#16a34a"}}>
       Hello World
       </div>
       
