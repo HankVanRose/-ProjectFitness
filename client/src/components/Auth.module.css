@@ -1,0 +1,62 @@
+body {
+  background-color: #242629; 
+  margin: 0; 
+  padding: 0; 
+  height: 100vh; 
+  font-family: 'Proxima Nova', sans-serif;
+
+}
+
+.authForm {
+  background-color: rgba(36, 38, 41, 0.9);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  max-width: 600px;
+  margin: auto;
+  font-size: 1.5rem;
+  margin-top: 5rem; 
+}
+
+.authForm .h3 {
+  color: #7f5af0;
+  font-size: 3rem;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 40px;
+}
+
+.authForm label {
+  font-weight: 600;
+  color: #7f5af0;
+}
+
+.authForm .input {
+  margin-bottom: 20px;
+  font-weight: 500;
+  font-size: 1.4rem;
+  background-color: #242629;
+  border: 1px solid #7f5af0;
+  color: #7f5af0; 
+}
+
+.authForm .input::placeholder {
+  color: #7f5af0; 
+}
+
+
+.authForm .btn {
+  background-color: #2cb67d;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 10px; 
+  border-radius: 4px; 
+  font-weight: 600;
+  font-size: 1.3rem;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; 
+}
+
+.authForm .btn:hover {
+  background-color: #26a36e; 
+  box-shadow: 0 4px 20px rgba(38, 163, 110, 0.7); 
+}

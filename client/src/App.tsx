@@ -1,4 +1,7 @@
+import { Route, Routes } from "react-router-dom"
 import NavBar from "./components/NavBar"
+import SignInPage from "./components/SignInPage/SignInPage"
+import SignUpPage from "./components/SignUpPage/SignUpPage"
 
  
 
@@ -8,9 +11,13 @@ function App() {
   return (
     <>
     <NavBar/>
-      <div style={{color: "#16a34a"}}>
-      Hello World
-      </div>
+       <Routes>
+          <Route path="/" element={<HomePage/>} />
+          <Route path="/signin" element={<SignInPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+
+
+       </Routes>
       
     </>
   )
