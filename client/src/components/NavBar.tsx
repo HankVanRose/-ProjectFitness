@@ -60,14 +60,16 @@ export default function NavBar() {
                   src={user.avatar}
                   roundedCircle
                   
-                  className="me-2 align-self-center" // Добавляем класс для правильного выравнивания
+                  className="me-2 align-self-center" 
                 />
                 <Nav.Link onClick={handleLogOut} className="px-3">
                   ВЫЙТИ
                 </Nav.Link>
-              </>
-            )}
-          </Nav>
+                </Nav>
+            </>
+           
+          )}
+          
         </Navbar.Collapse>
       </Container>
     </Navbar>
