@@ -1,3 +1,4 @@
+ 
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import styles from './Auth.module.css';
 import { useNavigate } from 'react-router-dom';
@@ -36,6 +37,7 @@ export default function AuthForm({ type, title }: AuthFormProps) {
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+ 
   };
 
   const validateSignup = (): boolean => {

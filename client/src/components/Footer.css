@@ -1,0 +1,34 @@
+.footer {
+    background-color: #16a34a; /* Темный фон для футера */
+    color: #f8f9fa; /* Белый цвет текста */
+  }
+  
+  .footer-heading {
+    color: #f8f9fa;
+    font-weight: 700;
+    margin-bottom: 1rem; /* Отступ между заголовком и контентом */
+    text-transform: uppercase; /* Преобразуем текст в верхний регистр */
+  }
+  
+  .footer-link {
+    color: #f8f9fa; /* Цвет ссылок */
+    transition: color 0.3s ease; /* Плавный переход цвета */
+  }
+  
+  .footer-link:hover {
+    color: #ffc107; /* Цвет при наведении */
+  }
+  
+  .footer-text {
+    color: #f8f9fa; /* Цвет текста в описании */
+    line-height: 1.5; /* Высота строки для улучшения читаемости */
+  }
+  
+  .footer-contact {
+    color: #f8f9fa; /* Цвет контактных ссылок */
+    transition: color 0.3s ease; /* Плавный переход цвета */
+  }
+  
+  .footer-contact:hover {
+    color: #ffc107; /* Цвет при наведении */
+  }

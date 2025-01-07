@@ -47,6 +47,11 @@ module.exports = {
         allowNull: true,
         defaultValue: 0
       },
+      calories: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        defaultValue: 0
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

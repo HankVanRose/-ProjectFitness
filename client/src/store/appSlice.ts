@@ -39,9 +39,11 @@ const appSlice = createSlice({
           state.user = null;
           state.loading = false;
         } else {
+ 
           state.user = action.payload as UserType;
           state.loading = false;
           state.error = null;
+ 
         }
       })
       .addCase(fetchUserSignin.pending, (state) => {
@@ -54,9 +56,11 @@ const appSlice = createSlice({
           state.user = null;
           state.loading = false;
         } else {
+ 
           state.user = action.payload as UserType;
           state.loading = false;
           state.error = null;
+ 
         }
       })
       .addCase(fetchUserLogout.fulfilled, (state) => {

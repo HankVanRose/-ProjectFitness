@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     age: DataTypes.DATE,
     height: DataTypes.INTEGER,
     weight: DataTypes.INTEGER,
-    points: DataTypes.INTEGER
+    points: DataTypes.INTEGER,
+    calories: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'User',

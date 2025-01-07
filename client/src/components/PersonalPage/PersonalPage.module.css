@@ -1,0 +1,11 @@
+.statistic {
+    color: white;
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.progressbar {
+    max-width: 1280px;
+    margin-top: 10px;
+}
