@@ -6,10 +6,9 @@ import {
   fetchUserSignin,
   fetchUserSignup,
 } from './thunkActions';
-// import { fetchAddTask, fetchDeleteTask, fetchTasks } from './thunkActions';
 
 type InitialState = {
-  user: UserType;
+  user: UserType | null;
   exercises: ExercisesType;
   plans: PlansType;
   loading: boolean;
@@ -17,7 +16,7 @@ type InitialState = {
 };
 
 const initialState: InitialState = {
-  user: {} as UserType,
+  user: null,
   exercises: [] as ExercisesType,
   plans: [] as PlansType,
   loading: false,
@@ -37,9 +36,10 @@ const appSlice = createSlice({
       .addCase(fetchUserSignup.fulfilled, (state, action) => {
         if ('error' in action.payload && action.payload.error) {
           state.error = action.payload.error;
+          state.user = null;
           state.loading = false;
         } else {
-          state.user = action.payload;
+          state.user = action.payload as UserType;
           state.loading = false;
           state.error = null;
         }
@@ -51,9 +51,10 @@ const appSlice = createSlice({
       .addCase(fetchUserSignin.fulfilled, (state, action) => {
         if ('error' in action.payload && action.payload.error) {
           state.error = action.payload.error;
+          state.user = null;
           state.loading = false;
         } else {
-          state.user = action.payload;
+          state.user = action.payload as UserType;
           state.loading = false;
           state.error = null;
         }
