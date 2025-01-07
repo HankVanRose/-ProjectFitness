@@ -6,12 +6,12 @@ import { Route, Routes } from 'react-router-dom';
 
 import Layout from './components/Layout';
 
- 
 import SignInPage from './components/SignInPage/SignInPage';
 import SignUpPage from './components/SignUpPage/SignUpPage';
 import HomePage from './components/HomePage';
 import PlansBlock from './components/plansBlock/PlansBlock';
 import PlanPage from './components/planPage/PlanPage';
+import ExercisePage from './components/ExercisePage/ExercisePage';
 
 const fitnessPlans = [
   {
@@ -67,16 +67,15 @@ function App() {
   return (
     <>
       <Routes>
- 
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/card" element={<PlansBlock plans={fitnessPlans} />} />
+          <Route path="/exercises" element={<ExercisePage />} />
           <Route path="/account" element={<PersonalPage />} />
-                <Route path="/plans/:id" element={<PlanPage  />} />
+          <Route path="/plans/:id" element={<PlanPage />} />
         </Route>
- 
       </Routes>
     </>
   );

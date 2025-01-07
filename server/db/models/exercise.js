@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
   Exercise.init(
     {
       name: DataTypes.STRING,
+      image: DataTypes.STRING,
       description: DataTypes.TEXT,
       muscleGroup: DataTypes.STRING,
       type: DataTypes.STRING,
