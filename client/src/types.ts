@@ -18,8 +18,9 @@ export type ExerciseType = {
   muscleGroup: string;
   calories: string;
   type: string;
-  points: number;
+  points: string;
   equipment: string;
+  
 };
 
 export type ExercisesType = ExerciseType[];

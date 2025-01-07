@@ -11,7 +11,11 @@ import SignUpPage from './components/SignUpPage/SignUpPage';
 import HomePage from './components/HomePage';
 import PlansBlock from './components/plansBlock/PlansBlock';
 import PlanPage from './components/planPage/PlanPage';
+ 
 import Slides from './components/accordion/Slides';
+ 
+import ExercisePage from './components/ExercisePage/ExercisePage';
+ 
 
 const fitnessPlans = [
   {
@@ -72,10 +76,13 @@ function App() {
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/card" element={<PlansBlock plans={fitnessPlans} />} />
+          <Route path="/exercises" element={<ExercisePage />} />
           <Route path="/account" element={<PersonalPage />} />
           <Route path="/plans/:id" element={<PlanPage />} />
+ 
           <Route path="/carousel" element={<Slides plans={fitnessPlans} />} />
 
+ 
         </Route>
       </Routes>
     </>
