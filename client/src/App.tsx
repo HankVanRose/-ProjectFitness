@@ -11,7 +11,11 @@ import SignUpPage from './components/SignUpPage/SignUpPage';
 import HomePage from './components/HomePage';
 import PlansBlock from './components/plansBlock/PlansBlock';
 import PlanPage from './components/planPage/PlanPage';
+ 
+import Slides from './components/accordion/Slides';
+ 
 import ExercisePage from './components/ExercisePage/ExercisePage';
+ 
 
 const fitnessPlans = [
   {
@@ -19,7 +23,7 @@ const fitnessPlans = [
     name: 'Тренировка всего тела',
     description:
       'Комплексная тренировка, нацеленная на все основные группы мышц.',
-    equipment: ['Гантели', 'Эспандеры', 'Коврик'],
+    equipment: ['Гантели', 'Эспандеры', 'Коврик'].join(', '),
     difficulty: 'Средний',
     image:
       'https://www.publicdomainpictures.net/pictures/30000/velka/full-body-exercises.jpg', // Измените на новое изображение
@@ -29,7 +33,7 @@ const fitnessPlans = [
     name: 'Кардио-тренировка',
     description:
       'Высокоинтенсивная кардио-тренировка для повышения выносливости.',
-    equipment: ['Скакалка', 'Кроссовки'],
+    equipment: ['Скакалка', 'Кроссовки'].join(', '),
     difficulty: 'Начальный',
     image:
       'https://www.publicdomainpictures.net/pictures/20000/velka/running.jpg', // Измените на новое изображение
@@ -39,7 +43,7 @@ const fitnessPlans = [
     name: 'Силовые тренировки',
     description:
       'Наращивание мышечной массы и силы через различные упражнения.',
-    equipment: ['Штанга', 'Гантели', 'Скамья'],
+    equipment: ['Штанга', 'Гантели', 'Скамья'].join(', '),
     difficulty: 'Продвинутый',
     image:
       'https://thebasefitness.ru/upload/iblock/42e/42ebdfcd49515c9ae499d88d03e00726.jpg', // Измените на новое изображение
@@ -49,7 +53,7 @@ const fitnessPlans = [
     name: 'Йога и гибкость',
     description:
       'Улучшение гибкости и психоэмоционального состояния через йогу.',
-    equipment: ['Йога-мат'],
+    equipment: ['Йога-мат'].join(', '),
     difficulty: 'Начальный',
     image: 'https://www.publicdomainpictures.net/pictures/30000/velka/yoga.jpg', // Измените на новое изображение
   },
@@ -58,7 +62,7 @@ const fitnessPlans = [
     name: 'HIIT (Высокоинтенсивный интервальный тренинг)',
     description:
       'Короткие всплески интенсивной физической активности с последующим отдыхом или плавной нагрузкой.',
-    equipment: ['Таймер интервалов', 'Гантели'],
+    equipment: ['Таймер интервалов', 'Гантели'].join(', '),
     difficulty: 'Продвинутый',
     image: 'https://www.publicdomainpictures.net/pictures/50000/velka/hiit.jpg', // Измените на новое изображение
   },
@@ -75,6 +79,10 @@ function App() {
           <Route path="/exercises" element={<ExercisePage />} />
           <Route path="/account" element={<PersonalPage />} />
           <Route path="/plans/:id" element={<PlanPage />} />
+ 
+          <Route path="/carousel" element={<Slides plans={fitnessPlans} />} />
+
+ 
         </Route>
       </Routes>
     </>
