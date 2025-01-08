@@ -8,8 +8,6 @@ export default function PlansBlock() {
 
   const [plans, setPlans] = useState([]);
 
-   
-  
   useEffect(() => {
     const allPlans = async () => {
       try {
@@ -24,13 +22,9 @@ export default function PlansBlock() {
 
   return (
     <Container maxW="full" px={4}>
-      <SimpleGrid 
-        columns={{ base: 1, md: 2, lg: 3 }} 
-        spacing={6}
-        py={8}
-      >
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} p={4}>
         {plans.map((plan) => (
-          <Box key={plan.id}>
+          <Box key={plan.id} p={4}   borderRadius="md"  >
             <PlanCard
               image={plan.image}
               id={plan.id}
