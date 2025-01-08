@@ -36,6 +36,7 @@ export default function ExerciseCard({
           backgroundRepeat: 'no-repeat',
           height: 500,
           cursor: 'pointer',
+          position: 'relative',
         }}
       >
         <Card.Body
@@ -43,32 +44,33 @@ export default function ExerciseCard({
           style={{ backdropFilter: 'blur(1px) brightness(0.7)' }}
         >
           <Card.Text className="Cardnametext" style={{ fontSize: 40 }}>
-            <b>{name.slice(0,22)}...</b>
+            <b>{name.slice(0, 22)}...</b>
           </Card.Text>
-          
 
-          <Button
-            style={{
-              position: 'absolute',
-              marginTop: 350,
-              backgroundColor: 'green',
-              borderColor: 'green',
-            }}
-          >
-            + ДОБАВИТЬ В МОЙ ПЛАН
-          </Button>
-          <Button
-            onClick={handleNavigate}
-            style={{
-              position: 'absolute',
-              marginTop: 350,
-              marginLeft: 440,
-              backgroundColor: 'green',
-              borderColor: 'green',
-            }}
-          >
-            ПОДРОБНЕЕ
-          </Button>
+          <div className="button-container">
+            <Button
+              style={{
+                position: 'relative',
+                marginTop: 350,
+                backgroundColor: 'green',
+                borderColor: 'green',
+              }}
+            >
+              + ДОБАВИТЬ В МОЙ ПЛАН
+            </Button>
+            <Button
+              onClick={handleNavigate}
+              style={{
+                position: 'relative',
+                marginTop: 350,
+
+                backgroundColor: 'green',
+                borderColor: 'green',
+              }}
+            >
+              ПОДРОБНЕЕ
+            </Button>
+          </div>
         </Card.Body>
       </Card>
     </>
