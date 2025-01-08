@@ -8,6 +8,7 @@ export default function PlanPage() {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [plan, setPlan] = useState<PlanType | null>(null);
+
   useEffect(() => {
     setLoading(true);
     const fetchPlan = async () => {
@@ -68,7 +69,7 @@ export default function PlanPage() {
           </div>
         </Col>
       </Row>
-        {/* //! тут остальное  */}
+      {/* //! тут остальное  */}
     </Container>
   );
 }

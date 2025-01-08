@@ -10,7 +10,7 @@ export default function PlansBlock() {
   const [plans, setPlans] = useState([]);
 
   useEffect(() => {
-    const wholePlans = async () => {
+    const allPlans = async () => {
       try {
         const res = await axiosInstance.get(`${VITE_API}/plans`);
         setPlans(res.data);
@@ -18,7 +18,7 @@ export default function PlansBlock() {
         console.error(error, 'Ошибка');
       }
     };
-    wholePlans();
+    allPlans();
   }, []);
 
   return (

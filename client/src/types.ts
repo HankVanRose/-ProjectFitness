@@ -20,6 +20,7 @@ export type ExerciseType = {
   type: string;
   points: string;
   equipment: string;
+  image: string;
   
 };
 
