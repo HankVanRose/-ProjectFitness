@@ -34,10 +34,16 @@ export type ExercisesType = ExerciseType[];
 export type PlanType = {
   id: number;
   name: string;
-  description: string;
+  shortDescription: string;
   equipment: string;
   difficulty: string;
   image: string;
+  slogan:string;
+  weeksDuration:number;
+  numOfSessions: number;
+  longDescription: string;
+
+
 };
 
 export type UserResponseType = {
