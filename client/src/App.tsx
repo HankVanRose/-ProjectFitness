@@ -12,13 +12,18 @@ import PlansBlock from './components/plansBlock/PlansBlock';
 import PlanPage from './components/planPage/PlanPage';
 
 
-import ExercisePage from './components/ExercisePage/ExercisePage';
+import ExercisePage from './components/ExercisePage/AllExercisesPage';
 
 import { useEffect } from 'react';
 import { useAppDispatch } from './store/hooks/hooks';
 import { fetchUserCheck } from './store/thunkActions';
 import ExerciseCard from './components/ExercisePage/ExerciseCard';
+ 
+import AllExercisesPage from './components/ExercisePage/AllExercisesPage';
+import SingleExercisePage from './components/ExercisePage/SingleExercisePage';
+ 
 import HomePage from './components/HomePage/HomePage';
+ 
 
 function App() {
   const dispatch = useAppDispatch();
@@ -35,8 +40,8 @@ function App() {
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/card" element={<PlansBlock />} />
-          <Route path="/exercises" element={<ExercisePage />} />
-          <Route path="/exercises/:id" element={<ExerciseCard />} />
+          <Route path="/exercises" element={<AllExercisesPage />} />
+          <Route path="/exercises/:id" element={<SingleExercisePage />} />
           <Route path="/account" element={<PersonalPage />} />
           <Route path="/plans/:id" element={<PlanPage />} />
 

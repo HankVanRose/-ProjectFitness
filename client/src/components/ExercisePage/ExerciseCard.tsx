@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
-import { Card } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import { ExerciseType } from '../../types';
 import { useNavigate } from 'react-router-dom';
+import './ExerciseCard.css';
 
 export default function ExerciseCard({
   image,
@@ -16,37 +17,58 @@ export default function ExerciseCard({
 }: ExerciseType) {
   const navigate = useNavigate();
 
-  const handleNavigate = useCallback(() => {
+  const handleNavigate = () => {
     navigate(`/exercises/${id}`);
-  }, [navigate, id]);
+  };
+
   return (
     <>
       <Card
+        className="Card1"
+        onClick={handleNavigate}
         style={{
           border: 'none',
           margin: '10px',
           backgroundImage: `url(${image})`,
-          backgroundColor: 'black',
+          backgroundColor: 'white',
           color: 'white',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
-          height: '100%',
+          height: 500,
+          cursor: 'pointer',
         }}
       >
         <Card.Body
           className="text-white"
           style={{ backdropFilter: 'blur(1px) brightness(0.7)' }}
         >
-          <Card.Text onClick={handleNavigate}>
-            <b>{name}</b>
+          <Card.Text className="Cardnametext" style={{ fontSize: 40 }}>
+            <b>{name.slice(0,22)}...</b>
           </Card.Text>
+          
 
-          <Card.Text>Необходимое снаряжение: {equipment}</Card.Text>
-          <Card.Text> {muscleGroup}</Card.Text>
-          <Card.Text>{description}</Card.Text>
-          <Card.Text>{type}</Card.Text>
-          <Card.Text>{points}</Card.Text>
-          <Card.Text>{calories}</Card.Text>
+          <Button
+            style={{
+              position: 'absolute',
+              marginTop: 350,
+              backgroundColor: 'green',
+              borderColor: 'green',
+            }}
+          >
+            + ДОБАВИТЬ В МОЙ ПЛАН
+          </Button>
+          <Button
+            onClick={handleNavigate}
+            style={{
+              position: 'absolute',
+              marginTop: 350,
+              marginLeft: 440,
+              backgroundColor: 'green',
+              borderColor: 'green',
+            }}
+          >
+            ПОДРОБНЕЕ
+          </Button>
         </Card.Body>
       </Card>
     </>

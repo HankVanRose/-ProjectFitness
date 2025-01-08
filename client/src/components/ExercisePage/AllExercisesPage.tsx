@@ -3,7 +3,7 @@ import axiosInstance from '../../axiosInstance';
 import { Col, Container, Row } from 'react-bootstrap';
 import ExerciseCard from './ExerciseCard';
 
-export default function ExercisePage() {
+export default function AllExercisesPage() {
   const { VITE_API } = import.meta.env;
 
   const [exercises, setExercises] = useState([]);
@@ -41,6 +41,7 @@ export default function ExercisePage() {
               type={exercise.type}
               points={exercise.points}
               calories={exercise.calories}
+              
             />
           </Col>
         ))}

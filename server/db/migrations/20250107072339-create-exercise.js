@@ -15,11 +15,18 @@ module.exports = {
       image: {
         type: Sequelize.STRING,
       },
-      description: {
+      shortDescription: {
         type: Sequelize.TEXT,
       },
-      muscleGroup: {
+      longDescription: {
+        type: Sequelize.TEXT,
+      },
+      shortMuscleGroup: {
         type: Sequelize.STRING,
+        allowNull: true,
+      },
+      longMuscleGroup: {
+        type: Sequelize.TEXT,
         allowNull: true,
       },
       type: {
@@ -35,6 +42,10 @@ module.exports = {
         allowNull: true,
       },
       calories: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      muscleImage: {
         type: Sequelize.STRING,
         allowNull: true,
       },
