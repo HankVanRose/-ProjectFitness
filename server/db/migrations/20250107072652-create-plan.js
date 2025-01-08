@@ -16,7 +16,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      description: {
+      shortDescription: {
         type: Sequelize.STRING,
         allowNull: true,
       },
@@ -24,8 +24,24 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      slogan: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       difficulty: {
         type: Sequelize.STRING,
+        allowNull: true,
+      },
+      weeksDuration: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      numOfSessions: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      longDescription: {
+        type: Sequelize.TEXT,
         allowNull: true,
       },
 

@@ -123,6 +123,7 @@ export default function SingleExercisePage() {
                 textAlign="justify"
                 marginRight="0.25rem"
                 marginLeft="0.5rem"
+                fontWeight={700}
               >
                 {singleExercise.calories} кКал.
               </Text>
@@ -144,6 +145,7 @@ export default function SingleExercisePage() {
                 lineHeight="1.6"
                 textAlign="justify"
                 marginRight="0.25rem"
+                fontWeight={700}
                 marginLeft="0.5rem"
               >
                 {singleExercise.points} pts.

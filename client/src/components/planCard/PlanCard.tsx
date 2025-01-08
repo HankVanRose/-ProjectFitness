@@ -1,63 +1,89 @@
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { PlanType } from '../../types';
-import { Box, Text, VStack } from '@chakra-ui/react';
+ 
+import { Box, Stack, Text, Image, Skeleton, Button } from '@chakra-ui/react';
+ 
 import { useNavigate } from 'react-router-dom';
 
-function PlanCard({
-  id,
-  name,
-  description,
-  equipment,
-  difficulty,
-  image,
-}: PlanType) {
+function PlanCard({ id, name, image }: PlanType) {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
+   
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+   
   const handleNavigate = useCallback(() => {
     navigate(`/plans/${id}`);
   }, [navigate, id]);
 
   return (
     <Box
-      m="10px"
-      h="100%"
-      bgImage={`url(${image})`}
-      bgColor="black"
-      bgSize="cover"
-      bgRepeat="no-repeat"
-      borderRadius="md"
+ 
+      onClick={handleNavigate}
+      margin="10px"
+      height="500px"
+      width="100%"
+      borderRadius="10px"
       overflow="hidden"
+      position="relative"
+      cursor="pointer"
+      backgroundColor="black"
     >
-      <Box
-        p={4}
-        backdropFilter="auto"
-        backdropBlur="1px"
-        brightness="0.7"
-        color="white"
-      >
-        <VStack align="stretch" spacing={2}>
-          <Text
-            fontWeight="bold"
-            cursor="pointer"
-            onClick={handleNavigate}
-            _hover={{ opacity: 0.8 }}
+      {isLoading ? (
+        <Box height="100%">
+          <Skeleton height="80%" width="100%" borderRadius="10px" />
+          <Skeleton
+            height="40px"
+            width="100%"
+            marginTop="10px"
+            borderRadius="5px"
+          />
+        </Box>
+      ) : (
+        <Box
+          style={{
+            backgroundImage: `url(${image})`,
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+          }}
+          height="100%"
+        >
+          <Box
+            backdropFilter="blur(1px) brightness(0.7)"
+            padding="20px"
+            height="100%"
+            display="flex"
+            flexDirection="column"
+            justifyContent="flex-end"
+            color="white"
           >
-            {name}
-          </Text>
-          
-          <Text>
-            Сложность: {difficulty}
-          </Text>
-          
-          <Text>
-            Необходимое снаряжение: {equipment}
-          </Text>
-          
-          <Text>
-            {description}
-          </Text>
-        </VStack>
-      </Box>
+            <Text fontSize="40px">
+              <b>{name}</b>
+            </Text>
+            <Box display="flex" flexDirection="column" marginTop="auto">
+               
+
+              <Button
+                marginTop="10px"
+                backgroundColor="green.500"
+                _hover={{ bg: 'green.600' }}
+                color={'white'}
+                onClick={handleNavigate}
+              >
+                ПОДРОБНЕЕ
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      )}
+ 
+   
     </Box>
   );
 }

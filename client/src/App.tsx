@@ -10,14 +10,10 @@ import SignInPage from './components/SignInPage/SignInPage';
 import SignUpPage from './components/SignUpPage/SignUpPage';
 import PlansBlock from './components/plansBlock/PlansBlock';
 import PlanPage from './components/planPage/PlanPage';
-import { Provider } from '@/components/ui/provider';
-
-import ExercisePage from './components/ExercisePage/AllExercisesPage';
 
 import { useEffect } from 'react';
 import { useAppDispatch } from './store/hooks/hooks';
 import { fetchUserCheck } from './store/thunkActions';
-import ExerciseCard from './components/ExercisePage/ExerciseCard';
 
 import AllExercisesPage from './components/ExercisePage/AllExercisesPage';
 import SingleExercisePage from './components/ExercisePage/SingleExercisePage';
@@ -33,20 +29,18 @@ function App() {
 
   return (
     <>
-     
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/signin" element={<SignInPage />} />
-            <Route path="/signup" element={<SignUpPage />} />
-            <Route path="/card" element={<PlansBlock />} />
-            <Route path="/exercises" element={<AllExercisesPage />} />
-            <Route path="/exercises/:id" element={<SingleExercisePage />} />
-            <Route path="/account" element={<PersonalPage />} />
-            <Route path="/plans/:id" element={<PlanPage />} />
-          </Route>
-        </Routes>
-      
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/signin" element={<SignInPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/card" element={<PlansBlock />} />
+          <Route path="/exercises" element={<AllExercisesPage />} />
+          <Route path="/exercises/:id" element={<SingleExercisePage />} />
+          <Route path="/account" element={<PersonalPage />} />
+          <Route path="/plans/:id" element={<PlanPage />} />
+        </Route>
+      </Routes>
     </>
   );
 }
