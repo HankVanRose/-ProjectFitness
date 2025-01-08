@@ -14,13 +14,16 @@ export type UserType = {
 export type ExerciseType = {
   id: number;
   name: string;
-  description: string;
-  muscleGroup: string;
+  shortDescription: string;
+  longDescription: string;
+  shortMuscleGroup: string;
+  longMuscleGroup: string;
   calories: string;
   type: string;
   points: string;
   equipment: string;
   image: string;
+  muscleImage: string;
   
 };
 
