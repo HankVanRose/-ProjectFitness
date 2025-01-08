@@ -8,32 +8,7 @@ export default function PlansBlock() {
 
   const [plans, setPlans] = useState([]);
 
-  const mockPlans = [
-    {
-      id: 1,
-      name: "Full Body Workout",
-      description: "Complete full body workout for all fitness levels",
-      equipment: "Dumbbells, Mat",
-      difficulty: "Beginner",
-      image: "https://example.com/workout1.jpg"
-    },
-    {
-      id: 2,
-      name: "Core Strength",
-      description: "Intensive core workout routine",
-      equipment: "Mat, Resistance bands",
-      difficulty: "Intermediate",
-      image: "https://example.com/workout2.jpg"
-    },
-    {
-      id: 3,
-      name: "HIIT Training",
-      description: "High-intensity interval training for fat burn",
-      equipment: "None",
-      difficulty: "Advanced",
-      image: "https://example.com/workout3.jpg"
-    }
-  ];
+   
   
   useEffect(() => {
     const allPlans = async () => {
@@ -54,13 +29,13 @@ export default function PlansBlock() {
         spacing={6}
         py={8}
       >
-        {mockPlans.map((plan) => (
+        {plans.map((plan) => (
           <Box key={plan.id}>
             <PlanCard
               image={plan.image}
               id={plan.id}
               name={plan.name}
-              description={plan.description}
+              shortDescription={plan.shortDescription}
               equipment={plan.equipment}
               difficulty={plan.difficulty}
             />

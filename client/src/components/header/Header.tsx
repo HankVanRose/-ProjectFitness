@@ -84,6 +84,15 @@ export default function Header() {
                   textDecoration="none"
                   _hover={{ textDecoration: 'none', color: 'gray.300', cursor: 'pointer' }}
                   _focus={{ outline: 'none', boxShadow: 'none' }}
+                  onClick={() => navigate('/card')}
+                >
+                  ПЛАНЫ ТРЕНИРОВОК
+                </Link>
+                <Link
+                  color="white"
+                  textDecoration="none"
+                  _hover={{ textDecoration: 'none', color: 'gray.300', cursor: 'pointer' }}
+                  _focus={{ outline: 'none', boxShadow: 'none' }}
                   onClick={() => navigate('/account')}
                 >
                   {user.username.toUpperCase()}

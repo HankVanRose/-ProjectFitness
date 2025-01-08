@@ -35,9 +35,9 @@ export default function AllExercisesPage() {
               image={exercise.image}
               id={exercise.id}
               name={exercise.name}
-              description={exercise.description}
+              shortDescription ={exercise.shortDescription}
               equipment={exercise.equipment}
-              muscleGroup={exercise.muscleGroup}
+              shortMuscleGroup ={exercise.shortMuscleGroup}
               type={exercise.type}
               points={exercise.points}
               calories={exercise.calories}

@@ -98,7 +98,9 @@ export default function PlanPage() {
             <Text fontSize="1.3rem" lineHeight="1.6" textAlign="justify">
               {plan.longDescription}
             </Text>
-            <Heading fontSize="1.5rem" textAlign="center">{plan.slogan?.toUpperCase()}</Heading>
+            <Heading fontSize="1.5rem" textAlign="center">
+              {plan.slogan?.toUpperCase()}
+            </Heading>
           </Stack>
 
           <Button
