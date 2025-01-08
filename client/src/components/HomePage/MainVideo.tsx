@@ -1,5 +1,5 @@
 import React from 'react';
-import video from '../../../public/mainpage.mp4';
+import video from '/mainpage.mp4';
 
 export default function MainVideo() {
   return (

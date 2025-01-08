@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react';
 import { PlanType } from '../../types';
-import { Card } from 'react-bootstrap';
+import { Box, Text, VStack } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
 function PlanCard({
@@ -18,31 +18,48 @@ function PlanCard({
   }, [navigate, id]);
 
   return (
-    <>
-      <Card
-        style={{
-          border: 'none',
-          margin: '10px',
-          backgroundImage: `url(${image})`,
-          backgroundColor: 'black',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          height: '100%',
-        }}
+    <Box
+      m="10px"
+      h="100%"
+      bgImage={`url(${image})`}
+      bgColor="black"
+      bgSize="cover"
+      bgRepeat="no-repeat"
+      borderRadius="md"
+      overflow="hidden"
+    >
+      <Box
+        p={4}
+        backdropFilter="auto"
+        backdropBlur="1px"
+        brightness="0.7"
+        color="white"
       >
-        <Card.Body
-          className="text-white"
-          style={{ backdropFilter: 'blur(1px) brightness(0.7)' }}
-        >
-          <Card.Text onClick={handleNavigate}>
-            <b>{name}</b>
-          </Card.Text>
-          <Card.Text>Сложность: {difficulty}</Card.Text>
-          <Card.Text>Необходимое снаряжение: {equipment}</Card.Text>
-          <Card.Text>{description}</Card.Text>
-        </Card.Body>
-      </Card>
-    </>
+        <VStack align="stretch" spacing={2}>
+          <Text
+            fontWeight="bold"
+            cursor="pointer"
+            onClick={handleNavigate}
+            _hover={{ opacity: 0.8 }}
+          >
+            {name}
+          </Text>
+          
+          <Text>
+            Сложность: {difficulty}
+          </Text>
+          
+          <Text>
+            Необходимое снаряжение: {equipment}
+          </Text>
+          
+          <Text>
+            {description}
+          </Text>
+        </VStack>
+      </Box>
+    </Box>
   );
 }
+
 export default memo(PlanCard);
