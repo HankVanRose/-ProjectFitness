@@ -3,6 +3,7 @@ import axiosInstance, { setAccessToken } from '../axiosInstance';
 import { AxiosError } from 'axios';
 import { UserType, UserResponseType } from '../types';
 
+
 const fetchUserSignup = createAsyncThunk(
   'user/signup',
   async (user: Pick<UserType, 'email' | 'password' | 'username'>) => {
@@ -12,16 +13,15 @@ const fetchUserSignup = createAsyncThunk(
         user
       );
       setAccessToken(response.data.accessToken);
-      return response.data.user;
+      return { user: response.data.user, success: response.data.success };
     } catch (error) {
       if (error instanceof AxiosError && error.response?.data) {
         return { error: error.response.data.message as string };
       }
-      return { error: 'An unexpected error occurred' };
+      return { error: 'An unexpected error occurred' };  // Returns string instead of undefined
     }
   }
 );
-
 const fetchUserSignin = createAsyncThunk(
   'user/signin',
   async (user: Pick<UserType, 'email' | 'password'>) => {
@@ -31,7 +31,7 @@ const fetchUserSignin = createAsyncThunk(
         user
       );
       setAccessToken(response.data.accessToken);
-      return response.data.user;
+      return { user: response.data.user, success: response.data.success };
     } catch (error) {
       if (error instanceof AxiosError && error.response?.data) {
         return { error: error.response.data.message as string };

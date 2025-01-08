@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 import { useState } from 'react';
 import SignupModal from './SignupModal'; // Adjust the import path as needed
 import SigninModal from './SigninModal'; // You'll need to create this component
+import { setError } from '@/store/appSlice';
 
 export default function Header() {
   const { user } = useAppSelector((state) => state.appSlice);
@@ -25,11 +26,13 @@ export default function Header() {
       ...prev,
       [modalName]: !prev[modalName],
     }));
+    dispatch(setError(null));
+
   };
 
   return (
     <>
-      <Box bg="black" py={4}>
+      <Box bg="#000000" py={4}>
         <Container maxW="container.lg" px={8}>
           <Flex align="center" justify="space-between">
             <Link

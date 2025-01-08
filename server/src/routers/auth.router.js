@@ -3,18 +3,16 @@ const { User } = require('../../db/models');
 const bcrypt = require('bcrypt');
 const generateToken = require('../utils/generateToken');
 const cookieConfig = require('../../configs/cookieConfig');
+const {
+  validateSignupData,
+  validateSigninData,
+} = require('../middlewares/validateData');
 
-router.post('/signup', async (req, res) => {
+router.post('/signup', validateSignupData, async (req, res) => {
+  const { username, email, password } = req.body;
+
   try {
-    const { username, email, password } = req.body;
-
-    if (!(username && email && password)) {
-      return res
-        .status(400)
-        .json({ message: 'Please provide name, email and a password' });
-    }
-
-    const [user, isCreated] = await User.findOrCreate({
+    const [user, created] = await User.findOrCreate({
       where: { email },
       defaults: {
         username,
@@ -23,80 +21,117 @@ router.post('/signup', async (req, res) => {
       },
     });
 
-    if (!isCreated) {
-      return res
-        .status(400)
-        .json({ message: `User with email ${email} already exists.` });
+    if (!created) {
+      return res.status(409).json({ message: 'User already exists' });
     }
 
-    const plainUser = user.get({ plain: true });
+    const plainUser = user.get();
     delete plainUser.password;
+    delete plainUser.createdAt;
+    delete plainUser.updatedAt;
 
     const { accessToken, refreshToken } = generateToken({ user: plainUser });
 
-    res
+    return res
+      .status(201)
       .cookie('refreshToken', refreshToken, cookieConfig.refresh)
-      .json({ user: plainUser, accessToken });
+      .json({
+        success: true,
+        user: plainUser,
+        accessToken,
+      });
   } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
+    console.error('Signup error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error during signup',
+    });
   }
 });
-router.post('/signin', async (req, res) => {
+
+router.post('/signin', validateSigninData, async (req, res) => {
+  const { email, password } = req.body;
+
   try {
-    const { email, password } = req.body;
-
-    if (!(email && password)) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
-
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      return res.status(400).json({
-        message: `User with email - ${email} is not defined.`,
-      });
+      return res.status(401).json({ message: 'No user with such email' });
     }
 
-    const isCorrectPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(password, user.password);
 
-    if (!isCorrectPassword) {
-      return res.status(401).json({ message: 'Incorrect email or password' });
-    } else {
-      const plainUser = user.get({ plain: true });
-      delete plainUser.password;
-
-      const { accessToken, refreshToken } = generateToken({ user: plainUser });
-
-      res
-        .cookie('refreshToken', refreshToken, cookieConfig.refresh)
-        .json({ user: plainUser, accessToken });
+    if (!isValidPassword) {
+      return res.status(401).json({ message: 'Incorrect password' });
     }
+
+    const plainUser = user.get();
+    delete plainUser.password;
+    delete plainUser.createdAt;
+    delete plainUser.updatedAt;
+
+    const { accessToken, refreshToken } = generateToken({ user: plainUser });
+
+    return res.cookie('refreshToken', refreshToken, cookieConfig.refresh).json({
+      success: true,
+      user: plainUser,
+      accessToken,
+    });
   } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
+    console.error('Signin error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error during signin',
+    });
   }
 });
 
 router.get('/signout', (req, res) => {
   try {
-    res.clearCookie('refreshToken').sendStatus(200);
+    res.clearCookie('refreshToken');
+    return res.status(200).json({
+      success: true,
+      message: 'Logged out successfully',
+    });
   } catch (error) {
-    console.error(error);
-    res.sendStatus(400);
+    console.error('Logout error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Error during logout',
+    });
   }
 });
 
 router.patch('/profile', async (req, res) => {
-  const { password, age, username, email, gender, equipment, goal, id, weight, height} =
-    req.body;
+  const {
+    password,
+    age,
+    username,
+    email,
+    gender,
+    equipment,
+    goal,
+    id,
+    weight,
+    height,
+  } = req.body;
   try {
     const result = await User.findByPk(id);
-    const updatedUser = await result.update({password: await bcrypt.hash(password, 10), age, username, email, gender, equipment, goal, weight, height})
-    res.status(201).json(updatedUser)
+    const updatedUser = await result.update({
+      password: await bcrypt.hash(password, 10),
+      age,
+      username,
+      email,
+      gender,
+      equipment,
+      goal,
+      weight,
+      height,
+    });
+    res.status(201).json(updatedUser);
   } catch (error) {
     console.error(error, 'initial server error');
-    res.sendStatus(500)
+    res.sendStatus(500);
   }
 });
 

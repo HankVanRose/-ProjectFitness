@@ -23,7 +23,9 @@ const PasswordInput = ({
     <Box className={className}>
       <Flex>
         <Input
+          p={2}
           type={showPassword ? 'text' : 'password'}
+          border={'1px solid black'}
           name={name}
           placeholder={placeholder}
           value={value}
