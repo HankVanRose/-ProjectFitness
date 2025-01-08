@@ -88,4 +88,26 @@ router.get('/signout', (req, res) => {
   }
 });
 
+router.patch('/profile', async (req, res) => {
+  const { id } = req.user;
+  const updatedProperties = req.body;
+  try {
+    if (password) {
+      updatedProperties.password = await bcrypt.hash(password, 10)
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id, 
+      updatedProperties, { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json({ user: updatedUser })
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating profile' });
+  }
+})
+
 module.exports = router;

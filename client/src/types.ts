@@ -10,7 +10,7 @@ export type UserType = {
   points?: number;
   age?: string;
   goal?: string;
-  equipment: [];
+  equipment: string[];
 };
 
 export type ExerciseType = {

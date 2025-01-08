@@ -5,6 +5,7 @@ import { Button, Col, Container, InputGroup, Row } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import SideBarComp from './SideBarComp';
 import styles from './PersonalPage.module.css';
+import { fetchUpdateProfile } from '../../store/thunkActions';
 
 interface FormData {
   id: number;
@@ -20,7 +21,7 @@ interface FormData {
 }
 
 export default function ProfileData() {
-  const { user } = useAppSelector((state) => state.appSlice);
+  const { user, error, loading } = useAppSelector((state) => state.appSlice);
   const dispatch = useAppDispatch();
 
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -38,7 +39,6 @@ export default function ProfileData() {
     password: '',
   });
 
-  console.log(formData);
   const [isEditing, setIsEditing] = useState<string>('');
 
   useEffect(() => {
@@ -55,19 +55,6 @@ export default function ProfileData() {
         email: user.email || '',
         password: '',
       });
-    } else {
-      setFormData({
-        id: 0,
-        age: '',
-        gender: '',
-        height: '',
-        weight: '',
-        goal: '',
-        equipment: [],
-        username: '',
-        email: '',
-        password: '',
-      });
     }
   }, [user]);
 
@@ -75,8 +62,24 @@ export default function ProfileData() {
     setFormData({ ...formData, [field]: value });
   };
 
-  const handleSave = () => {
-    dispatch(updateUser(formData));
+  const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+
+    dispatch(
+      fetchUpdateProfile({
+        age: (formData.get('age') as string) || '',
+        gender: (formData.get('gender') as string) || '',
+        height: (formData.get('height') as string) || '',
+        weight: (formData.get('weight') as string) || '',
+        goal: (formData.get('goal') as string) || '',
+        equipment: (formData.getAll('equipment') as string[]) || [],
+        username: (formData.get('username') as string) || '',
+        email: formData.get('email') as string || '',
+        password: formData.get('password') as string || '',
+      })
+    );
   };
 
   const editableField = (
@@ -84,24 +87,25 @@ export default function ProfileData() {
     label: string,
     type = 'text'
   ) => (
-    <InputGroup>
-      <InputGroup.Text id={`basic-addon-${field}`}>
-        {label}
-      </InputGroup.Text>
-      <Form.Control
-        type={type}
-        value={formData[field] || ''}
-        placeholder={label}
-        disabled={isEditing !== field}
-        onChange={(e) => handleInputChange(field, e.target.value)}
-      />
-      <Button
-        variant='outline-secondary'
-        onClick={() => setIsEditing((prev) => (prev === field ? '' : field))}
-      >
-        {isEditing === field ? '✔️' : '✏️'}
-      </Button>
-    </InputGroup>
+    <Row className='mb-3'>
+      <InputGroup>
+        <InputGroup.Text id={`basic-addon-${field}`}>{label}</InputGroup.Text>
+        <Form.Control
+          name={field}
+          type={type}
+          value={formData[field] ?? ''}
+          placeholder={label}
+          disabled={isEditing !== field}
+          onChange={(e) => handleInputChange(field, e.target.value)}
+        />
+        <Button
+          variant='outline-secondary'
+          onClick={() => setIsEditing((prev) => (prev === field ? '' : field))}
+        >
+          {isEditing === field ? '✔️' : '✏️'}
+        </Button>
+      </InputGroup>
+    </Row>
   );
 
   const content = () => {
@@ -109,13 +113,14 @@ export default function ProfileData() {
       case 0:
         return (
           <>
-            <Row className='mb-3'>{editableField('age', 'Возраст')}</Row>
+            {editableField('age', 'Возраст')}
 
             <Row className='mb-3'>
               <InputGroup>
                 <InputGroup.Text id='basic-addon1'>Пол</InputGroup.Text>
                 <Form.Select
-                  value={formData.gender || ''}
+                  name='gender'
+                  value={formData.gender ?? ''}
                   onChange={(e) => handleInputChange('gender', e.target.value)}
                   disabled={isEditing !== 'gender'}
                 >
@@ -135,15 +140,15 @@ export default function ProfileData() {
               </InputGroup>
             </Row>
 
-            <Row className='mb-3'>{editableField('height', 'Рост')}</Row>
-
-            <Row className='mb-3'>{editableField('weight', 'Вес')}</Row>
+            {editableField('height', 'Рост')}
+            {editableField('weight', 'Вес')}
 
             <Row className='mb-3'>
               <InputGroup>
                 <InputGroup.Text id='basic-addon2'>Цели</InputGroup.Text>
                 <Form.Select
-                  value={formData.goal || ''}
+                  name='goal'
+                  value={formData.goal ?? ''}
                   onChange={(e) => handleInputChange('goal', e.target.value)}
                   disabled={isEditing !== 'goal'}
                 >
@@ -155,7 +160,7 @@ export default function ProfileData() {
                     Повысить выносливость
                   </option>
                 </Form.Select>
-                <Button
+                <Button 
                   variant='outline-secondary'
                   onClick={() =>
                     setIsEditing((prev) => (prev === 'goal' ? '' : 'goal'))
@@ -195,27 +200,21 @@ export default function ProfileData() {
               <InputGroup className='mb-3'>
                 <InputGroup.Text id='basic-addon3'>ID</InputGroup.Text>
                 <Form.Control
+                  name='id'
                   disabled
-                  placeholder={user ? `${user?.id}` : 'ID пользователя'}
+                  value={user ? `${user?.id}` : 'ID пользователя'}
                   aria-label='ID пользователя'
                   aria-describedby='basic-addon3'
                 />
               </InputGroup>
             </Row>
 
-            <Row className='mb-3'>
-              {editableField('username', 'Имя пользователя')}
-            </Row>
-
-            <Row className='mb-3'>
-              {editableField('email', 'Email', 'email')}
-            </Row>
-
-            <Row className='mb-3'>
-              {editableField('password', 'Пароль', 'password')}
-            </Row>
+            {editableField('username', 'Имя пользователя')}
+            {editableField('email', 'Email', 'email')}
+            {editableField('password', 'Пароль', 'password')}
           </>
         );
+
       case 2:
         return <p className={styles.form}>У вас пока нет плана тренировок.</p>;
       default:

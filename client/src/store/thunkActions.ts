@@ -54,4 +54,18 @@ const fetchUserCheck = createAsyncThunk('user/check', async () => {
   return response.data.user;
 });
 
-export { fetchUserSignup, fetchUserSignin, fetchUserLogout, fetchUserCheck };
+const fetchUpdateProfile = createAsyncThunk('/user/updateProfile', async (profileData: Omit<UserType, 'id'> ) => {
+  try {
+    const response = await axiosInstance.patch<UserResponseType>(
+      `{import.meta,env.VITE_API}/auth/profile`, profileData
+    );
+    return response.data.user;
+  } catch (error) {
+    if (error instanceof AxiosError && error.response?.data) {
+      return { error: error.response.data.message as string };
+    }
+    return { error: 'An unexpected error occurred' };
+  }
+})
+
+export { fetchUserSignup, fetchUserSignin, fetchUserLogout, fetchUserCheck, fetchUpdateProfile };
