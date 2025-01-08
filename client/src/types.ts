@@ -3,12 +3,14 @@ export type UserType = {
   username: string;
   email: string;
   avatar?: string;
-  weight?: number;
-  height?: number;
+  weight?: string;
+  height?: string;
   password?: string;
   gender?: string;
   points?: number;
-  age?: number;
+  age?: string;
+  goal?: string;
+  equipment: [];
 };
 
 export type ExerciseType = {
