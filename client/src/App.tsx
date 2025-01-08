@@ -8,11 +8,9 @@ import Layout from './components/Layout';
 
 import SignInPage from './components/SignInPage/SignInPage';
 import SignUpPage from './components/SignUpPage/SignUpPage';
-import HomePage from './components/HomePage';
 import PlansBlock from './components/plansBlock/PlansBlock';
 import PlanPage from './components/planPage/PlanPage';
 
-import Slides from './components/accordion/Slides';
 
 import ExercisePage from './components/ExercisePage/ExercisePage';
 
@@ -20,6 +18,7 @@ import { useEffect } from 'react';
 import { useAppDispatch } from './store/hooks/hooks';
 import { fetchUserCheck } from './store/thunkActions';
 import ExerciseCard from './components/ExercisePage/ExerciseCard';
+import HomePage from './components/HomePage/HomePage';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -41,7 +40,6 @@ function App() {
           <Route path="/account" element={<PersonalPage />} />
           <Route path="/plans/:id" element={<PlanPage />} />
 
-          <Route path="/carousel" element={<Slides />} />
         </Route>
       </Routes>
     </>
