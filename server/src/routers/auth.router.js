@@ -93,7 +93,7 @@ router.patch('/profile', async (req, res) => {
   try {
     const result = await User.findByPk(id);
     const updatedUser = await result.update({password: await bcrypt.hash(password, 10), age, username, email, gender, equipment, goal, weight, height})
-    res.status(201).json(updatedUser)
+    res.status(200).json(updatedUser)
   } catch (error) {
     console.error(error, 'initial server error');
     res.sendStatus(500)

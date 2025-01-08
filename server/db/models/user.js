@@ -10,20 +10,24 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.Session, { foreignKey: 'userId' });
     }
   }
-  User.init({
-    username: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    avatar: DataTypes.STRING,
-    gender: DataTypes.STRING,
-    age: DataTypes.DATE,
-    height: DataTypes.INTEGER,
-    weight: DataTypes.INTEGER,
-    points: DataTypes.INTEGER,
-    calories: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'User',
-  });
+  User.init(
+    {
+      username: DataTypes.STRING,
+      email: DataTypes.STRING,
+      password: DataTypes.STRING,
+      avatar: DataTypes.STRING,
+      gender: DataTypes.STRING,
+      age: DataTypes.INTEGER,
+      height: DataTypes.STRING,
+      weight: DataTypes.STRING,
+      points: DataTypes.INTEGER,
+      calories: DataTypes.INTEGER,
+      goal: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: 'User',
+    }
+  );
   return User;
 };

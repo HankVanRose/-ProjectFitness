@@ -9,7 +9,7 @@ import { fetchUpdateProfile } from '../../store/thunkActions';
 
 interface FormData {
   id: number;
-  age: string;
+  age: number;
   gender: string;
   height: string;
   weight: string;
@@ -28,7 +28,7 @@ export default function ProfileData() {
 
   const [formData, setFormData] = useState<FormData>({
     id: 0,
-    age: '',
+    age: 0,
     gender: '',
     height: '',
     weight: '',
@@ -45,7 +45,7 @@ export default function ProfileData() {
     if (user) {
       setFormData({
         id: user.id || 0,
-        age: user.age || '',
+        age: user.age || 0,
         gender: user.gender || '',
         height: user.height || '',
         weight: user.weight || '',
@@ -65,12 +65,10 @@ export default function ProfileData() {
   const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // const formData = new FormData(e.currentTarget);
-
     dispatch(
       fetchUpdateProfile({
         id: user!.id,
-        age: formData.age,
+        age: Number(formData.age),
         gender:  formData.gender,
         height:  formData.height,
         weight:  formData.weight,

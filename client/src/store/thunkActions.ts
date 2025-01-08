@@ -56,10 +56,10 @@ const fetchUserCheck = createAsyncThunk('user/check', async () => {
 
 const fetchUpdateProfile = createAsyncThunk('user/updateProfile', async (profileData: UserType ) => {
   try {
-    const response = await axiosInstance.patch<UserResponseType>(
+    const response = await axiosInstance.patch<UserType>(
       `${import.meta.env.VITE_API}/auth/profile`, profileData
     );
-    return response.data.user;
+    return response.data;
   } catch (error) {
     if (error instanceof AxiosError && error.response?.data) {
       return { error: error.response.data.message as string };
