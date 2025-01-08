@@ -1,7 +1,11 @@
-import React from 'react'
+import Slides from './Slides';
+import MainVideo from './MainVideo';
 
 export default function HomePage() {
   return (
-    <div>HomePage</div>
-  )
+    <>
+      <MainVideo />
+      {/* <Slides /> */}
+    </>
+  );
 }
