@@ -1,83 +1,176 @@
-import Nav from 'react-bootstrap/Nav';
-import { NavLink as RouterNavLink } from 'react-router';
-import { Container, Row, Col, Navbar, Image } from 'react-bootstrap';
+import { 
+  Box, 
+  Container, 
+  SimpleGrid, 
+  Image, 
+  Heading, 
+  Text, 
+  Link, 
+  VStack, 
+  HStack, 
+  Flex 
+} from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router-dom';
 import { FaTelegram } from 'react-icons/fa';
-import './Footer.css';  
 
 export default function Footer() {
   return (
-    <Navbar className="footer" style={{ padding: '40px 0', marginTop: 20 }}>
-      <Container>
-        <Row className="w-100">
-          <Col md={3} className="text-center">
-            <Image src="/logo.png" alt="Logo" height={120} />
-          </Col>
+    <Box
+      as="footer"
+      py={10}
+      mt={5}
+      bg="black" // Changed to black background
+      width="100%"
+      position="relative"
+      color="white" // Added white text color for all content
+    >
+      <Container maxW="container.xl">
+        <SimpleGrid 
+          columns={{ base: 1, md: 4 }} 
+          spacing={8}
+          justifyContent="center"
+          alignItems="start"
+        >
+          {/* Logo Column */}
+          <VStack spacing={4} height="100%">
+            <Image 
+              src="/logo.png" 
+              alt="Logo" 
+              h={120} 
+              objectFit="contain"
+            />
+          </VStack>
 
-          <Col md={3} className="text-center">
-            <h6 className="footer-heading">Страницы</h6>
-            <Navbar.Text>
-              <Nav.Link as={RouterNavLink} to="/" className="footer-link">
+          {/* Pages Column */}
+          <VStack 
+            align={{ base: 'center', md: 'start' }} 
+            spacing={3}
+            height="100%"
+          >
+            <Heading as="h6" size="sm" color="white">
+              Страницы
+            </Heading>
+            <VStack 
+              align={{ base: 'center', md: 'start' }} 
+              spacing={2}
+              width="100%"
+            >
+              <Link
+                as={RouterLink}
+                to="/"
+                color="white" // Added white color
+                _hover={{ textDecoration: 'none', opacity: 0.8 }}
+                width="100%"
+              >
                 Главная
-              </Nav.Link>
-              <Nav.Link as={RouterNavLink} to="/ " className="footer-link">
+              </Link>
+              <Link
+                as={RouterLink}
+                to="/"
+                color="white" // Added white color
+                _hover={{ textDecoration: 'none', opacity: 0.8 }}
+                width="100%"
+              >
                 Планы тренировок
-              </Nav.Link>
-              <Nav.Link as={RouterNavLink} to="/ " className="footer-link">
+              </Link>
+              <Link
+                as={RouterLink}
+                to="/"
+                color="white" // Added white color
+                _hover={{ textDecoration: 'none', opacity: 0.8 }}
+                width="100%"
+              >
                 Личный кабинет
-              </Nav.Link>
-            </Navbar.Text>
-          </Col>
+              </Link>
+            </VStack>
+          </VStack>
 
-          <Col md={3} className="text-center">
-            <h6 className="footer-heading">Контакты</h6>
-            <p className="footer-text">
+          {/* Contacts Column */}
+          <VStack 
+            align={{ base: 'center', md: 'start' }} 
+            spacing={3}
+            height="100%"
+          >
+            <Heading as="h6" size="sm" color="white">
+              Контакты
+            </Heading>
+            <Text textAlign={{ base: 'center', md: 'left' }}>
               Адрес: г. Москва, <br />
               ул. Орджоникидзе, д. 11 стр. 10 <br />
               (м. Ленинский проспект)
-            </p>
-          </Col>
+            </Text>
+          </VStack>
 
-          <Col md={3} className="text-center">
-            <h6 className="footer-heading">Сайт разработан</h6>
-            <div className="footer-text">
-              <Nav.Link
-                as={RouterNavLink}
-                to="https://t.me/HankvanRose"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-contact"
+          {/* Developers Column */}
+          <VStack 
+            align={{ base: 'center', md: 'start' }} 
+            spacing={3}
+            height="100%"
+          >
+            <Heading as="h6" size="sm" color="white">
+              Сайт разработан
+            </Heading>
+            <VStack 
+              align={{ base: 'center', md: 'start' }} 
+              spacing={2}
+              width="100%"
+            >
+              <Link
+                href="https://t.me/HankvanRose"
+                isExternal
+                color="white" // Added white color
+                _hover={{ textDecoration: 'none', opacity: 0.8 }}
+                display="block"
+                width="100%"
               >
-                <FaTelegram style={{ marginRight: '0.5rem' }} />
-                Вячеслав Платонов
-              </Nav.Link>
-              <Nav.Link
-                as={RouterNavLink}
-                to="https://t.me/zemfiravildanova"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-contact"
+                <HStack spacing={2}>
+                  <FaTelegram />
+                  <Text>Вячеслав Платонов</Text>
+                </HStack>
+              </Link>
+              <Link
+                href="https://t.me/zemfiravildanova"
+                isExternal
+                color="white" // Added white color
+                _hover={{ textDecoration: 'none', opacity: 0.8 }}
+                display="block"
+                width="100%"
               >
-                <FaTelegram style={{ marginRight: '0.5rem' }} />
-                Земфира Вильданова
-              </Nav.Link>
-              <Nav.Link
-                as={RouterNavLink}
-                to="https://t.me/renthefirst"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-contact"
+                <HStack spacing={2}>
+                  <FaTelegram />
+                  <Text>Земфира Вильданова</Text>
+                </HStack>
+              </Link>
+              <Link
+                href="https://t.me/renthefirst"
+                isExternal
+                color="white" // Added white color
+                _hover={{ textDecoration: 'none', opacity: 0.8 }}
+                display="block"
+                width="100%"
               >
-                <FaTelegram style={{ marginRight: '0.5rem' }} />
-                Ренат Кабаков
-              </Nav.Link>
-            </div>
-          </Col>
-        </Row>
+                <HStack spacing={2}>
+                  <FaTelegram />
+                  <Text>Ренат Кабаков</Text>
+                </HStack>
+              </Link>
+            </VStack>
+          </VStack>
+        </SimpleGrid>
 
-        <Navbar.Text className="text-center w-100 mt-3 footer-text">
-          &copy; {new Date().getFullYear()} BE FIT. Все права защищены.
-        </Navbar.Text>
+        {/* Copyright */}
+        <Flex 
+          justify="center" 
+          mt={8} 
+          borderTop="1px" 
+          borderColor="whiteAlpha.300" // Changed border color to be visible on black
+          pt={4}
+        >
+          <Text>
+            &copy; {new Date().getFullYear()} BE FIT. Все права защищены.
+          </Text>
+        </Flex>
       </Container>
-    </Navbar>
+    </Box>
   );
 }

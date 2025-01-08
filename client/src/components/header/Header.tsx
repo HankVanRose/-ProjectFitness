@@ -3,10 +3,10 @@ import { fetchUserLogout } from '@/store/thunkActions';
 import { Box, Flex, Container, Link, Image, Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router';
 import { useState } from 'react';
-import SignupModal from './header/SignupModal'; // Adjust the import path as needed
-// import SigninModal from './SigninModal'; // You'll need to create this component
+import SignupModal from './SignupModal'; // Adjust the import path as needed
+import SigninModal from './SigninModal'; // You'll need to create this component
 
-export default function NavBar() {
+export default function Header() {
   const { user } = useAppSelector((state) => state.appSlice);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -111,10 +111,10 @@ export default function NavBar() {
         show={modals.signUp} 
         handleClose={() => toggleModal('signUp')} 
       />
-      {/* <SigninModal 
+      <SigninModal 
         show={modals.signIn} 
         handleClose={() => toggleModal('signIn')} 
-      /> */}
+      />
     </>
   );
 }
