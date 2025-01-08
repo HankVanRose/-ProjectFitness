@@ -117,6 +117,7 @@ router.patch('/profile', async (req, res) => {
   } = req.body;
   try {
     const result = await User.findByPk(id);
+ 
     const updatedUser = await result.update({
       password: await bcrypt.hash(password, 10),
       age,
@@ -129,6 +130,7 @@ router.patch('/profile', async (req, res) => {
       height,
     });
     res.status(201).json(updatedUser);
+ 
   } catch (error) {
     console.error(error, 'initial server error');
     res.sendStatus(500);

@@ -81,6 +81,14 @@ const appSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchUpdateProfile.fulfilled, (state, action) => {
+        console.log('Action payload:', action.payload);
+
+        if (!action.payload) {
+          state.error = 'No data from the server';
+          state.loading = false; 
+          return;
+        }
+        
         if ('error' in action.payload && action.payload.error) {
           state.error = action.payload.error;
           state.loading = false;

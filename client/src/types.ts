@@ -8,7 +8,7 @@ export type UserType = {
   password?: string;
   gender?: string;
   points?: number;
-  age?: string;
+  age?: number;
   goal?: string;
   equipment: string[];
 };
