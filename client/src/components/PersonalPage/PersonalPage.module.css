@@ -1,17 +1,21 @@
 .statistic {
-    color: white;
-    margin-top: 50px;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+  color: white;
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .progressbar {
-    max-width: 1280px;
-    margin-top: 5px;
-    margin-bottom: 50px;
+  max-width: 1280px;
+  margin-top: 5px;
+  margin-bottom: 50px;
 }
 
 .form {
-    color: white;
+  color: white;
+}
+
+.inputText {
+  width: 90px;
 }

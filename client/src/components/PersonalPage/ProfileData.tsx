@@ -1,122 +1,219 @@
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import { useAppSelector } from '../../store/hooks/hooks';
-import { Col, Container, InputGroup, Row } from 'react-bootstrap';
-import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../store/hooks/hooks';
+import { Button, Col, Container, InputGroup, Row } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
 import SideBarComp from './SideBarComp';
 import styles from './PersonalPage.module.css';
 
-export default function ProfileData() {
-  const { user, loading, error } = useAppSelector((state) => state.appSlice);
+interface FormData {
+  id: number;
+  age: string;
+  gender: string;
+  height: string;
+  weight: string;
+  goal: string;
+  equipment: string[];
+  username: string;
+  email: string;
+  password: string;
+}
 
-  const [activeTab, setActiveTab] = useState(0);
+export default function ProfileData() {
+  const { user } = useAppSelector((state) => state.appSlice);
+  const dispatch = useAppDispatch();
+
+  const [activeTab, setActiveTab] = useState<number>(0);
+
+  const [formData, setFormData] = useState<FormData>({
+    id: 0,
+    age: '',
+    gender: '',
+    height: '',
+    weight: '',
+    goal: '',
+    equipment: [],
+    username: '',
+    email: '',
+    password: '',
+  });
+
+  console.log(formData);
+  const [isEditing, setIsEditing] = useState<string>('');
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        id: user.id || 0,
+        age: user.age || '',
+        gender: user.gender || '',
+        height: user.height || '',
+        weight: user.weight || '',
+        goal: user.goal || '',
+        equipment: user.equipment || [],
+        username: user.username || '',
+        email: user.email || '',
+        password: '',
+      });
+    } else {
+      setFormData({
+        id: 0,
+        age: '',
+        gender: '',
+        height: '',
+        weight: '',
+        goal: '',
+        equipment: [],
+        username: '',
+        email: '',
+        password: '',
+      });
+    }
+  }, [user]);
+
+  const handleInputChange = (field: keyof FormData, value: string) => {
+    setFormData({ ...formData, [field]: value });
+  };
+
+  const handleSave = () => {
+    dispatch(updateUser(formData));
+  };
+
+  const editableField = (
+    field: keyof FormData,
+    label: string,
+    type = 'text'
+  ) => (
+    <InputGroup>
+      <InputGroup.Text id={`basic-addon-${field}`}>
+        {label}
+      </InputGroup.Text>
+      <Form.Control
+        type={type}
+        value={formData[field] || ''}
+        placeholder={label}
+        disabled={isEditing !== field}
+        onChange={(e) => handleInputChange(field, e.target.value)}
+      />
+      <Button
+        variant='outline-secondary'
+        onClick={() => setIsEditing((prev) => (prev === field ? '' : field))}
+      >
+        {isEditing === field ? '✔️' : '✏️'}
+      </Button>
+    </InputGroup>
+  );
 
   const content = () => {
     switch (activeTab) {
       case 0:
         return (
           <>
-            <FloatingLabel
-              controlId='floatingInput1'
-              label='Возраст'
-              className='mb-3'
-            >
-              <Form.Control type='text' placeholder='Возраст' />
-            </FloatingLabel>
-            <FloatingLabel
-              controlId='floatingSelect1'
-              label='Пол'
-              className='mb-3'
-            >
-              <Form.Select>
-                <option>Укажите ваш пол</option>
-                <option>Мужской</option>
-                <option>Женский</option>
-              </Form.Select>
-            </FloatingLabel>
-            <FloatingLabel
-              controlId='floatingInput2'
-              label='Рост'
-              className='mb-3'
-            >
-              <Form.Control type='text' placeholder='Рост' />
-            </FloatingLabel>
-            <FloatingLabel
-              controlId='floatingInput3'
-              label='Вес'
-              className='mb-3'
-            >
-              <Form.Control type='text' placeholder='Вес' />
-            </FloatingLabel>
-            <FloatingLabel
-              controlId='floatingSelect2'
-              label='Цели'
-              className='mb-3'
-            >
-              <Form.Select>
-                <option>Выберите цель тренировок</option>
-                <option>Сбросить вес</option>
-                <option>Стать сильнее</option>
-                <option>Уменьшить стресс</option>
-                <option>Повысить выносливость</option>
-              </Form.Select>
-            </FloatingLabel>
-            <Form className={styles.form}>
-              <Form.Label>Выберите оборудование</Form.Label>
+            <Row className='mb-3'>{editableField('age', 'Возраст')}</Row>
+
+            <Row className='mb-3'>
+              <InputGroup>
+                <InputGroup.Text id='basic-addon1'>Пол</InputGroup.Text>
+                <Form.Select
+                  value={formData.gender || ''}
+                  onChange={(e) => handleInputChange('gender', e.target.value)}
+                  disabled={isEditing !== 'gender'}
+                >
+                  <option value=''>Укажите ваш пол</option>
+                  <option value='male'>Мужской</option>
+                  <option value='female'>Женский</option>
+                </Form.Select>
+                <Button
+                  variant='outline-secondary'
+                  onClick={() =>
+                    setIsEditing((prev) => (prev === 'gender' ? '' : 'gender'))
+                  }
+                  className='mt-2'
+                >
+                  {isEditing === 'gender' ? '✔️' : '✏️'}
+                </Button>
+              </InputGroup>
+            </Row>
+
+            <Row className='mb-3'>{editableField('height', 'Рост')}</Row>
+
+            <Row className='mb-3'>{editableField('weight', 'Вес')}</Row>
+
+            <Row className='mb-3'>
+              <InputGroup>
+                <InputGroup.Text id='basic-addon2'>Цели</InputGroup.Text>
+                <Form.Select
+                  value={formData.goal || ''}
+                  onChange={(e) => handleInputChange('goal', e.target.value)}
+                  disabled={isEditing !== 'goal'}
+                >
+                  <option value=''>Выберите цель тренировок</option>
+                  <option value='Сбросить вес'>Сбросить вес</option>
+                  <option value='Стать сильнее'>Стать сильнее</option>
+                  <option value='Уменьшить стресс'>Уменьшить стресс</option>
+                  <option value='Повысить выносливость'>
+                    Повысить выносливость
+                  </option>
+                </Form.Select>
+                <Button
+                  variant='outline-secondary'
+                  onClick={() =>
+                    setIsEditing((prev) => (prev === 'goal' ? '' : 'goal'))
+                  }
+                  className='mt-2'
+                >
+                  {isEditing === 'goal' ? '🟢' : '✏️'}
+                </Button>
+              </InputGroup>
+            </Row>
+
+            {/* <Form className={styles.form}> */}
+            {/* <Form.Label>Выберите оборудование</Form.Label>
+            {['Коврик', 'Гантели', 'Резинки', 'Утяжелители'].map((item) => (
               <Form.Check
+                key={item}
                 type='checkbox'
-                id='inline-checkbox-1'
-                label='Коврик'
+                id={`checkbox-${item}`}
+                label={item}
+                checked={formData.equipment.includes(item)}
+                onChange={(e) => {
+                  const updatedEquipment = e.target.checked
+                    ? [...formData.equipment, item]
+                    : formData.equipment.filter((equip) => equip !== item);
+                  handleFieldChange('equipment', updatedEquipment);
+                }}
               />
-              <Form.Check
-                type='checkbox'
-                id='inline-checkbox-2'
-                label='Гантели'
-              />
-              <Form.Check
-                type='checkbox'
-                id='inline-checkbox-3'
-                label='Резинки'
-              />
-              <Form.Check
-                type='checkbox'
-                id='inline-checkbox-4'
-                label='Утяжелители'
-              />
-            </Form>
+            ))} */}
+            {/* </Form> */}
           </>
         );
 
       case 1:
         return (
           <>
-            <InputGroup className='mb-3'>
-              <InputGroup.Text id='basic-addon1'>ID</InputGroup.Text>
-              <Form.Control
-                disabled
-                placeholder={user ? `${user?.id}` : 'ID пользователя'}
-                aria-label='ID пользователя'
-                aria-describedby='basic-addon1'
-              />
-            </InputGroup>
+            <Row className='mb-3'>
+              <InputGroup className='mb-3'>
+                <InputGroup.Text id='basic-addon3'>ID</InputGroup.Text>
+                <Form.Control
+                  disabled
+                  placeholder={user ? `${user?.id}` : 'ID пользователя'}
+                  aria-label='ID пользователя'
+                  aria-describedby='basic-addon3'
+                />
+              </InputGroup>
+            </Row>
 
-            <FloatingLabel
-              controlId='floatingInput4'
-              label='Имя пользователя'
-              className='mb-3'
-            >
-              <Form.Control type='text' placeholder='Имя пользователя' />
-            </FloatingLabel>
-            <FloatingLabel
-              controlId='floatingInput5'
-              label='Email'
-              className='mb-3'
-            >
-              <Form.Control type='email' placeholder='name@example.com' />
-            </FloatingLabel>
-            <FloatingLabel controlId='floatingPassword' label='Пароль'>
-              <Form.Control type='password' placeholder='Пароль' />
-            </FloatingLabel>
+            <Row className='mb-3'>
+              {editableField('username', 'Имя пользователя')}
+            </Row>
+
+            <Row className='mb-3'>
+              {editableField('email', 'Email', 'email')}
+            </Row>
+
+            <Row className='mb-3'>
+              {editableField('password', 'Пароль', 'password')}
+            </Row>
           </>
         );
       case 2:
@@ -132,7 +229,12 @@ export default function ProfileData() {
         <Col sm={4}>
           <SideBarComp activeTab={activeTab} setActiveTab={setActiveTab} />
         </Col>
-        <Col sm={8}>{content()}</Col>
+        <Col sm={8}>
+          {content()}
+          <Button variant='primary' onClick={handleSave} className='mt-3'>
+            Сохранить
+          </Button>
+        </Col>
       </Row>
     </Container>
   );
