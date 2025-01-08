@@ -1,6 +1,8 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import { PlanType } from '../../types';
+ 
 import { Box, Stack, Text, Image, Skeleton, Button } from '@chakra-ui/react';
+ 
 import { useNavigate } from 'react-router-dom';
 
 function PlanCard({ id, name, image }: PlanType) {
@@ -22,6 +24,7 @@ function PlanCard({ id, name, image }: PlanType) {
 
   return (
     <Box
+ 
       onClick={handleNavigate}
       margin="10px"
       height="500px"
@@ -79,6 +82,8 @@ function PlanCard({ id, name, image }: PlanType) {
           </Box>
         </Box>
       )}
+ 
+   
     </Box>
   );
 }

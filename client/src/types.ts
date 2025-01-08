@@ -8,7 +8,7 @@ export type UserType = {
   password?: string;
   gender?: string;
   points?: number;
-  age?: string;
+  age?: number;
   goal?: string;
   equipment: string[];
 };
@@ -48,6 +48,7 @@ export type PlanType = {
 
 export type UserResponseType = {
   user: UserType;
+  success: boolean;
   accessToken: string;
 };
 export type PlansType = PlanType[];

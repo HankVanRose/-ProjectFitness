@@ -1,7 +1,6 @@
-import { Col, Container, Row } from 'react-bootstrap';
+import { Box, Container, SimpleGrid } from '@chakra-ui/react';
 import PlanCard from '../planCard/PlanCard';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import axiosInstance from '../../axiosInstance';
 
 export default function PlansBlock() {
@@ -9,6 +8,33 @@ export default function PlansBlock() {
 
   const [plans, setPlans] = useState([]);
 
+  const mockPlans = [
+    {
+      id: 1,
+      name: "Full Body Workout",
+      description: "Complete full body workout for all fitness levels",
+      equipment: "Dumbbells, Mat",
+      difficulty: "Beginner",
+      image: "https://example.com/workout1.jpg"
+    },
+    {
+      id: 2,
+      name: "Core Strength",
+      description: "Intensive core workout routine",
+      equipment: "Mat, Resistance bands",
+      difficulty: "Intermediate",
+      image: "https://example.com/workout2.jpg"
+    },
+    {
+      id: 3,
+      name: "HIIT Training",
+      description: "High-intensity interval training for fat burn",
+      equipment: "None",
+      difficulty: "Advanced",
+      image: "https://example.com/workout3.jpg"
+    }
+  ];
+  
   useEffect(() => {
     const allPlans = async () => {
       try {
@@ -22,29 +48,25 @@ export default function PlansBlock() {
   }, []);
 
   return (
-    <>
-      <Container fluid>
-        <Row>
-          {plans.map((plan) => (
-            <Col
-              style={{ marginBottom: '30px' }}
-              xs={12}
-              md={6}
-              lg={4}
-              key={plan.id}
-            >
-              <PlanCard
-                image={plan.image}
-                id={plan.id}
-                name={plan.name}
-                description={plan.description}
-                equipment={plan.equipment}
-                difficulty={plan.difficulty}
-              />
-            </Col>
-          ))}
-        </Row>
-      </Container>
-    </>
+    <Container maxW="full" px={4}>
+      <SimpleGrid 
+        columns={{ base: 1, md: 2, lg: 3 }} 
+        spacing={6}
+        py={8}
+      >
+        {mockPlans.map((plan) => (
+          <Box key={plan.id}>
+            <PlanCard
+              image={plan.image}
+              id={plan.id}
+              name={plan.name}
+              description={plan.description}
+              equipment={plan.equipment}
+              difficulty={plan.difficulty}
+            />
+          </Box>
+        ))}
+      </SimpleGrid>
+    </Container>
   );
 }
