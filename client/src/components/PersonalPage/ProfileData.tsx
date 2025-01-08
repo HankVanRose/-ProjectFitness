@@ -65,19 +65,20 @@ export default function ProfileData() {
   const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData = new FormData(e.currentTarget);
+    // const formData = new FormData(e.currentTarget);
 
     dispatch(
       fetchUpdateProfile({
-        age: (formData.get('age') as string) || '',
-        gender: (formData.get('gender') as string) || '',
-        height: (formData.get('height') as string) || '',
-        weight: (formData.get('weight') as string) || '',
-        goal: (formData.get('goal') as string) || '',
-        equipment: (formData.getAll('equipment') as string[]) || [],
-        username: (formData.get('username') as string) || '',
-        email: formData.get('email') as string || '',
-        password: formData.get('password') as string || '',
+        id: user!.id,
+        age: formData.age,
+        gender:  formData.gender,
+        height:  formData.height,
+        weight:  formData.weight,
+        goal: formData.goal ,
+        equipment: formData.equipment ,
+        username:  formData.username,
+        email:  formData.email,
+        password: formData.password ,
       })
     );
   };

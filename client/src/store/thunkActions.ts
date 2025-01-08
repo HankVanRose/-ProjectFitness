@@ -54,10 +54,10 @@ const fetchUserCheck = createAsyncThunk('user/check', async () => {
   return response.data.user;
 });
 
-const fetchUpdateProfile = createAsyncThunk('/user/updateProfile', async (profileData: Omit<UserType, 'id'> ) => {
+const fetchUpdateProfile = createAsyncThunk('user/updateProfile', async (profileData: UserType ) => {
   try {
     const response = await axiosInstance.patch<UserResponseType>(
-      `{import.meta,env.VITE_API}/auth/profile`, profileData
+      `${import.meta.env.VITE_API}/auth/profile`, profileData
     );
     return response.data.user;
   } catch (error) {
