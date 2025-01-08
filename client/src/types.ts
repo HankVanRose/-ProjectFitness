@@ -42,6 +42,7 @@ export type PlanType = {
 
 export type UserResponseType = {
   user: UserType;
+  success: boolean;
   accessToken: string;
 };
 export type PlansType = PlanType[];

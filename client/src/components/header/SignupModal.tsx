@@ -52,18 +52,26 @@ export default function SignupModal({ show, handleClose }: SignUpModalProps) {
   };
 
   return (
-    <DialogRoot open={show} onOpenChange={handleClose}>
-      <DialogContent>
+    <DialogRoot
+      size={'md'}
+      placement="center"
+      open={show}
+      onOpenChange={handleClose}
+    >
+      <DialogContent p={4} backgroundColor={'white'} color={'black'}>
         <DialogHeader>
-          <DialogTitle>Sign Up</DialogTitle>
+          <DialogTitle mb={5} fontWeight={600}>
+            Sign Up
+          </DialogTitle>
           <DialogCloseTrigger />
         </DialogHeader>
         <DialogBody>
           <form onSubmit={handleSubmit}>
-            <VStack spacing={4}>
+            <VStack>
               <Box w="100%">
                 <Text mb={2}>Username</Text>
                 <Input
+                  p={2}
                   id="username"
                   type="text"
                   name="username"
@@ -71,12 +79,14 @@ export default function SignupModal({ show, handleClose }: SignUpModalProps) {
                   placeholder="Enter username"
                   value={formData.username}
                   onChange={handleChange}
+                  border={'1px solid black'}
                 />
               </Box>
 
               <Box w="100%">
                 <Text mb={2}>Email address</Text>
                 <Input
+                  p={2}
                   id="email"
                   type="text"
                   name="email"
@@ -84,6 +94,7 @@ export default function SignupModal({ show, handleClose }: SignUpModalProps) {
                   placeholder="Enter email"
                   value={formData.email}
                   onChange={handleChange}
+                  border={'1px solid black'}
                 />
               </Box>
 
@@ -96,7 +107,13 @@ export default function SignupModal({ show, handleClose }: SignUpModalProps) {
               </Box>
 
               <Flex w="100%" justify="flex-end" mt={2}>
-                <Button variant="outline" type="submit">
+                <Button
+                  p={3}
+                  borderRadius="md"
+                  color={'black'}
+                  variant="outline"
+                  type="submit"
+                >
                   Register
                 </Button>
               </Flex>

@@ -50,18 +50,26 @@ export default function SigninModal({ show, handleClose }: SignInModalProps) {
   };
 
   return (
-    <DialogRoot open={show} onOpenChange={handleClose}>
-      <DialogContent>
+    <DialogRoot
+      size={'md'}
+      placement="center"
+      open={show}
+      onOpenChange={handleClose}
+    >
+      <DialogContent p={4} backgroundColor={'white'} color={'black'}>
         <DialogHeader>
-          <DialogTitle>Sign in</DialogTitle>
+          <DialogTitle mb={5} fontWeight={600}>
+            Sign in
+          </DialogTitle>
           <DialogCloseTrigger />
         </DialogHeader>
         <DialogBody>
           <form onSubmit={handleSubmit}>
-            <VStack spacing={4}>
+            <VStack>
               <Box w="100%">
                 <Text mb={2}>Email address</Text>
                 <Input
+                  p={2}
                   id="email"
                   type="text"
                   name="email"
@@ -69,6 +77,7 @@ export default function SigninModal({ show, handleClose }: SignInModalProps) {
                   placeholder="Enter email"
                   value={formData.email}
                   onChange={handleChange}
+                  border={'1px solid black'}
                 />
               </Box>
 
@@ -84,14 +93,19 @@ export default function SigninModal({ show, handleClose }: SignInModalProps) {
               <Box w="100%" mt={4}>
                 <Flex justify="space-between" align="center">
                   <Button
-                    variant="link"
                     onClick={() => {
                       /* Handle forgot password */
                     }}
                   >
                     Forgot Password?
                   </Button>
-                  <Button variant="outline" type="submit">
+                  <Button
+                    p={3}
+                    borderRadius="md"
+                    color={'black'}
+                    variant="outline"
+                    type="submit"
+                  >
                     Sign in
                   </Button>
                 </Flex>
@@ -103,9 +117,8 @@ export default function SigninModal({ show, handleClose }: SignInModalProps) {
             <Box
               mt={4}
               p={3}
-              bg="red.50"
+              bgColor="red.500/20"
               border="1px"
-              borderColor="red.500"
               borderRadius="md"
             >
               <Text color="red.500">{error}</Text>

@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ExercisesType, PlansType, UserType } from '../types';
 import {
   fetchUpdateProfile,
@@ -7,7 +7,6 @@ import {
   fetchUserSignin,
   fetchUserSignup,
 } from './thunkActions';
-import { FaHouseFloodWaterCircleArrowRight } from 'react-icons/fa6';
 
 type InitialState = {
   user: UserType | null;
@@ -28,7 +27,11 @@ const initialState: InitialState = {
 const appSlice = createSlice({
   name: 'appSlice',
   initialState,
-  reducers: {},
+  reducers: {
+    setError: (state, action: PayloadAction<string | null>) => {
+      state.error = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchUserSignup.pending, (state) => {
@@ -38,12 +41,13 @@ const appSlice = createSlice({
       .addCase(fetchUserSignup.fulfilled, (state, action) => {
         if ('error' in action.payload && action.payload.error) {
           state.error = action.payload.error;
-          state.user = null;
           state.loading = false;
         } else {
-          state.user = action.payload as UserType;
-          state.loading = false;
-          state.error = null;
+          if (action.payload.user) {
+            state.user = action.payload.user;
+            state.loading = false;
+            state.error = null;
+          }
         }
       })
 
@@ -54,15 +58,15 @@ const appSlice = createSlice({
       .addCase(fetchUserSignin.fulfilled, (state, action) => {
         if ('error' in action.payload && action.payload.error) {
           state.error = action.payload.error;
-          state.user = null;
           state.loading = false;
         } else {
-          state.user = action.payload as UserType;
-          state.loading = false;
-          state.error = null;
+          if (action.payload.user) {
+            state.user = action.payload.user;
+            state.loading = false;
+            state.error = null;
+          }
         }
       })
-
       .addCase(fetchUserLogout.fulfilled, (state) => {
         state.user = initialState.user;
       })
@@ -109,4 +113,4 @@ const appSlice = createSlice({
 });
 
 export default appSlice.reducer;
-// export const { increment, decrement, changeCount } = appSlice.actions;
+export const { setError } = appSlice.actions;
