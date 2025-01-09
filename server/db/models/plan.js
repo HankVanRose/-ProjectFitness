@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.belongsToMany(models.Exercise, { through: 'PlanExercises' });
       this.hasMany(models.Session, { foreignKey: 'planId' });
+      this.hasMany(models.Day, { foreignKey: 'planId' });
     }
   }
   Plan.init(
@@ -17,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       difficulty: DataTypes.STRING,
       weeksDuration: DataTypes.INTEGER,
       numOfSessions: DataTypes.INTEGER,
-      slogan: DataTypes.STRING
+      slogan: DataTypes.STRING,
     },
     {
       sequelize,

@@ -45,12 +45,12 @@ module.exports = {
       points: {
         type: Sequelize.INTEGER,
         allowNull: true,
-        defaultValue: 0
+        defaultValue: 0,
       },
       calories: {
         type: Sequelize.INTEGER,
         allowNull: true,
-        defaultValue: 0
+        defaultValue: 0,
       },
       goal: {
         type: Sequelize.STRING,
