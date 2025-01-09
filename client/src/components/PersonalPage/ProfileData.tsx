@@ -14,6 +14,7 @@ import {
   InputElement,
   Stack,
   VStack,
+  Text
 } from '@chakra-ui/react';
 import { InputGroup } from '@/components/ui/input-group';
 // import { EditIcon, CheckIcon } from '@chakra-ui/icons';
@@ -125,12 +126,12 @@ export default function ProfileData() {
 
     return (
       <Stack>
-        <Field label={label} mb={4}>
+        <Field label={label} mb={4} color={{ base: 'black', _dark: 'white' }}>
           <InputGroup
             endElement={
               <IconButton
-                h='1.75rem'
-                size='sm'
+                h="1.75rem"
+                size="sm"
                 aria-label={isEditingField ? 'Save' : 'Edit'}
                 onClick={() => handleEditing(field)}
                 colorScheme={isEditingField ? 'green' : 'gray'}
@@ -140,6 +141,8 @@ export default function ProfileData() {
             }
           >
             <Input
+            bgColor={{ base: 'black', _dark: 'white' }}
+              color={{ base: 'white', _dark: 'black' }}
               type={type}
               placeholder={label}
               value={formData[field] ?? ''}
@@ -169,7 +172,7 @@ export default function ProfileData() {
       { value: 'Сбросить вес', label: 'Сбросить вес' },
       { value: 'Стать сильнее', label: 'Стать сильнее' },
       { value: 'Уменьшить стресс', label: 'Уменьшить стресс' },
-      { value: 'Повысить выносливость', label: 'Повысить выносливость' }
+      { value: 'Повысить выносливость', label: 'Повысить выносливость' },
     ],
   });
 
@@ -182,6 +185,8 @@ export default function ProfileData() {
 
             <Stack>
               <SelectRoot
+               bgColor={{ base: 'black', _dark: 'white' }}
+                color={{ base: 'black', _dark: 'black' }}
                 mb={4}
                 collection={frameworks}
                 value={formData.gender || ''}
@@ -193,9 +198,9 @@ export default function ProfileData() {
                 onClick={() => !isEditing && handleEditing('gender')}
               >
                 <SelectTrigger>
-                  <SelectValueText placeholder='Выберите пол'></SelectValueText>
+                  <SelectValueText placeholder="Выберите пол"></SelectValueText>
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent color={{ base: 'black', _dark: 'white' }}>
                   {frameworks.items.map((framework) => (
                     <SelectItem item={framework} key={framework.value}>
                       {framework.label}
@@ -218,6 +223,7 @@ export default function ProfileData() {
 
             <Stack>
               <SelectRoot
+                color={{ base: 'black', _dark: 'white' }}
                 mb={6}
                 collection={goals}
                 value={formData.goal || ''}
@@ -229,9 +235,9 @@ export default function ProfileData() {
                 onClick={() => !isEditing && handleEditing('goal')}
               >
                 <SelectTrigger>
-                  <SelectValueText placeholder='Выберите цель'></SelectValueText>
+                  <SelectValueText placeholder="Выберите цель"></SelectValueText>
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent color={{ base: 'black', _dark: 'white' }}>
                   {goals.items.map((one) => (
                     <SelectItem item={one} key={one.value}>
                       {one.label}
@@ -266,15 +272,20 @@ export default function ProfileData() {
         return (
           <>
             <Stack>
-              <Field label='ID' mb={4}>
+              <Field
+                label="ID"
+                mb={4}
+                color={{ base: 'black', _dark: 'white' }}
+              >
                 <Input
-                  type='text'
+                  color={{ base: 'black', _dark: 'white' }}
+                  type="text"
                   value={user ? `${user?.id}` : 'ID пользователя'}
-                  name='id'
+                  name="id"
                   disabled
                   pl={4}
-                  aria-label='ID пользователя'
-                  aria-describedby='basic-addon3'
+                  aria-label="ID пользователя"
+                  aria-describedby="basic-addon3"
                 />
               </Field>
             </Stack>
@@ -286,9 +297,13 @@ export default function ProfileData() {
         );
 
       case 2:
-        return <p>У вас пока нет плана тренировок.</p>;
+        return (
+          <Text color={{ base: 'black', _dark: 'white' }}>
+            У вас пока нет плана тренировок.
+          </Text>
+        );
       default:
-        return <p>Выберите вкладку.</p>;
+        return <Text color={{ base: 'black', _dark: 'white' }}>Выберите вкладку.  </Text>
     }
   };
 
@@ -301,12 +316,12 @@ export default function ProfileData() {
         <Box flex={1}>
           {content()}
           <Button
-            minW='10ch'
-            variant='surface'
-            colorPalette='green'
-            borderRadius='sm'
+            minW="10ch"
+            variant="surface"
+            colorPalette="green"
+            borderRadius="sm"
             onClick={handleSave}
-            className='mt-3'
+            className="mt-3"
           >
             Сохранить
           </Button>
