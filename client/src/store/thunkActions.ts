@@ -68,4 +68,14 @@ const fetchUpdateProfile = createAsyncThunk('user/updateProfile', async (profile
   }
 })
 
+// const fetchExercises = createAsyncThunk('exercises', async () => {
+//   try {
+//     const response = await axiosInstance.get<PlanType>(
+//       `${import.meta.env.VITE_API}`
+//     )
+//   } catch (error) {
+    
+//   }
+// })
+
 export { fetchUserSignup, fetchUserSignin, fetchUserLogout, fetchUserCheck, fetchUpdateProfile };

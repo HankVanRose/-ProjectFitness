@@ -9,7 +9,7 @@ router.route('/').get(async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      error: 'Failed to fetch films',
+      error: 'Failed to fetch exercises',
     });
   }
 });
@@ -22,7 +22,7 @@ router.route('/:id').get(async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      error: 'Failed to fetch films',
+      error: 'Failed to fetch exercise',
     });
   }
 });
