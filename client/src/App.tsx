@@ -19,6 +19,7 @@ import AllExercisesPage from './components/ExercisePage/AllExercisesPage';
 import SingleExercisePage from './components/ExercisePage/SingleExercisePage';
 
 import HomePage from './components/HomePage/HomePage';
+import AddedPlanPage from './components/AddedPlanPage/AddedPlanPage';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -39,6 +40,7 @@ function App() {
           <Route path="/exercises/:id" element={<SingleExercisePage />} />
           <Route path="/account" element={<PersonalPage />} />
           <Route path="/plans/:id" element={<PlanPage />} />
+          <Route path="/plans/:id/yourown" element={<AddedPlanPage />} />
         </Route>
       </Routes>
     </>
