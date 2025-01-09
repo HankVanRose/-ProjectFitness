@@ -46,6 +46,11 @@ export type PlanType = {
 
 };
 
+export type SessionType = {
+  userId: number;
+  planId: number;
+}
+
 export type UserResponseType = {
   user: UserType;
   success: boolean;

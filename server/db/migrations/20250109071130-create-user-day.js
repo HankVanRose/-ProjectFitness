@@ -2,26 +2,30 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('PlanExercises', {
+    await queryInterface.createTable('UserDays', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      planId: {
+      userId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Plans',
+          model: 'Users',
           key: 'id',
         },
       },
-      exerciseId: {
+      dayId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Exercises',
+          model: 'Days',
           key: 'id',
         },
+      },
+      isCompleted: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,
@@ -36,6 +40,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('PlanExercises');
+    await queryInterface.dropTable('UserDays');
   },
 };

@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('PlanExercises', {
+    await queryInterface.createTable('Days', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -16,12 +16,8 @@ module.exports = {
           key: 'id',
         },
       },
-      exerciseId: {
+      points: {
         type: Sequelize.INTEGER,
-        references: {
-          model: 'Exercises',
-          key: 'id',
-        },
       },
       createdAt: {
         allowNull: false,
@@ -36,6 +32,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('PlanExercises');
+    await queryInterface.dropTable('Days');
   },
 };

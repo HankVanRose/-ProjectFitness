@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../axiosInstance';
-import { PlanType } from '../../types';
+import { PlanType, SessionType } from '../../types';
 import {
   Box,
   Container,
@@ -13,11 +13,28 @@ import {
   Button,
   Spinner,
 } from '@chakra-ui/react';
+import { useAppSelector } from '@/store/hooks/hooks';
 
 export default function PlanPage() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [plan, setPlan] = useState<PlanType | null>(null);
+  const navigate = useNavigate();
+  const { VITE_API } = import.meta.env;
+  const { user } = useAppSelector((store) => store.appSlice);
+
+  const addPlanHandler = async (e): Promise<void> => {
+    e.preventDefault();
+    try {
+      await axiosInstance.post<SessionType>(`${VITE_API}/session`, {
+        userId: user?.id,
+        planId: plan?.id,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    navigate(`/plans/${id}/yourown`);
+  };
 
   useEffect(() => {
     const fetchPlan = async () => {
@@ -110,6 +127,7 @@ export default function PlanPage() {
             borderRadius={10}
             height={50}
             w="100%"
+            onClick={addPlanHandler}
           >
             + ДОБАВИТЬ В МОЙ ПЛАН
           </Button>
