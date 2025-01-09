@@ -40,7 +40,15 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
+      sessionsPerWeek: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
       longDescription: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      weeksDescription: {
         type: Sequelize.TEXT,
         allowNull: true,
       },

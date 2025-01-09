@@ -26,7 +26,6 @@ export type ExerciseType = {
   equipment: string;
   image: string;
   muscleImage: string;
-  
 };
 
 export type ExercisesType = ExerciseType[];
@@ -38,18 +37,18 @@ export type PlanType = {
   equipment: string;
   difficulty: string;
   image: string;
-  slogan:string;
-  weeksDuration:number;
+  slogan: string;
+  weeksDuration: number;
   numOfSessions: number;
   longDescription: string;
-
-
+  weeksDescription: string;
+  sessionsPerWeek: number;
 };
 
 export type SessionType = {
   userId: number;
   planId: number;
-}
+};
 
 export type UserResponseType = {
   user: UserType;

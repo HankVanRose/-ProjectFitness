@@ -19,6 +19,8 @@ module.exports = (sequelize, DataTypes) => {
       weeksDuration: DataTypes.INTEGER,
       numOfSessions: DataTypes.INTEGER,
       slogan: DataTypes.STRING,
+      weeksDescription: DataTypes.TEXT,
+      sessionsPerWeek: DataTypes.INTEGER,
     },
     {
       sequelize,
