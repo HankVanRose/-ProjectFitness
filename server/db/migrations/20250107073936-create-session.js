@@ -7,21 +7,21 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       planId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Plans',
-          key: 'id'
-        }
+          key: 'id',
+        },
       },
       userId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Users',
-          key: 'id'
-        }
+          key: 'id',
+        },
       },
       createdAt: {
         allowNull: false,
@@ -37,5 +37,5 @@ module.exports = {
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Sessions');
-  }
+  },
 };
