@@ -21,6 +21,7 @@ import { useColorModeValue } from './components/ui/color-mode';
 import { Box } from '@chakra-ui/react';
 
 import AddedPlanPage from './components/AddedPlanPage/AddedPlanPage';
+import NewPlanForm from './components/NewPlanPage/NewPlanForm';
 
 
 function App() {
@@ -33,16 +34,17 @@ function App() {
   const bgColor = useColorModeValue('white', 'black');
 
   return (
-    <Box bg={bgColor} minH="100vh">
+    <Box bg={bgColor} minH='100vh'>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/card" element={<PlansBlock />} />
-          <Route path="/exercises" element={<AllExercisesPage />} />
-          <Route path="/exercises/:id" element={<SingleExercisePage />} />
-          <Route path="/account" element={<PersonalPage />} />
-          <Route path="/plans/:id" element={<PlanPage />} />
-          <Route path="/plans/:id/yourown" element={<AddedPlanPage />} />
+          <Route path='/' element={<HomePage />} />
+          <Route path='/card' element={<PlansBlock />} />
+          <Route path='/exercises' element={<AllExercisesPage />} />
+          <Route path='/exercises/:id' element={<SingleExercisePage />} />
+          <Route path='/account' element={<PersonalPage />} />
+          <Route path='/plans/:id' element={<PlanPage />} />
+          <Route path='/plans/:id/yourown' element={<AddedPlanPage />} />
+          <Route path='/plans/new' element={<NewPlanForm />} />
         </Route>
       </Routes>
     </Box>
