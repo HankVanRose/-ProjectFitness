@@ -58,7 +58,7 @@ export default function SingleExercisePage() {
 
   return (
     <Box
-      backgroundColor="#f9f9f9"
+    color={{ base: 'black', _dark: 'white' }}
       padding="20px"
       display="flex"
       alignItems="center"
@@ -153,6 +153,7 @@ export default function SingleExercisePage() {
             </div>
 
             <Button
+             color={{ base: 'white', _dark: 'white' }}
               marginY={20}
               variant="outline"
               backgroundColor="green.700"
@@ -165,6 +166,7 @@ export default function SingleExercisePage() {
             </Button>
 
             <Button
+             color={{ base: 'white', _dark: 'white' }}
               variant="outline"
               backgroundColor="red.700"
               borderColor="red.700"

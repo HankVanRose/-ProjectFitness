@@ -21,13 +21,13 @@ export default function ProgressBarComp() {
             objectFit='cover'
           />
         </Box>
-        <VStack align='stretch' flex={1} spacing={4}>
+        <VStack align='stretch' flex={1} spacing={4} >
           <ProgressRoot value={now} size='lg' colorPalette='green' striped>
-            <ProgressLabel justify='space-between'>
+            <ProgressLabel color={{ base: 'black', _dark: 'white' }} justify='space-between'>
               <Text fontSize='xl' fontWeight='bold'>
                 {user?.username?.toUpperCase()}
               </Text>
-              <Text fontSize='xl'>{user?.points} баллов</Text>
+              <Text fontSize='xl' >{user?.points} баллов</Text>
             </ProgressLabel>
             <ProgressBar />
           </ProgressRoot>
