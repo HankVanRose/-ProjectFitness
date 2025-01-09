@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   DialogBody,
   DialogCloseTrigger,
@@ -7,30 +7,35 @@ import {
   DialogTitle,
   DialogRoot,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 
-export default function AddedModal({ show, handleClose, activeStep, singlePlan }) {
-  
-    if(!singlePlan) {
-        return `is loading`
-    }
-  
+export default function AddedModal({
+  show,
+  handleClose,
+  activeStep,
+  singlePlan,
+}) {
+  console.log(singlePlan?.shortDescription);
+  if (!singlePlan) {
+    return `is loading`;
+  }
 
   return (
-    <DialogRoot open={show}  size="full" placement="center"  >
+    <DialogRoot
+      open={show}
+      size="full"
+      placement="center"
+      scrollBehavior="outside"
+    >
       <DialogTrigger asChild>
-        <Button  visibility={'none'}>
-         
-        </Button>
+        <Button visibility={'none'}></Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent style={{ width: '50%', maxWidth: '80%' }}>
         <DialogHeader>
-          <DialogTitle>{`Шаг ${activeStep + 1}`}</DialogTitle>
+          <DialogTitle>{`ДЕНЬ ${activeStep + 1}`}</DialogTitle>
           <DialogCloseTrigger onClick={handleClose} />
         </DialogHeader>
-        <DialogBody>
-          {singlePlan[activeStep] || 'Описание не доступно.'}
-        </DialogBody>
+        <DialogBody>{singlePlan?.shortDescription}</DialogBody>
       </DialogContent>
     </DialogRoot>
   );

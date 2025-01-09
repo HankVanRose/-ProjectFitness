@@ -23,7 +23,7 @@ export default function AddedPlanPage() {
   const [showModal, setShowModal] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const handleClose = () => setShowModal(false);
-  const handleOpen = (stepIndex) => {
+  const handleOpen = (stepIndex:number) => {
     setActiveStep(stepIndex);
     setShowModal(true);
   };
@@ -89,7 +89,7 @@ export default function AddedPlanPage() {
                             {[...Array(singlePlan.sessionsPerWeek)].map(
                               (_, stepIndex) => (
                                 <StepsItem
-                                  onClick={() => handleOpen(stepIndex)} // Открытие модального окна
+                                  onClick={() => handleOpen(stepIndex)} 
                                   key={stepIndex}
                                   index={stepIndex}
                                 />
@@ -135,7 +135,7 @@ export default function AddedPlanPage() {
         show={showModal}
         handleClose={handleClose}
         activeStep={activeStep}
-        singlePlan={singlePlan?.sessionsPerWeek}
+        singlePlan={singlePlan }
       />
     </>
   );
