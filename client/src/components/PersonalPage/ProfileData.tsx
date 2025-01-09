@@ -1,11 +1,32 @@
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Form from 'react-bootstrap/Form';
 import { useAppDispatch, useAppSelector } from '../../store/hooks/hooks';
-import { Button, Col, Container, InputGroup, Row } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import SideBarComp from './SideBarComp';
 import styles from './PersonalPage.module.css';
 import { fetchUpdateProfile } from '../../store/thunkActions';
+import {
+  Box,
+  Button,
+  Container,
+  Group,
+  HStack,
+  IconButton,
+  Input,
+  InputElement,
+  VStack,
+} from '@chakra-ui/react';
+// import { InputGroup } from '@/components/ui/input-group';
+// import { EditIcon, CheckIcon } from '@chakra-ui/icons';
+import { FiEdit, FiCheck } from 'react-icons/fi';
+import { useColorModeValue } from '../ui/color-mode';
+import { createListCollection } from '@chakra-ui/react';
+import {
+  SelectContent,
+  SelectItem,
+  SelectLabel,
+  SelectRoot,
+  SelectTrigger,
+  SelectValueText,
+} from '@/components/ui/select';
 
 interface FormData {
   id: number;
@@ -21,10 +42,11 @@ interface FormData {
 }
 
 export default function ProfileData() {
-  const { user, error, loading } = useAppSelector((state) => state.appSlice);
+  const { user } = useAppSelector((state) => state.appSlice);
   const dispatch = useAppDispatch();
 
   const [activeTab, setActiveTab] = useState<number>(0);
+  const [isFormModified, setIsFormModified] = useState(false); //изменение формы
 
   const [formData, setFormData] = useState<FormData>({
     id: 0,
@@ -40,6 +62,9 @@ export default function ProfileData() {
   });
 
   const [isEditing, setIsEditing] = useState<string>('');
+
+  const focusBg = useColorModeValue('blue.500', 'blue.900'); // фон при фокусе
+  const editingBg = useColorModeValue('green.50', 'green.900'); // фон при изменении
 
   useEffect(() => {
     if (user) {
@@ -58,63 +83,121 @@ export default function ProfileData() {
     }
   }, [user]);
 
+  // изменение значений в полях
   const handleInputChange = (field: keyof FormData, value: string) => {
-    setFormData({ ...formData, [field]: value });
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    setIsFormModified(true);
+  };
+
+  // переключение изменения полей
+  const handleEditing = (field: string) => {
+    setIsEditing((prev) => (prev === field ? '' : field));
   };
 
   const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     dispatch(
       fetchUpdateProfile({
         id: user!.id,
         age: Number(formData.age),
-        gender:  formData.gender,
-        height:  formData.height,
-        weight:  formData.weight,
-        goal: formData.goal ,
-        equipment: formData.equipment ,
-        username:  formData.username,
-        email:  formData.email,
-        password: formData.password ,
+        gender: formData.gender,
+        height: formData.height,
+        weight: formData.weight,
+        goal: formData.goal,
+        equipment: formData.equipment,
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
       })
     );
+    setIsFormModified(false);
+    setIsEditing('');
   };
 
   const editableField = (
     field: keyof FormData,
     label: string,
     type = 'text'
-  ) => (
-    <Row className='mb-3'>
-      <InputGroup>
-        <InputGroup.Text id={`basic-addon-${field}`}>{label}</InputGroup.Text>
-        <Form.Control
-          name={field}
+  ) => {
+    const isEditingField = isEditing === field;
+
+    return (
+      // <Row className='mb-3'>
+      //   <InputGroup>
+      //     <InputGroup.Text id={`basic-addon-${field}`}>{label}</InputGroup.Text>
+      //     <Form.Control
+      //       name={field}
+      //       type={type}
+      //       value={formData[field] ?? ''}
+      //       placeholder={label}
+      //       disabled={isEditing !== field}
+      //       onChange={(e) => handleInputChange(field, e.target.value)}
+      //     />
+      //     <Button
+      //       variant='outline-secondary'
+      //       onClick={() => setIsEditing((prev) => (prev === field ? '' : field))}
+      //     >
+      //       {isEditing === field ? '✔️' : '✏️'}
+      //     </Button>
+      //   </InputGroup>
+      // </Row>
+      <Group size='lg'>
+        {/* <Group>
+          <InputAddon fontWeight='bold' mb={2}>
+            {label}
+          </InputAddon>
+          <HStack> */}
+        <Input
           type={type}
-          value={formData[field] ?? ''}
           placeholder={label}
-          disabled={isEditing !== field}
+          value={formData[field] ?? ''}
+          name={field}
           onChange={(e) => handleInputChange(field, e.target.value)}
+          disabled={!isEditingField}
+          bg={isEditingField ? editingBg : undefined}
+          _focus={{ bg: focusBg }}
+          onClick={() => !isEditingField && handleEditing(field)}
+          pl={4}
         />
+        <InputElement width='4.5rem'>
+          <IconButton
+            h='1.75rem'
+            size='sm'
+            aria-label={isEditingField ? 'Save' : 'Edit'}
+            icon={isEditingField ? <FiCheck /> : <FiEdit />}
+            onClick={() => handleEditing(field)}
+            colorScheme={isEditingField ? 'green' : 'gray'}
+          />
+        </InputElement>
+        {/* {isEditing === field ? 'V' : '✏️'}
+          </HStack>
+        </Group>
         <Button
-          variant='outline-secondary'
+          ml={2}
+          size='sm'
           onClick={() => setIsEditing((prev) => (prev === field ? '' : field))}
         >
           {isEditing === field ? '✔️' : '✏️'}
-        </Button>
-      </InputGroup>
-    </Row>
-  );
+        </Button> */}
+      </Group>
+    );
+  };
+
+  const frameworks = createListCollection({
+    items: [
+      { value: 'male', label: 'Мужской' },
+      { value: 'female', label: 'Женский' },
+    ],
+  });
 
   const content = () => {
     switch (activeTab) {
       case 0:
         return (
           <>
-            {editableField('age', 'Возраст')}
+            {editableField('age', 'Возраст', 'number')}
 
-            <Row className='mb-3'>
+            {/* <Row className='mb-3'>
               <InputGroup>
                 <InputGroup.Text id='basic-addon1'>Пол</InputGroup.Text>
                 <Form.Select
@@ -137,12 +220,46 @@ export default function ProfileData() {
                   {isEditing === 'gender' ? '✔️' : '✏️'}
                 </Button>
               </InputGroup>
-            </Row>
+            </Row> */}
+
+            <SelectRoot
+              mb={6}
+              collection={frameworks}
+              value={formData.gender ?? ''}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                handleInputChange('gender', e.target.value)
+              }
+            >
+              <SelectTrigger>
+                <SelectValueText
+                  placeholder='Выберите пол'
+                  size='lg'
+                  isDisabled={isEditing !== 'gender'}
+                  bg={isEditing === 'gender' ? editingBg : undefined}
+                  onClick={() => !isEditing && handleEditing('gender')}
+                ></SelectValueText>
+              </SelectTrigger>
+              <SelectContent>
+                {frameworks.items.map((framework) => (
+                  <SelectItem item={framework} key={framework.value}>
+                    {framework.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+              <Button
+                mt={2}
+                size='sm'
+                onClick={() => handleEditing('gender')}
+                colorScheme={isEditing === 'gender' ? 'green' : 'gray'}
+              >
+                {isEditing === 'gender' ? '✔️' : '✏️'}
+              </Button>
+            </SelectRoot>
 
             {editableField('height', 'Рост')}
             {editableField('weight', 'Вес')}
 
-            <Row className='mb-3'>
+            {/* <Row className='mb-3'>
               <InputGroup>
                 <InputGroup.Text id='basic-addon2'>Цели</InputGroup.Text>
                 <Form.Select
@@ -159,7 +276,7 @@ export default function ProfileData() {
                     Повысить выносливость
                   </option>
                 </Form.Select>
-                <Button 
+                <Button
                   variant='outline-secondary'
                   onClick={() =>
                     setIsEditing((prev) => (prev === 'goal' ? '' : 'goal'))
@@ -169,7 +286,7 @@ export default function ProfileData() {
                   {isEditing === 'goal' ? '🟢' : '✏️'}
                 </Button>
               </InputGroup>
-            </Row>
+            </Row> */}
 
             {/* <Form className={styles.form}> */}
             {/* <Form.Label>Выберите оборудование</Form.Label>
@@ -195,7 +312,7 @@ export default function ProfileData() {
       case 1:
         return (
           <>
-            <Row className='mb-3'>
+            {/* <Row className='mb-3'>
               <InputGroup className='mb-3'>
                 <InputGroup.Text id='basic-addon3'>ID</InputGroup.Text>
                 <Form.Control
@@ -206,7 +323,7 @@ export default function ProfileData() {
                   aria-describedby='basic-addon3'
                 />
               </InputGroup>
-            </Row>
+            </Row> */}
 
             {editableField('username', 'Имя пользователя')}
             {editableField('email', 'Email', 'email')}
@@ -223,17 +340,17 @@ export default function ProfileData() {
 
   return (
     <Container>
-      <Row>
-        <Col sm={4}>
+      <HStack>
+        <VStack sm={4}>
           <SideBarComp activeTab={activeTab} setActiveTab={setActiveTab} />
-        </Col>
-        <Col sm={8}>
+        </VStack>
+        <Box flex={1}>
           {content()}
           <Button variant='primary' onClick={handleSave} className='mt-3'>
             Сохранить
           </Button>
-        </Col>
-      </Row>
+        </Box>
+      </HStack>
     </Container>
   );
 }
