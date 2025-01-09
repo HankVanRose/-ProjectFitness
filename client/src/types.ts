@@ -56,3 +56,9 @@ export type UserResponseType = {
   accessToken: string;
 };
 export type PlansType = PlanType[];
+
+export type DayExercise = { 
+  planId: number;
+  points: number;
+  Exercises: ExercisesType;
+}

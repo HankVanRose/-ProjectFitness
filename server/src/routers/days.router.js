@@ -17,6 +17,22 @@ router.get('/', async (req, res) => {
   }
 });
 
+// router.get('/dayexercise', async (req, res) => {
+//   try {
+//     const days = await DayExercise.findAll({
+//       include: {
+//         model: Exercise,
+//       },
+//     });
+//     res.status(200).json(days);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({
+//       error: 'Failed to fetch days',
+//     });
+//   }
+// });
+
 // router.post('/', async (req, res) => {
 //     const { planId, points, exerciseIds } = req.body;
 
@@ -36,4 +52,4 @@ router.get('/', async (req, res) => {
 // });
 
 module.exports = router;
-g
+ 
