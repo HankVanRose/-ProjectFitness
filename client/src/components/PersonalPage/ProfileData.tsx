@@ -12,9 +12,10 @@ import {
   IconButton,
   Input,
   InputElement,
+  Stack,
   VStack,
 } from '@chakra-ui/react';
-// import { InputGroup } from '@/components/ui/input-group';
+import { InputGroup } from '@/components/ui/input-group';
 // import { EditIcon, CheckIcon } from '@chakra-ui/icons';
 import { FiEdit, FiCheck } from 'react-icons/fi';
 import { useColorModeValue } from '../ui/color-mode';
@@ -27,6 +28,7 @@ import {
   SelectTrigger,
   SelectValueText,
 } from '@/components/ui/select';
+import { Field } from '@/components/ui/field';
 
 interface FormData {
   id: number;
@@ -122,64 +124,36 @@ export default function ProfileData() {
     const isEditingField = isEditing === field;
 
     return (
-      // <Row className='mb-3'>
-      //   <InputGroup>
-      //     <InputGroup.Text id={`basic-addon-${field}`}>{label}</InputGroup.Text>
-      //     <Form.Control
-      //       name={field}
-      //       type={type}
-      //       value={formData[field] ?? ''}
-      //       placeholder={label}
-      //       disabled={isEditing !== field}
-      //       onChange={(e) => handleInputChange(field, e.target.value)}
-      //     />
-      //     <Button
-      //       variant='outline-secondary'
-      //       onClick={() => setIsEditing((prev) => (prev === field ? '' : field))}
-      //     >
-      //       {isEditing === field ? '✔️' : '✏️'}
-      //     </Button>
-      //   </InputGroup>
-      // </Row>
-      <Group size='lg'>
-        {/* <Group>
-          <InputAddon fontWeight='bold' mb={2}>
-            {label}
-          </InputAddon>
-          <HStack> */}
-        <Input
-          type={type}
-          placeholder={label}
-          value={formData[field] ?? ''}
-          name={field}
-          onChange={(e) => handleInputChange(field, e.target.value)}
-          disabled={!isEditingField}
-          bg={isEditingField ? editingBg : undefined}
-          _focus={{ bg: focusBg }}
-          onClick={() => !isEditingField && handleEditing(field)}
-          pl={4}
-        />
-        <InputElement width='4.5rem'>
-          <IconButton
-            h='1.75rem'
-            size='sm'
-            aria-label={isEditingField ? 'Save' : 'Edit'}
-            icon={isEditingField ? <FiCheck /> : <FiEdit />}
-            onClick={() => handleEditing(field)}
-            colorScheme={isEditingField ? 'green' : 'gray'}
-          />
-        </InputElement>
-        {/* {isEditing === field ? 'V' : '✏️'}
-          </HStack>
-        </Group>
-        <Button
-          ml={2}
-          size='sm'
-          onClick={() => setIsEditing((prev) => (prev === field ? '' : field))}
-        >
-          {isEditing === field ? '✔️' : '✏️'}
-        </Button> */}
-      </Group>
+      <Stack>
+        <Field label={label} mb={4}>
+          <InputGroup
+            endElement={
+              <IconButton
+                h='1.75rem'
+                size='sm'
+                aria-label={isEditingField ? 'Save' : 'Edit'}
+                onClick={() => handleEditing(field)}
+                colorScheme={isEditingField ? 'green' : 'gray'}
+              >
+                {isEditingField ? <FiCheck /> : <FiEdit />}
+              </IconButton>
+            }
+          >
+            <Input
+              type={type}
+              placeholder={label}
+              value={formData[field] ?? ''}
+              name={field}
+              onChange={(e) => handleInputChange(field, e.target.value)}
+              disabled={!isEditingField}
+              bg={isEditingField ? editingBg : undefined}
+              _focus={{ bg: focusBg }}
+              onClick={() => !isEditingField && handleEditing(field)}
+              pl={4}
+            />
+          </InputGroup>
+        </Field>
+      </Stack>
     );
   };
 
@@ -190,6 +164,15 @@ export default function ProfileData() {
     ],
   });
 
+  const goals = createListCollection({
+    items: [
+      { value: 'Сбросить вес', label: 'Сбросить вес' },
+      { value: 'Стать сильнее', label: 'Стать сильнее' },
+      { value: 'Уменьшить стресс', label: 'Уменьшить стресс' },
+      { value: 'Повысить выносливость', label: 'Повысить выносливость' }
+    ],
+  });
+
   const content = () => {
     switch (activeTab) {
       case 0:
@@ -197,96 +180,66 @@ export default function ProfileData() {
           <>
             {editableField('age', 'Возраст', 'number')}
 
-            {/* <Row className='mb-3'>
-              <InputGroup>
-                <InputGroup.Text id='basic-addon1'>Пол</InputGroup.Text>
-                <Form.Select
-                  name='gender'
-                  value={formData.gender ?? ''}
-                  onChange={(e) => handleInputChange('gender', e.target.value)}
-                  disabled={isEditing !== 'gender'}
-                >
-                  <option value=''>Укажите ваш пол</option>
-                  <option value='male'>Мужской</option>
-                  <option value='female'>Женский</option>
-                </Form.Select>
-                <Button
-                  variant='outline-secondary'
-                  onClick={() =>
-                    setIsEditing((prev) => (prev === 'gender' ? '' : 'gender'))
-                  }
-                  className='mt-2'
-                >
-                  {isEditing === 'gender' ? '✔️' : '✏️'}
-                </Button>
-              </InputGroup>
-            </Row> */}
-
-            <SelectRoot
-              mb={6}
-              collection={frameworks}
-              value={formData.gender ?? ''}
-              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                handleInputChange('gender', e.target.value)
-              }
-            >
-              <SelectTrigger>
-                <SelectValueText
-                  placeholder='Выберите пол'
-                  size='lg'
-                  isDisabled={isEditing !== 'gender'}
-                  bg={isEditing === 'gender' ? editingBg : undefined}
-                  onClick={() => !isEditing && handleEditing('gender')}
-                ></SelectValueText>
-              </SelectTrigger>
-              <SelectContent>
-                {frameworks.items.map((framework) => (
-                  <SelectItem item={framework} key={framework.value}>
-                    {framework.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-              <Button
+            <Stack>
+              <SelectRoot
+                mb={4}
+                collection={frameworks}
+                value={formData.gender || ''}
+                onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                  handleInputChange('gender', e.target.value)
+                }
+                isDisabled={isEditing !== 'gender'}
+                bg={isEditing === 'gender' ? editingBg : undefined}
+                onClick={() => !isEditing && handleEditing('gender')}
+              >
+                <SelectTrigger>
+                  <SelectValueText placeholder='Выберите пол'></SelectValueText>
+                </SelectTrigger>
+                <SelectContent>
+                  {frameworks.items.map((framework) => (
+                    <SelectItem item={framework} key={framework.value}>
+                      {framework.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+                {/* <Button
                 mt={2}
                 size='sm'
                 onClick={() => handleEditing('gender')}
                 colorScheme={isEditing === 'gender' ? 'green' : 'gray'}
               >
                 {isEditing === 'gender' ? '✔️' : '✏️'}
-              </Button>
-            </SelectRoot>
+              </Button> */}
+              </SelectRoot>
+            </Stack>
 
             {editableField('height', 'Рост')}
             {editableField('weight', 'Вес')}
 
-            {/* <Row className='mb-3'>
-              <InputGroup>
-                <InputGroup.Text id='basic-addon2'>Цели</InputGroup.Text>
-                <Form.Select
-                  name='goal'
-                  value={formData.goal ?? ''}
-                  onChange={(e) => handleInputChange('goal', e.target.value)}
-                  disabled={isEditing !== 'goal'}
-                >
-                  <option value=''>Выберите цель тренировок</option>
-                  <option value='Сбросить вес'>Сбросить вес</option>
-                  <option value='Стать сильнее'>Стать сильнее</option>
-                  <option value='Уменьшить стресс'>Уменьшить стресс</option>
-                  <option value='Повысить выносливость'>
-                    Повысить выносливость
-                  </option>
-                </Form.Select>
-                <Button
-                  variant='outline-secondary'
-                  onClick={() =>
-                    setIsEditing((prev) => (prev === 'goal' ? '' : 'goal'))
-                  }
-                  className='mt-2'
-                >
-                  {isEditing === 'goal' ? '🟢' : '✏️'}
-                </Button>
-              </InputGroup>
-            </Row> */}
+            <Stack>
+              <SelectRoot
+                mb={6}
+                collection={goals}
+                value={formData.goal || ''}
+                onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                  handleInputChange('goal', e.target.value)
+                }
+                isDisabled={isEditing !== 'goal'}
+                bg={isEditing === 'goal' ? editingBg : undefined}
+                onClick={() => !isEditing && handleEditing('goal')}
+              >
+                <SelectTrigger>
+                  <SelectValueText placeholder='Выберите цель'></SelectValueText>
+                </SelectTrigger>
+                <SelectContent>
+                  {goals.items.map((one) => (
+                    <SelectItem item={one} key={one.value}>
+                      {one.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </SelectRoot>
+            </Stack>
 
             {/* <Form className={styles.form}> */}
             {/* <Form.Label>Выберите оборудование</Form.Label>
@@ -312,18 +265,19 @@ export default function ProfileData() {
       case 1:
         return (
           <>
-            {/* <Row className='mb-3'>
-              <InputGroup className='mb-3'>
-                <InputGroup.Text id='basic-addon3'>ID</InputGroup.Text>
-                <Form.Control
+            <Stack>
+              <Field label='ID' mb={4}>
+                <Input
+                  type='text'
+                  value={user ? `${user?.id}` : 'ID пользователя'}
                   name='id'
                   disabled
-                  value={user ? `${user?.id}` : 'ID пользователя'}
+                  pl={4}
                   aria-label='ID пользователя'
                   aria-describedby='basic-addon3'
                 />
-              </InputGroup>
-            </Row> */}
+              </Field>
+            </Stack>
 
             {editableField('username', 'Имя пользователя')}
             {editableField('email', 'Email', 'email')}
@@ -332,7 +286,7 @@ export default function ProfileData() {
         );
 
       case 2:
-        return <p className={styles.form}>У вас пока нет плана тренировок.</p>;
+        return <p>У вас пока нет плана тренировок.</p>;
       default:
         return <p>Выберите вкладку.</p>;
     }
@@ -341,12 +295,19 @@ export default function ProfileData() {
   return (
     <Container>
       <HStack>
-        <VStack sm={4}>
+        <VStack>
           <SideBarComp activeTab={activeTab} setActiveTab={setActiveTab} />
         </VStack>
         <Box flex={1}>
           {content()}
-          <Button variant='primary' onClick={handleSave} className='mt-3'>
+          <Button
+            minW='10ch'
+            variant='surface'
+            colorPalette='green'
+            borderRadius='sm'
+            onClick={handleSave}
+            className='mt-3'
+          >
             Сохранить
           </Button>
         </Box>
