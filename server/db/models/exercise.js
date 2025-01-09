@@ -3,8 +3,16 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Exercise extends Model {
     static associate(models) {
-      this.belongsToMany(models.Plan, { through: 'PlanExercises' });
-      this.belongsToMany(models.Day, { through: 'DayExercises', foreignKey:'exerciseId' });
+      this.belongsToMany(models.Plan, {
+        through: 'PlanExercises',
+        foreignKey: 'exerciseId',
+        otherKey: 'planId',
+      });
+      this.belongsToMany(models.Day, {
+        through: 'DayExercises',
+        foreignKey: 'exerciseId',
+        otherKey: 'dayId',
+      });
     }
   }
   Exercise.init(

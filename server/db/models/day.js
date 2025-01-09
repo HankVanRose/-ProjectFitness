@@ -4,7 +4,11 @@ module.exports = (sequelize, DataTypes) => {
   class Day extends Model {
     static associate(models) {
       this.belongsTo(models.Plan, { foreignKey: 'planId' });
-      this.belongsToMany(models.Exercise, { through: 'DayExercises', foreignKey:'dayId' });
+      this.belongsToMany(models.Exercise, {
+        through: 'DayExercises',
+        foreignKey: 'dayId',
+        otherKey: 'exerciseId',
+      });
       this.hasMany(models.UserDay, { foreignKey: 'dayId' });
     }
   }
