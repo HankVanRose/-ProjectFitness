@@ -1,5 +1,7 @@
 const router = require('express').Router();
-const { Session, Plan } = require('../../db/models');
+
+const { Session, Plan, UserDay, Day } = require('../../db/models');
+
 
 //! все сессии
 router.route('/').get(async (req, res) => {
@@ -62,7 +64,6 @@ router.route('/:userId').get(async (req, res) => {
     });
 
     res.status(200).json(plan);
-    console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n', plan);
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -77,11 +78,18 @@ router.route('/').post(async (req, res) => {
   try {
     const { userId, planId } = req.body;
     const plan = await Session.create({ userId, planId });
-    res.status(200).json(plan);
+    const foundDays = await Day.findAll({ where: { planId } });
+    const foundDaysId = foundDays.map((el) => el.id);
+    console.log('\n\n\n\n\n\n\n\n\n', foundDaysId);
+    const userDaysPromises = foundDaysId.map((dayId) => {
+      return UserDay.create({ userId, dayId });
+    }); // Ожидаем завершения всех операций
+    const result = await Promise.all(userDaysPromises);
+    res.status(200).json({ plan, userDays: result });
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      error: 'Failed to fetch films',
+      error: 'Failed to fetch days',
     });
   }
 });

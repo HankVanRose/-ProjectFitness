@@ -11,6 +11,7 @@ router.get('/:id', async (req, res) => {
         attributes: { exclude: ['createdAt', 'updatedAt'] },
       },
     });
+    console.log('\n\n\n\n\n\n\n\n',  days);
     res.status(200).json(days);
   } catch (error) {
     console.error(error);
