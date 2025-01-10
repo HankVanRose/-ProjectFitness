@@ -1,8 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance, { setAccessToken } from '../axiosInstance';
 import { AxiosError } from 'axios';
-import { UserType, UserResponseType } from '../types';
-
+import { UserType, UserResponseType, SessionType, UserPlans } from '../types';
 
 const fetchUserSignup = createAsyncThunk(
   'user/signup',
@@ -18,7 +17,7 @@ const fetchUserSignup = createAsyncThunk(
       if (error instanceof AxiosError && error.response?.data) {
         return { error: error.response.data.message as string };
       }
-      return { error: 'An unexpected error occurred' };  // Returns string instead of undefined
+      return { error: 'An unexpected error occurred' }; // Returns string instead of undefined
     }
   }
 );
@@ -54,19 +53,30 @@ const fetchUserCheck = createAsyncThunk('user/check', async () => {
   return response.data.user;
 });
 
-const fetchUpdateProfile = createAsyncThunk('user/updateProfile', async (profileData: UserType ) => {
-  try {
-    const response = await axiosInstance.patch<UserType>(
-      `${import.meta.env.VITE_API}/auth/profile`, profileData
-    );
-    return response.data;
-  } catch (error) {
-    if (error instanceof AxiosError && error.response?.data) {
-      return { error: error.response.data.message as string };
+const fetchUpdateProfile = createAsyncThunk(
+  'user/updateProfile',
+  async (profileData: UserType) => {
+    try {
+      const response = await axiosInstance.patch<UserType>(
+        `${import.meta.env.VITE_API}/auth/profile`,
+        profileData
+      );
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError && error.response?.data) {
+        return { error: error.response.data.message as string };
+      }
+      return { error: 'An unexpected error occurred' };
     }
-    return { error: 'An unexpected error occurred' };
   }
-})
+);
+
+const userActivePlan = createAsyncThunk('user/activeplans', async (userId) => {
+  const response = await axiosInstance.get<UserPlans>(
+    `${import.meta.env.VITE_API}/session/plans/${userId}`
+  );
+  return response.data
+});
 
 // const fetchExercises = createAsyncThunk('exercises', async () => {
 //   try {
@@ -74,8 +84,15 @@ const fetchUpdateProfile = createAsyncThunk('user/updateProfile', async (profile
 //       `${import.meta.env.VITE_API}`
 //     )
 //   } catch (error) {
-    
+
 //   }
 // })
 
-export { fetchUserSignup, fetchUserSignin, fetchUserLogout, fetchUserCheck, fetchUpdateProfile };
+export {
+  fetchUserSignup,
+  fetchUserSignin,
+  fetchUserLogout,
+  fetchUserCheck,
+  fetchUpdateProfile,
+  userActivePlan,
+};

@@ -44,6 +44,9 @@ export type PlanType = {
   weeksDescription: string;
 };
 
+ 
+ 
+
 export type SessionType = {
   userId: number;
   planId: number;
