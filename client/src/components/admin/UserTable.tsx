@@ -1,6 +1,10 @@
-import { Button, Table, Text } from '@chakra-ui/react';
+import { Box, Button, Input, Table, Text } from '@chakra-ui/react';
 import { Avatar } from '@/components/ui/avatar';
 import { Tooltip } from '@/components/ui/tooltip';
+import axiosInstance from '@/axiosInstance';
+import { useDeferredValue, useEffect, useState } from 'react';
+import { IoSearchCircleOutline } from 'react-icons/io5';
+import { InputGroup } from '../ui/input-group';
 
 const users = [
   {
@@ -140,79 +144,126 @@ const handleBlockUser = (userId) => {
 };
 
 const UserTable = ({ users1 }) => {
-  return (
-    <Table.Root size="sm" interactive stickyHeader>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader p={3}>Аватар</Table.ColumnHeader>
-          <Table.ColumnHeader p={3}>Username</Table.ColumnHeader>
-          {/* <Table.ColumnHeader p={3}>Роль</Table.ColumnHeader> */}
-          <Table.ColumnHeader p={3}>Почта</Table.ColumnHeader>
-          <Table.ColumnHeader p={3}>Пол</Table.ColumnHeader>
-          <Table.ColumnHeader p={3}>Возраст</Table.ColumnHeader>
-          <Table.ColumnHeader p={3}>Рост</Table.ColumnHeader>
-          <Table.ColumnHeader p={3}>Вес</Table.ColumnHeader>
-          <Table.ColumnHeader p={3}>Баллы</Table.ColumnHeader>
-          <Table.ColumnHeader p={3}>
-            Сожженные <br /> калории
-          </Table.ColumnHeader>
-          <Table.ColumnHeader p={3}>Цель</Table.ColumnHeader>
-          <Table.ColumnHeader>Блок</Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {users.map((user) => (
-          <Table.Row key={user.id}>
-            <Table.Cell p={3}>
-              <Avatar
-                variant="outline"
-                name={user.username}
-                src={user?.avatar}
-              />
-            </Table.Cell>
-            <Table.Cell p={3}>{user?.username}</Table.Cell>
-            {/* <Table.Cell p={3}>{user?.role}</Table.Cell> */}
-            <Table.Cell p={3}>{user .email}</Table.Cell>
-            <Table.Cell p={3}>{user?.gender}</Table.Cell>
-            <Table.Cell p={3}>{user?.age}</Table.Cell>
-            <Table.Cell p={3}>{user?.height}</Table.Cell>
-            <Table.Cell p={3}>{user?.weight}</Table.Cell>
-            <Table.Cell p={3}>{user?.points}</Table.Cell>
-            <Table.Cell p={3}>{user?.calories}</Table.Cell>
-            <Table.Cell p={3}>
-              <Tooltip
-                content={user?.goal}
-                positioning={{ placement: 'top' }}
-                openDelay={300}
-                closeDelay={100}
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState(users);
+  const [isLoading, setIsLoading] = useState(false);
 
-                contentProps={{
-                  css: { backgroundColor: 'rgba(2, 149, 7, 0.5)', padding: 2 },
-                }}
-              >
-                <Text cursor="pointer">
-                  {user?.goal.length > 15
-                    ? user?.goal.slice(0, 15) + '...'
-                    : user?.goal}
-                </Text>
-              </Tooltip>
-            </Table.Cell>
-            <Table.Cell>
-              <Button
-                size="sm"
-                colorPalette="green"
-                variant="outline"
-                borderRadius={10}
-                p={2}
-                onClick={() => handleBlockUser(user.id)}
-              >
-                Block User
-              </Button>
-            </Table.Cell>
+  // Create a deferred value for the search query
+  const deferredSearchQuery = useDeferredValue(searchQuery);
+
+  // Use useEffect to trigger search when deferredSearchQuery changes
+  useEffect(() => {
+    const searchUsers = async () => {
+      if (!deferredSearchQuery.trim()) {
+        setFilteredUsers(users); // Reset to original users if search is empty
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const response = await axiosInstance.get(
+          `/api/users/search?query=${deferredSearchQuery}`
+        );
+        setFilteredUsers(response.data);
+      } catch (error) {
+        console.error('Error searching users:', error);
+        // Handle error appropriately
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    searchUsers();
+  }, [deferredSearchQuery]); // Only run effect when deferredSearchQuery changes
+
+  return (
+    <Box>
+      <Box>
+        <InputGroup flex="1" startElement={<IoSearchCircleOutline />}>
+          <Input
+            placeholder="Поиск..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            width="300px"
+          />
+        </InputGroup>
+      </Box>
+
+      <Table.Root size="sm" interactive stickyHeader>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader p={3}>Аватар</Table.ColumnHeader>
+            <Table.ColumnHeader p={3}>Username</Table.ColumnHeader>
+            {/* <Table.ColumnHeader p={3}>Роль</Table.ColumnHeader> */}
+            <Table.ColumnHeader p={3}>Почта</Table.ColumnHeader>
+            <Table.ColumnHeader p={3}>Пол</Table.ColumnHeader>
+            <Table.ColumnHeader p={3}>Возраст</Table.ColumnHeader>
+            <Table.ColumnHeader p={3}>Рост</Table.ColumnHeader>
+            <Table.ColumnHeader p={3}>Вес</Table.ColumnHeader>
+            <Table.ColumnHeader p={3}>Баллы</Table.ColumnHeader>
+            <Table.ColumnHeader p={3}>
+              Сожженные <br /> калории
+            </Table.ColumnHeader>
+            <Table.ColumnHeader p={3}>Цель</Table.ColumnHeader>
+            <Table.ColumnHeader>Блок</Table.ColumnHeader>
           </Table.Row>
-        ))}
-      </Table.Body>
-    </Table.Root>
+        </Table.Header>
+        <Table.Body>
+          {users.map((user) => (
+            <Table.Row key={user.id}>
+              <Table.Cell p={3}>
+                <Avatar
+                  variant="outline"
+                  name={user.username}
+                  src={user?.avatar}
+                />
+              </Table.Cell>
+              <Table.Cell p={3}>{user?.username}</Table.Cell>
+              {/* <Table.Cell p={3}>{user?.role}</Table.Cell> */}
+              <Table.Cell p={3}>{user.email}</Table.Cell>
+              <Table.Cell p={3}>{user?.gender}</Table.Cell>
+              <Table.Cell p={3}>{user?.age}</Table.Cell>
+              <Table.Cell p={3}>{user?.height}</Table.Cell>
+              <Table.Cell p={3}>{user?.weight}</Table.Cell>
+              <Table.Cell p={3}>{user?.points}</Table.Cell>
+              <Table.Cell p={3}>{user?.calories}</Table.Cell>
+              <Table.Cell p={3}>
+                <Tooltip
+                  content={user?.goal}
+                  positioning={{ placement: 'top' }}
+                  openDelay={300}
+                  closeDelay={100}
+                  contentProps={{
+                    css: {
+                      backgroundColor: 'rgba(2, 149, 7, 0.5)',
+                      padding: 2,
+                    },
+                  }}
+                >
+                  <Text cursor="pointer">
+                    {user?.goal.length > 15
+                      ? user?.goal.slice(0, 15) + '...'
+                      : user?.goal}
+                  </Text>
+                </Tooltip>
+              </Table.Cell>
+              <Table.Cell>
+                <Button
+                  size="sm"
+                  colorPalette="green"
+                  variant="outline"
+                  borderRadius={10}
+                  p={2}
+                  onClick={() => handleBlockUser(user.id)}
+                >
+                  Block User
+                </Button>
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table.Root>
+    </Box>
   );
 };
 

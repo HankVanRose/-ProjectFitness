@@ -1,14 +1,14 @@
-import { 
-  Box, 
-  Container, 
-  SimpleGrid, 
-  Image, 
-  Heading, 
-  Text, 
-  Link, 
-  VStack, 
-  HStack, 
-  Flex 
+import {
+  Box,
+  Container,
+  SimpleGrid,
+  Image,
+  Heading,
+  Text,
+  Link,
+  VStack,
+  HStack,
+  Flex,
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { FaTelegram } from 'react-icons/fa';
@@ -16,31 +16,33 @@ import { FaTelegram } from 'react-icons/fa';
 export default function Footer() {
   return (
     <Box
-      as='footer'
+      as="footer"
       py={10}
       mt={5}
       bg={{ base: 'white', _dark: 'black' }}
-      width='100%'
-      position='relative'
-      color='white' // Added white text color for all content
+      width="100%"
+      position="relative"
+      color="white" 
     >
-      <Container maxW='container.xl'>
+      <Container
+        mx="auto" 
+      >
         <SimpleGrid
           columns={{ base: 1, md: 4 }}
           gap={8}
-          justifyContent='center'
-          alignItems='start'
+          justifyContent="center"
+          alignItems="start"
         >
           {/* Logo Column */}
-          <VStack gap={4} height='100%'>
-            <Image src='/logo.png' alt='Logo' h={120} objectFit='contain' />
+          <VStack gap={4} height="100%">
+            <Image src="/logo.png" alt="Logo" h={120} objectFit="contain" />
           </VStack>
 
           {/* Pages Column */}
-          <VStack align={{ base: 'center', md: 'start' }} gap={3} height='100%'>
+          <VStack align={{ base: 'center', md: 'start' }} gap={3} height="100%">
             <Heading
-              as='h6'
-              size='sm'
+              as="h6"
+              size="sm"
               color={{ base: 'black', _dark: 'white' }}
             >
               Страницы
@@ -48,32 +50,32 @@ export default function Footer() {
             <VStack
               align={{ base: 'center', md: 'start' }}
               gap={2}
-              width='100%'
+              width="100%"
             >
               <Link
                 as={RouterLink}
-                to='/'
+                to="/"
                 color={{ base: 'black', _dark: 'white' }}
                 _hover={{ textDecoration: 'none', opacity: 0.8 }}
-                width='100%'
+                width="100%"
               >
                 Главная
               </Link>
               <Link
                 as={RouterLink}
-                to='/card'
+                to="/card"
                 color={{ base: 'black', _dark: 'white' }} // Added white color
                 _hover={{ textDecoration: 'none', opacity: 0.8 }}
-                width='100%'
+                width="100%"
               >
                 Планы тренировок
               </Link>
               <Link
                 as={RouterLink}
-                to='/account'
+                to="/account"
                 color={{ base: 'black', _dark: 'white' }}
                 _hover={{ textDecoration: 'none', opacity: 0.8 }}
-                width='100%'
+                width="100%"
               >
                 Личный кабинет
               </Link>
@@ -81,10 +83,10 @@ export default function Footer() {
           </VStack>
 
           {/* Contacts Column */}
-          <VStack align={{ base: 'center', md: 'start' }} gap={3} height='100%'>
+          <VStack align={{ base: 'center', md: 'start' }} gap={3} height="100%">
             <Heading
-              as='h6'
-              size='sm'
+              as="h6"
+              size="sm"
               color={{ base: 'black', _dark: 'white' }}
             >
               Контакты
@@ -100,10 +102,10 @@ export default function Footer() {
           </VStack>
 
           {/* Developers Column */}
-          <VStack align={{ base: 'center', md: 'start' }} gap={3} height='100%'>
+          <VStack align={{ base: 'center', md: 'start' }} gap={3} height="100%">
             <Heading
-              as='h6'
-              size='sm'
+              as="h6"
+              size="sm"
               color={{ base: 'black', _dark: 'white' }}
             >
               Сайт разработан
@@ -111,15 +113,15 @@ export default function Footer() {
             <VStack
               align={{ base: 'center', md: 'start' }}
               gap={2}
-              width='100%'
+              width="100%"
             >
               <Link
-                href='https://t.me/HankvanRose'
+                href="https://t.me/HankvanRose"
                 isExternal
                 color={{ base: 'black', _dark: 'white' }}
                 _hover={{ textDecoration: 'none', opacity: 0.8 }}
-                display='block'
-                width='100%'
+                display="block"
+                width="100%"
               >
                 <HStack gap={2}>
                   <FaTelegram />
@@ -127,12 +129,12 @@ export default function Footer() {
                 </HStack>
               </Link>
               <Link
-                href='https://t.me/zemfiravildanova'
+                href="https://t.me/zemfiravildanova"
                 isExternal
                 color={{ base: 'black', _dark: 'white' }}
                 _hover={{ textDecoration: 'none', opacity: 0.8 }}
-                display='block'
-                width='100%'
+                display="block"
+                width="100%"
               >
                 <HStack gap={2}>
                   <FaTelegram />
@@ -140,12 +142,12 @@ export default function Footer() {
                 </HStack>
               </Link>
               <Link
-                href='https://t.me/renthefirst'
+                href="https://t.me/renthefirst"
                 isExternal
                 color={{ base: 'black', _dark: 'white' }}
                 _hover={{ textDecoration: 'none', opacity: 0.8 }}
-                display='block'
-                width='100%'
+                display="block"
+                width="100%"
               >
                 <HStack gap={2}>
                   <FaTelegram />
@@ -158,10 +160,10 @@ export default function Footer() {
 
         {/* Copyright */}
         <Flex
-          justify='center'
+          justify="center"
           mt={8}
-          borderTop='1px'
-          borderColor='whiteAlpha.300' // Changed border color to be visible on black
+          borderTop="1px"
+          borderColor="whiteAlpha.300" // Changed border color to be visible on black
           pt={4}
         >
           <Text color={{ base: 'black', _dark: 'white' }}>

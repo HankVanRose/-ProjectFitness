@@ -32,14 +32,14 @@ export default function Header() {
 
   return (
     <>
-      <Box bg={{ base: 'white', _dark: 'black' }} py={4}>
-        <Container maxW='container.lg' px={8}>
-          <Flex align='center' justify='space-between'>
+      <Box bg={{ base: 'white', _dark: 'black' }} py={4} width="100%">
+        <Container px={8} mx="auto">
+          <Flex align="center" justify="space-between">
             <Link
               color={{ base: 'black', _dark: 'white' }}
-              fontSize='xl'
-              fontWeight='bold'
-              textDecoration='none'
+              fontSize="xl"
+              fontWeight="bold"
+              textDecoration="none"
               _hover={{ textDecoration: 'none', cursor: 'pointer' }}
               _focus={{ outline: 'none', boxShadow: 'none' }}
               onClick={() => navigate('/')}
@@ -52,7 +52,7 @@ export default function Header() {
                 <Flex gap={8}>
                   <Link
                     color={{ base: 'black', _dark: 'white' }}
-                    textDecoration='none'
+                    textDecoration="none"
                     _hover={{
                       textDecoration: 'none',
                       color: 'gray.300',
@@ -65,7 +65,7 @@ export default function Header() {
                   </Link>
                   <Link
                     color={{ base: 'black', _dark: 'white' }}
-                    textDecoration='none'
+                    textDecoration="none"
                     _hover={{
                       textDecoration: 'none',
                       color: 'gray.300',
@@ -78,10 +78,10 @@ export default function Header() {
                   </Link>
                 </Flex>
               ) : (
-                <Flex align='center' gap={8}>
+                <Flex align="center" gap={8}>
                   <Link
                     color={{ base: 'black', _dark: 'white' }}
-                    textDecoration='none'
+                    textDecoration="none"
                     _hover={{
                       textDecoration: 'none',
                       color: 'gray.300',
@@ -94,7 +94,7 @@ export default function Header() {
                   </Link>
                   <Link
                     color={{ base: 'black', _dark: 'white' }}
-                    textDecoration='none'
+                    textDecoration="none"
                     _hover={{
                       textDecoration: 'none',
                       color: 'gray.300',
@@ -107,7 +107,7 @@ export default function Header() {
                   </Link>
                   <Link
                     color={{ base: 'black', _dark: 'white' }}
-                    textDecoration='none'
+                    textDecoration="none"
                     _hover={{
                       textDecoration: 'none',
                       color: 'gray.300',
@@ -120,13 +120,13 @@ export default function Header() {
                   </Link>
                   <Image
                     src={user.avatar}
-                    alt='User avatar'
-                    boxSize='40px'
-                    borderRadius='full'
-                    objectFit='cover'
+                    alt="User avatar"
+                    boxSize="40px"
+                    borderRadius="full"
+                    objectFit="cover"
                   />
                   <Button
-                    variant='ghost'
+                    variant="ghost"
                     color={{ base: 'black', _dark: 'white' }}
                     onClick={handleLogOut}
                     _hover={{ bg: 'whiteAlpha.100' }}

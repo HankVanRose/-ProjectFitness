@@ -35,7 +35,7 @@ function App() {
   const bgColor = useColorModeValue('white', 'black');
 
   return (
-    <Box bg={bgColor} minH='100vh'>
+    // <Box bg={bgColor} minH='100vh'>
       <Routes>
         <Route element={<Layout />}>
           <Route path='/' element={<HomePage />} />
@@ -50,7 +50,7 @@ function App() {
 
         </Route>
       </Routes>
-    </Box>
+    // </Box>
   );
 }
 
