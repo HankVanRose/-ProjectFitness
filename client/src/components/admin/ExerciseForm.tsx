@@ -12,8 +12,11 @@ import {
   NativeSelectField,
   NativeSelectRoot,
 } from '@/components/ui/native-select';
+import { useColorModeValue } from '../ui/color-mode';
 
 const ExerciseForm = () => {
+  const bgColor = useColorModeValue('white', 'black');
+
   return (
     <Box
       display="flex"
@@ -22,7 +25,7 @@ const ExerciseForm = () => {
       w="100%" // Changed from maxW="xl" to w="100%"
       p={5}
     >
-      <Fieldset.Root size="lg" >
+      <Fieldset.Root size="lg">
         <Stack>
           <Fieldset.Legend fontWeight={600}>
             Создать новое упражнение
@@ -39,56 +42,57 @@ const ExerciseForm = () => {
             w="100%" // Added full width to grid
           >
             <Field label="Название упражнения">
-              <Input name="name" />
+              <Input name="name" p={2} />
             </Field>
 
             <Field label="URL картинки">
-              <Input name="image" />
+              <Input name="image" p={2} />
             </Field>
 
             <Field label="Краткое описание">
-              <Input name="shortDescription" />
+              <Input name="shortDescription" p={2} />
             </Field>
 
             <Field label="Основная группа мышц">
-              <Input name="shortMuscleGroup" />
+              <Input name="shortMuscleGroup" p={2} />
             </Field>
 
             <Field label="Тип упражнения">
-              <NativeSelectRoot>
+              <NativeSelectRoot variant="outline">
                 <NativeSelectField
+                  p={2}
                   name="type"
+                  bg={bgColor}
                   items={['Силовое', 'Кардио', 'Растяжка', 'Функциональное']}
                 />
               </NativeSelectRoot>
             </Field>
 
             <Field label="Необходимое оборудование">
-              <Input name="equipment" />
+              <Input name="equipment" p={2} />
             </Field>
 
             <Field label="Очки">
-              <Input name="points" type="number" />
+              <Input name="points" type="number" p={2} />
             </Field>
 
             <Field label="Калории">
-              <Input name="calories" type="number" />
+              <Input name="calories" type="number" p={2} />
             </Field>
 
             <Field label="URL изображения мышц">
-              <Input name="muscleImage" />
+              <Input name="muscleImage" p={2} />
             </Field>
 
-            {/* Full width items */}
             <Box gridColumn="span 2">
               <Field label="Подробное описание">
-                <Textarea name="longDescription" rows={4} />
+                <Textarea name="longDescription" p={2} rows={3} />
               </Field>
             </Box>
 
             <Box gridColumn="span 2">
               <Field label="Задействованные мышцы">
-                <Textarea name="longMuscleGroup" rows={4} />
+                <Textarea name="longMuscleGroup" p={2} rows={3} />
               </Field>
             </Box>
           </Grid>
