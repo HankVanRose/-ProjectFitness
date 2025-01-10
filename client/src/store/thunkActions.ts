@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance, { setAccessToken } from '../axiosInstance';
 import { AxiosError } from 'axios';
-import { UserType, UserResponseType, SessionType, UserPlans } from '../types';
+import { UserType, UserResponseType, SessionType } from '../types';
 
 const fetchUserSignup = createAsyncThunk(
   'user/signup',
@@ -71,11 +71,22 @@ const fetchUpdateProfile = createAsyncThunk(
   }
 );
 
-const userActivePlan = createAsyncThunk('user/activeplans', async (userId) => {
-  const response = await axiosInstance.get<UserPlans>(
-    `${import.meta.env.VITE_API}/session/plans/${userId}`
-  );
-  return response.data
+const userActivePlan = createAsyncThunk<
+  SessionType[], // успех
+  number, // тип аргумента
+  { rejectValue: string } //тип ошибки
+>('user/activeplans', async (userId, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.get<SessionType[]>(
+      `${import.meta.env.VITE_API}/session/plans/${userId}`
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError && error.response?.data.message) {
+      return rejectWithValue(error.response.data.message);
+    }
+    return rejectWithValue('An unexpected error occurred');
+  }
 });
 
 // const fetchExercises = createAsyncThunk('exercises', async () => {

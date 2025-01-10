@@ -10,7 +10,6 @@ export type UserType = {
   points?: number;
   age?: number;
   goal?: string;
-  equipment: string[];
 };
 
 export type ExerciseType = {
@@ -48,6 +47,10 @@ export type SessionType = {
   userId: number;
   planId: number;
   isCompleted: boolean;
+  Plan?: {
+    name: string,
+    image: string,
+  }
 };
 
 export type UserResponseType = {

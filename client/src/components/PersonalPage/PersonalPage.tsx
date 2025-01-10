@@ -1,15 +1,17 @@
-import { Col, Container, Row } from 'react-bootstrap';
+import { Container, HStack, VStack } from '@chakra-ui/react';
 import ProgressBarComp from './ProgressBarComp';
 import ProfileData from './ProfileData';
 
 export default function PersonalPage() {
   return (
-    <Container>
+    <Container mx='auto'>
       <ProgressBarComp />
       <Container>
-        <Row>
-          <Col sm={12}><ProfileData /></Col>
-        </Row>
+        <HStack>
+          <VStack>
+            <ProfileData />
+          </VStack>
+        </HStack>
       </Container>
     </Container>
   );
