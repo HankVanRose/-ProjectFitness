@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       points: DataTypes.INTEGER,
       calories: DataTypes.INTEGER,
       goal: DataTypes.STRING,
+      isAdmin: DataTypes.BOOLEAN,
     },
     {
       sequelize,

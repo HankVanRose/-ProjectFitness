@@ -18,6 +18,8 @@ module.exports = {
           weight: '90',
           points: 10,
           calories: 0,
+          goal: 'Стать сильнее',
+          isAdmin: false,
         },
       ],
       {}
