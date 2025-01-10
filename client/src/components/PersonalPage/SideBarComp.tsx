@@ -6,7 +6,7 @@ activeTab: number;
 setActiveTab: (index: number) => void;
 }
 export default function SideBarComp({ activeTab, setActiveTab }: SideBarProps) {
-const tabs = ['Мой профиль', 'Учетная запись', 'Мой план'];
+const tabs = ['Мой профиль', 'Учетная запись', 'Мои планы'];
 // const activeBg = useColorModeValue('#16a34a', '#16a34a'); // фон активной кнопки (светлая/темная темы)
 // const inactiveBg = useColorModeValue('gray.100', 'undefined'); // фон неактивной кнопки
 const activeColor = useColorModeValue('27272A', '27272A'); // цвет текста активной кнопки

@@ -195,22 +195,22 @@ export default function ProfileData() {
             {editableField('age', 'Возраст', 'number')}
 
             <Stack>
+              <Text textStyle='sm' mb={0}>Пол</Text>
               <SelectRoot
                 mb={4}
                 collection={frameworks}
-                // value={formData.gender || ''}
-                onValueChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                value={formData.gender ?? ''}
+                onValueChange={(value: ChangeEvent<HTMLSelectElement>) =>
                   handleInputChange('gender', e.target.value)
                 }
                 disabled={isEditing !== 'gender'}
                 bg={isEditing === 'gender' ? editingBg : undefined}
                 onClick={() => !isEditing && handleEditing('gender')}
               >
-                <SelectLabel>Пол</SelectLabel>
                 <SelectTrigger>
                   <SelectValueText placeholder='Выберите пол'></SelectValueText>
                 </SelectTrigger>
-                <SelectContent color={{ base: 'black', _dark: 'white' }}>
+                <SelectContent>
                   {frameworks.items.map((framework) => (
                     <SelectItem item={framework} key={framework.value}>
                       {framework.label}
