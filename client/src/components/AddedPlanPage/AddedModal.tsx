@@ -9,9 +9,9 @@ import {
   DialogRoot,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { DayExercise, ExercisesType } from '@/types';
+import { DayExercise } from '@/types';
 import axiosInstance from '@/axiosInstance';
-import { useAppSelector } from '@/store/hooks/hooks';
+
 import { setLoading } from '@/store/appSlice';
 
 export default function AddedModal({
@@ -22,7 +22,7 @@ export default function AddedModal({
 }) {
   const { VITE_API } = import.meta.env;
 
-  const [dayExercises, setDayExercises] = useState<DayExercise>({});
+  const [dayExercises, setDayExercises] = useState<DayExercise>([]);
 
   useEffect(() => {
     const dayExr = async () => {
