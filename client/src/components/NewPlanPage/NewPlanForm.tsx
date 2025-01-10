@@ -16,24 +16,22 @@ import { useEffect, useState } from 'react';
 import { Field } from '@/components/ui/field';
 import axiosInstance from '@/axiosInstance';
 import { setError, setLoading } from '@/store/appSlice';
+import { DayExercise, ExerciseType } from '@/types';
 
-interface Day {
-    id: number;
-  planId: number;
-  points: number;
-}
-
-export default function NewPlanForm() {
+export default function NewPlanForm({ planId }: { planId: number }) {
   const { VITE_API } = import.meta.env;
 
-  const [days, setDays] = useState<Day[]>([]);
-  const [exercises, setExercises] = useState([]);
+  const [points, setPoints] = useState<string>('');
+  const [days, setDays] = useState<DayExercise[]>([]);
+  //   const [exerciseIds, setExerciseIds] = useState<number[]>([]);
+  const [allExercises, setAllExercises] = useState<ExerciseType[]>([]);
 
   useEffect(() => {
     const allExercises = async () => {
       try {
+        setLoading(true);
         const res = await axiosInstance.get(`${VITE_API}/exercise`);
-        setExercises(res.data);
+        setAllExercises(res.data);
       } catch (error) {
         setError('Ошибка при загрузке упражнений');
         console.error(error);
@@ -45,9 +43,46 @@ export default function NewPlanForm() {
   }, [VITE_API]);
 
   const addDay = () => {
-      setDays((prevDays) => [...prevDays, { exercises: [], points: 0 },]);
-  }
+    setDays((prevDays) => [...prevDays, { exercises: [], points: 0 }]);
+  };
 
+  const updateDay = (
+    dayIndex: number,
+    field: string,
+    value: string | number
+  ) => {
+    setDays((prevDays) =>
+      prevDays.map((day, index) =>
+        index === dayIndex ? { ...day, [field]: value } : day
+      )
+    );
+  };
+
+  const addExercise = (dayIndex: number) => {
+    setDays((prevDays) =>
+      prevDays.map((day, index) =>
+        index === dayIndex
+          ? { ...day, Exercises: [...day.Exercises, null] }
+          : day
+      )
+    );
+  };
+
+  const handleCreateDay = async () => {
+    try {
+      const response = await axiosInstance.post(`${VITE_API}/days`, {
+        planId,
+        points: Number(points),
+        exerciseIds: days.flatMap((day) =>
+          day.Exercises.filter((exerciseId) => exerciseId != null)
+        ),
+      });
+      setDays(response.data);
+    } catch (error) {
+      setError('Ошибка при добавлении дня');
+      console.error(error);
+    }
+  };
   const difficultyOptions = createListCollection({
     items: [
       { value: 'easy', label: 'Низкая' },
@@ -57,11 +92,10 @@ export default function NewPlanForm() {
   });
 
   const exercisesOptions = createListCollection({
-    items: [
-      { value: 'easy', label: 'Низкая' },
-      { value: 'medium', label: 'Средняя' },
-      { value: 'hard', label: 'Высокая' },
-    ],
+    items: allExercises.map((exercise) => ({
+      value: exercise.id.toString(),
+      label: exercise.name,
+    })),
   });
 
   return (
@@ -134,18 +168,34 @@ export default function NewPlanForm() {
                 type='number'
                 placeholder='Очки'
                 value={day.points}
-                onChange={(e) => handleInputChange(e, dayIndex, 'points')}
+                onChange={(e) =>
+                  updateDay(dayIndex, 'points', Number(e.target.value))
+                }
               />
             </Field>
 
             <Heading size='sm' mt={4}>
               Упражнения
             </Heading>
-            {day.exercises.map((_, exerciseIndex: number) => (
+            {day.Exercises.map((exerciseId, exerciseIndex: number) => (
               <Field key={exerciseIndex} mt={2} label='Выберите упражнение'>
-                <SelectRoot mb={4} collection={exercisesOptions}>
+                <SelectRoot
+                  mb={4}
+                  collection={exercisesOptions}
+                  onValueChange={(value) => {
+                    const updatedExercises = [...day.Exercises];
+                    updatedExercises[exerciseIndex] = Number(value);
+                    updateDay(dayIndex, 'exercises', updatedExercises);
+                  }}
+                >
                   <SelectTrigger>
-                    <SelectValueText placeholder='Выберите упражнение'></SelectValueText>
+                    <SelectValueText placeholder='Выберите упражнение'>
+                    {exerciseId
+                      ? exercisesOptions.items.find(
+                          (item) => item.value === exerciseId.toString()
+                        )?.label
+                      : ''}
+                    </SelectValueText>
                   </SelectTrigger>
                   <SelectContent>
                     {exercisesOptions.items.map((option) => (
@@ -158,18 +208,22 @@ export default function NewPlanForm() {
               </Field>
             ))}
 
-            <Button mt={4} colorScheme='green' onClick={() => addExercise(dayIndex)}>
-                Добавить упражнение
+            <Button
+              mt={4}
+              colorScheme='green'
+              onClick={() => addExercise(dayIndex)}
+            >
+              Добавить упражнение
             </Button>
           </Box>
         ))}
 
-        <Button mt={4} colorScheme='green' onClick={addDay}> 
-            Добавить день
+        <Button mt={4} colorScheme='green' onClick={addDay}>
+          Добавить день
         </Button>
 
         <Button type='submit' colorScheme='teal' size='lg' mt={6}>
-            Создать план
+          Создать план
         </Button>
       </VStack>
     </Box>
