@@ -43,6 +43,8 @@ export default function AddedPlanPage() {
     planToShow(id);
   }, [id]);
 
+
+  console.log(singlePlan.numOfTrainings);
   return (
     <>
       <Box
@@ -83,11 +85,11 @@ export default function AddedPlanPage() {
                   <Stack gap="10" width="full">
                     <StepsRoot
                       defaultValue={1}
-                      count={singlePlan.numOfSessions}
+                      count={singlePlan.numOfTrainings}
                       colorPalette="green"
                     >
                       <StepsList>
-                        {[...Array(singlePlan.numOfSessions)].map(
+                        {[...Array(singlePlan.numOfTrainings)].map(
                           (_, stepIndex) => (
                             <StepsItem
                               onClick={() => handleOpen(stepIndex)}
@@ -97,7 +99,7 @@ export default function AddedPlanPage() {
                           )
                         )}
                       </StepsList>
-                      {[...Array(singlePlan.numOfSessions)].map(
+                      {[...Array(singlePlan.numOfTrainings)].map(
                         (_, contentIndex) => (
                           <StepsContent key={contentIndex} index={contentIndex}>
                             {`ДЕНЬ ${contentIndex + 1}`}

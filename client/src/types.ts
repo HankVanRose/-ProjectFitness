@@ -38,18 +38,16 @@ export type PlanType = {
   difficulty: string;
   image: string;
   slogan: string;
-
-  numOfSessions: number;
+  numOfTrainings: number;
   longDescription: string;
   weeksDescription: string;
+  
 };
-
- 
- 
 
 export type SessionType = {
   userId: number;
   planId: number;
+  isCompleted: boolean;
 };
 
 export type UserResponseType = {
