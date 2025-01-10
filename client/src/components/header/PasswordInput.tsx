@@ -13,40 +13,32 @@ interface PasswordInputProps {
 const PasswordInput = ({
   value,
   onChange,
-  name = 'password',
-  placeholder = 'Password',
+
+
   className,
 }: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <Box className={className}>
-      <Flex>
+      <Flex borderRadius="md">
         <Input
           p={2}
           type={showPassword ? 'text' : 'password'}
-          border={'1px solid black'}
-          name={name}
-          placeholder={placeholder}
+          name="password"
+          placeholder="Введите ваш пароль"
           value={value}
           onChange={onChange}
           borderRight="none"
           roundedRight="none"
         />
-        <Box
-          borderWidth="1px"
-          borderLeft="none"
-          borderColor="inherit"
-          roundedRight="md"
-          p={0}
-        >
+        <Box>
           <Button
+            border="1px solid rgba(146, 146, 146, 0.3)"
+            borderRadius="0 5px 5px 0"
             h="100%"
-            size="sm"
             onClick={() => setShowPassword(!showPassword)}
             variant="ghost"
-            _hover={{ bg: 'transparent' }}
-            _active={{ bg: 'transparent' }}
           >
             {showPassword ? (
               <MdVisibilityOff size={20} />

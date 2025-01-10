@@ -17,7 +17,7 @@ const fetchUserSignup = createAsyncThunk(
       if (error instanceof AxiosError && error.response?.data) {
         return { error: error.response.data.message as string };
       }
-      return { error: 'An unexpected error occurred' }; // Returns string instead of undefined
+      return { error: 'Произошла ошибка, пожалуйста, повторите ещё раз или попробуйте попозже.' }; 
     }
   }
 );
@@ -35,7 +35,7 @@ const fetchUserSignin = createAsyncThunk(
       if (error instanceof AxiosError && error.response?.data) {
         return { error: error.response.data.message as string };
       }
-      return { error: 'An unexpected error occurred' };
+      return { error: 'Произошла ошибка, пожалуйста, повторите ещё раз или попробуйте попозже.' }; 
     }
   }
 );
@@ -66,7 +66,7 @@ const fetchUpdateProfile = createAsyncThunk(
       if (error instanceof AxiosError && error.response?.data) {
         return { error: error.response.data.message as string };
       }
-      return { error: 'An unexpected error occurred' };
+      return { error: 'Произошла ошибка, пожалуйста, повторите ещё раз или попробуйте попозже.' }; 
     }
   }
 );

@@ -11,6 +11,7 @@ import {
 import PasswordInput from './PasswordInput';
 import { useAuth } from '@/hooks/useAuth';
 import { useAppSelector } from '@/store/hooks/hooks';
+import { useColorModeValue } from '../ui/color-mode';
 
 interface SignInModalProps {
   show: boolean;
@@ -22,6 +23,8 @@ export default function SigninModal({ show, handleClose }: SignInModalProps) {
     email: '',
     password: '',
   });
+  const bgColor = useColorModeValue('white', 'black');
+  const textColor = useColorModeValue('black', 'white');
 
   const { signin } = useAuth();
   const { error } = useAppSelector((store) => store.appSlice);
@@ -56,33 +59,32 @@ export default function SigninModal({ show, handleClose }: SignInModalProps) {
       open={show}
       onOpenChange={handleClose}
     >
-      <DialogContent p={4} backgroundColor={'white'} color={'black'}>
+      <DialogContent p={7} backgroundColor={bgColor} color={textColor}>
         <DialogHeader>
           <DialogTitle mb={5} fontWeight={600}>
-            Sign in
+          Вход
           </DialogTitle>
-          <DialogCloseTrigger />
+          <DialogCloseTrigger borderRadius='md' />
         </DialogHeader>
         <DialogBody>
           <form onSubmit={handleSubmit}>
             <VStack>
               <Box w="100%">
-                <Text mb={2}>Email address</Text>
+                <Text mb={2}>Электронная почта</Text>
                 <Input
                   p={2}
                   id="email"
                   type="text"
                   name="email"
                   autoComplete="off"
-                  placeholder="Enter email"
+                  placeholder="Введите вашу почту"
                   value={formData.email}
                   onChange={handleChange}
-                  border={'1px solid black'}
                 />
               </Box>
 
               <Box w="100%">
-                <Text mb={2}>Password</Text>
+                <Text mb={2}>Пароль</Text>
                 <PasswordInput
                   name="password"
                   value={formData.password}
@@ -94,19 +96,22 @@ export default function SigninModal({ show, handleClose }: SignInModalProps) {
                 <Flex justify="space-between" align="center">
                   <Button
                     onClick={() => {
-                      /* Handle forgot password */
+                      //!
                     }}
+                    variant="ghost"
+                    p={3}
+                    borderRadius="md"
                   >
-                    Forgot Password?
+                    Забыли пароль?
                   </Button>
                   <Button
                     p={3}
                     borderRadius="md"
-                    color={'black'}
+                    color={textColor}
                     variant="outline"
                     type="submit"
                   >
-                    Sign in
+                    Войти
                   </Button>
                 </Flex>
               </Box>
