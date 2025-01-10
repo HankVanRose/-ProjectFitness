@@ -1,11 +1,15 @@
 const router = require('express').Router();
 const { Day, Exercise, DayExercise, Plan } = require('../../db/models');
 
-router.get('/', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
+ 
     const days = await Day.findAll({
+      where: { planId: req.params.id },
+      attributes: { exclude: ['createdAt', 'updatedAt'] },
       include: {
         model: Exercise,
+        attributes: { exclude: ['createdAt', 'updatedAt'] },
       },
     });
     res.status(200).json(days);
@@ -17,43 +21,27 @@ router.get('/', async (req, res) => {
   }
 });
 
-// router.get('/dayexercise', async (req, res) => {
-//   try {
-//     const days = await DayExercise.findAll({
-//       include: {
-//         model: Exercise,
-//       },
-//     });
-//     res.status(200).json(days);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({
-//       error: 'Failed to fetch days',
-//     });
-//   }
-// });
+ 
 
 //! создаем день с упражнениями
 router.post('/', async (req, res) => {
-    const { planId, points, exerciseIds } = req.body;
+  const { planId, points, exerciseIds } = req.body;
 
   try {
     const newDay = await Day.create({ planId, points });
 
     if (exerciseIds && exerciseIds.length > 0) {
-        const dayExercises = exerciseIds.map((exerciseId) => 
-        ({
-            dayId: newDay.id,
-            exerciseId,
-        })
-    );
-    await DayExercise.bulkCreate(dayExercises);
+      const dayExercises = exerciseIds.map((exerciseId) => ({
+        dayId: newDay.id,
+        exerciseId,
+      }));
+      await DayExercise.bulkCreate(dayExercises);
     }
 
     const dayWithExercises = await Day.findByPk(newDay.id, {
-        include: {
-            model: Exercise,
-        },
+      include: {
+        model: Exercise,
+      },
     });
     res.status(201).json(dayWithExercises);
   } catch (error) {
@@ -122,4 +110,3 @@ router.post('/newPlan/day/exercises', async (req, res) => {
 });
 
 module.exports = router;
- 

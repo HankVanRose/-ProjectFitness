@@ -1,0 +1,79 @@
+.dialog-overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+  }
+  
+  .dialog-content {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 90%;
+    position: relative;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .dialog-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .dialog-close {
+    cursor: pointer;
+    font-size: 18px;
+    color: #888;
+    transition: color 0.3s;
+  }
+  
+  .dialog-close:hover {
+    color: #ff5555;
+  }
+  
+  .dialog-body {
+    margin-top: 20px;
+  }
+  
+  .exercise-container {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+  
+  .exercise-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #555;
+  }
+  
+  .exercise-description {
+    margin-top: 10px;
+    color: #666;
+  }
+  
+  .exercise-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: transform 0.2s;
+  }
+  
+  .exercise-image:hover {
+    transform: scale(1.05);
+  }
