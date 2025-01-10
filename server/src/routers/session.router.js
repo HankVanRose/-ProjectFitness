@@ -29,7 +29,18 @@ router.route('/').get(async (req, res) => {
 //   }
 // });
 
-//! все названия сессии юзера
+//! все сессии юзера с планами (только названия и картинки)
+//! [
+//!  {
+//!     "id": 1,
+//!     "planId": 2,
+//!     "userId": 1,
+//!     "isCompleted": false,
+//!     "Plan": {
+//!       "name": "CrossFit HELL",
+//!       "image": "https://fitni.ru/wp-content/uploads/2017/07/1500225443_maxresdefault.jpg"
+//!     }
+//!   }]
 router.route('/plans/:userId').get(async (req, res) => {
   try {
     const { userId } = req.params;
@@ -39,14 +50,14 @@ router.route('/plans/:userId').get(async (req, res) => {
       attributes: { exclude: ['createdAt', 'updatedAt'] },
       include: {
         model: Plan,
-        attributes: ['name'],
+        attributes: ['name', 'image'],
       },
     });
 
-    const planNames = plans.map((plan) => plan.Plan.name);
-    const planNamesWithSpaces = planNames.join(' ');
+    // const planNames = plans.map((plan) => plan.Plan.name);
+    // const planNamesWithSpaces = planNames.join(' ');
 
-    res.json(planNamesWithSpaces);
+    res.json(plans);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server error' });

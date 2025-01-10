@@ -2,8 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   ExercisesType,
   PlansType,
-  UserPlan,
-  UserPlans,
+  SessionType,
   UserType,
 } from '../types';
 import {
@@ -21,7 +20,7 @@ type InitialState = {
   plans: PlansType;
   loading: boolean;
   error: string | null;
-  userplan: string[];
+  userplan: SessionType[] | null;
 };
 
 const initialState: InitialState = {
@@ -30,7 +29,7 @@ const initialState: InitialState = {
   plans: [] as PlansType,
   loading: false,
   error: '',
-  userplan: [],
+  userplan: null,
 };
 
 const appSlice = createSlice({
@@ -123,13 +122,18 @@ const appSlice = createSlice({
         state.loading = false;
       })
       .addCase(userActivePlan.fulfilled, (state, action) => {
-        state.userplan = [...action.payload];
-
         state.loading = false;
+        state.userplan = action.payload;
       })
       .addCase(userActivePlan.pending, (state) => {
         state.loading = true;
-      });
+        state.error = null;
+      })
+      .addCase(userActivePlan.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'An unexpected error';
+        state.userplan = null;
+      })
   },
 });
 

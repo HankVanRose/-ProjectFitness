@@ -1,23 +1,21 @@
 import { useAppDispatch, useAppSelector } from '../../store/hooks/hooks';
 import { ChangeEvent, useEffect, useState } from 'react';
 import SideBarComp from './SideBarComp';
-import styles from './PersonalPage.module.css';
 import { fetchUpdateProfile, userActivePlan } from '../../store/thunkActions';
 import {
   Box,
   Button,
   Container,
-  Group,
   HStack,
   IconButton,
   Input,
-  InputElement,
   Stack,
   VStack,
   Text,
+  Heading,
+  Image,
 } from '@chakra-ui/react';
 import { InputGroup } from '@/components/ui/input-group';
-// import { EditIcon, CheckIcon } from '@chakra-ui/icons';
 import { FiEdit, FiCheck } from 'react-icons/fi';
 import { useColorModeValue } from '../ui/color-mode';
 import { createListCollection } from '@chakra-ui/react';
@@ -30,6 +28,7 @@ import {
   SelectValueText,
 } from '@/components/ui/select';
 import { Field } from '@/components/ui/field';
+import { setLoading } from '@/store/appSlice';
 
 interface FormData {
   id: number;
@@ -38,7 +37,6 @@ interface FormData {
   height: string;
   weight: string;
   goal: string;
-  equipment: string[];
   username: string;
   email: string;
   password: string;
@@ -47,15 +45,18 @@ interface FormData {
 export default function ProfileData() {
   const { user } = useAppSelector((state) => state.appSlice);
   const dispatch = useAppDispatch();
+  const { userplan } = useAppSelector((store) => store.appSlice);
 
   const [activeTab, setActiveTab] = useState<number>(0);
   const [isFormModified, setIsFormModified] = useState(false); //изменение формы
 
   useEffect(() => {
-    dispatch(userActivePlan(user?.id));
+    if (user) {
+      dispatch(userActivePlan(user?.id));
+    } else {
+      setLoading(true);
+    }
   }, [user?.id]);
-
-  const { userplan } = useAppSelector((store) => store.appSlice);
 
   const [formData, setFormData] = useState<FormData>({
     id: 0,
@@ -64,7 +65,6 @@ export default function ProfileData() {
     height: '',
     weight: '',
     goal: '',
-    equipment: [],
     username: '',
     email: '',
     password: '',
@@ -72,7 +72,7 @@ export default function ProfileData() {
 
   const [isEditing, setIsEditing] = useState<string>('');
 
-  const focusBg = useColorModeValue('blue.500', 'blue.900'); // фон при фокусе
+  // const focusBg = useColorModeValue('blue.500', 'blue.900'); // фон при фокусе
   const editingBg = useColorModeValue('green.50', 'green.900'); // фон при изменении
 
   useEffect(() => {
@@ -84,7 +84,6 @@ export default function ProfileData() {
         height: user.height || '',
         weight: user.weight || '',
         goal: user.goal || '',
-        equipment: user.equipment || [],
         username: user.username || '',
         email: user.email || '',
         password: '',
@@ -113,7 +112,6 @@ export default function ProfileData() {
         height: formData.height,
         weight: formData.weight,
         goal: formData.goal,
-        equipment: formData.equipment,
         username: formData.username,
         email: formData.email,
         password: formData.password,
@@ -132,31 +130,38 @@ export default function ProfileData() {
 
     return (
       <Stack>
-        <Field label={label} mb={4} color={{ base: 'black', _dark: 'white' }}>
+        <Field label={label} mb={4}>
           <InputGroup
             endElement={
               <IconButton
-                h="1.75rem"
-                size="sm"
+                h='1.75rem'
+                size='sm'
                 aria-label={isEditingField ? 'Save' : 'Edit'}
                 onClick={() => handleEditing(field)}
-                colorScheme={isEditingField ? 'green' : 'gray'}
+                variant='ghost'
               >
                 {isEditingField ? <FiCheck /> : <FiEdit />}
               </IconButton>
             }
           >
             <Input
-              bgColor={{ base: 'black', _dark: 'white' }}
-              color={{ base: 'white', _dark: 'black' }}
               type={type}
               placeholder={label}
+              _placeholder={{
+                color: 'inherit',
+                opacity: 1,
+              }}
               value={formData[field] ?? ''}
               name={field}
               onChange={(e) => handleInputChange(field, e.target.value)}
               disabled={!isEditingField}
+              _disabled={{
+                opacity: 1,
+                cursor: 'not-allowed',
+                color: 'inherit',
+              }}
               bg={isEditingField ? editingBg : undefined}
-              _focus={{ bg: focusBg }}
+              // _focus={{ bg: focusBg }}
               onClick={() => !isEditingField && handleEditing(field)}
               pl={4}
             />
@@ -191,20 +196,19 @@ export default function ProfileData() {
 
             <Stack>
               <SelectRoot
-                bgColor={{ base: 'black', _dark: 'white' }}
-                color={{ base: 'black', _dark: 'black' }}
                 mb={4}
                 collection={frameworks}
-                value={formData.gender || ''}
-                onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                // value={formData.gender || ''}
+                onValueChange={(e: ChangeEvent<HTMLSelectElement>) =>
                   handleInputChange('gender', e.target.value)
                 }
-                isDisabled={isEditing !== 'gender'}
+                disabled={isEditing !== 'gender'}
                 bg={isEditing === 'gender' ? editingBg : undefined}
                 onClick={() => !isEditing && handleEditing('gender')}
               >
+                <SelectLabel>Пол</SelectLabel>
                 <SelectTrigger>
-                  <SelectValueText placeholder="Выберите пол"></SelectValueText>
+                  <SelectValueText placeholder='Выберите пол'></SelectValueText>
                 </SelectTrigger>
                 <SelectContent color={{ base: 'black', _dark: 'white' }}>
                   {frameworks.items.map((framework) => (
@@ -213,14 +217,6 @@ export default function ProfileData() {
                     </SelectItem>
                   ))}
                 </SelectContent>
-                {/* <Button
-                mt={2}
-                size='sm'
-                onClick={() => handleEditing('gender')}
-                colorScheme={isEditing === 'gender' ? 'green' : 'gray'}
-              >
-                {isEditing === 'gender' ? '✔️' : '✏️'}
-              </Button> */}
               </SelectRoot>
             </Stack>
 
@@ -236,12 +232,13 @@ export default function ProfileData() {
                 onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                   handleInputChange('goal', e.target.value)
                 }
-                isDisabled={isEditing !== 'goal'}
+                disabled={isEditing !== 'goal'}
                 bg={isEditing === 'goal' ? editingBg : undefined}
                 onClick={() => !isEditing && handleEditing('goal')}
               >
+                <SelectLabel>Моя цель</SelectLabel>
                 <SelectTrigger>
-                  <SelectValueText placeholder="Выберите цель"></SelectValueText>
+                  <SelectValueText placeholder='Выберите цель'></SelectValueText>
                 </SelectTrigger>
                 <SelectContent color={{ base: 'black', _dark: 'white' }}>
                   {goals.items.map((one) => (
@@ -279,19 +276,19 @@ export default function ProfileData() {
           <>
             <Stack>
               <Field
-                label="ID"
+                label='ID'
                 mb={4}
                 color={{ base: 'black', _dark: 'white' }}
               >
                 <Input
                   color={{ base: 'black', _dark: 'white' }}
-                  type="text"
+                  type='text'
                   value={user ? `${user?.id}` : 'ID пользователя'}
-                  name="id"
+                  name='id'
                   disabled
                   pl={4}
-                  aria-label="ID пользователя"
-                  aria-describedby="basic-addon3"
+                  aria-label='ID пользователя'
+                  aria-describedby='basic-addon3'
                 />
               </Field>
             </Stack>
@@ -310,8 +307,25 @@ export default function ProfileData() {
                 Нет тренировок
               </Text>
             ) : (
-              // Здесь вы можете добавить код, чтобы отобразить тренировки, если они есть
-              <Text color={{ base: 'black', _dark: 'white' }}>{userplan}</Text>
+              <VStack gap={4} align='start'>
+                {userplan?.map((plan) => (
+                  <Box
+                  key={plan.planId}
+                  p={4}
+                  borderWidth='1px'
+                  borderRadius='md'
+                  w='full'>
+                    <Text fontWeight='bold'>Название плана: {plan.Plan?.name || "Не указано"}</Text>
+                    <Text>Статус: {plan.isCompleted ? 'Завершен' : 'В процессе'}</Text>
+                    {plan.Plan?.image && (
+                      <Image
+                      src={plan.Plan.image}
+                      alt={plan.Plan.name || 'План'}
+                      maxW='100%' borderRadius='8px' />
+                    )}
+                  </Box>
+                ))}
+              </VStack>
             )}
           </>
         );
@@ -326,19 +340,20 @@ export default function ProfileData() {
 
   return (
     <Container>
-      <HStack>
-        <VStack>
+      <HStack alignItems='flex-start'>
+        <VStack mx={10} mt={90}>
           <SideBarComp activeTab={activeTab} setActiveTab={setActiveTab} />
         </VStack>
-        <Box flex={1}>
+        <Box flex={1} mr={10}>
+          <Heading mb={7}>Профиль атлета</Heading>
           {content()}
           <Button
-            minW="10ch"
-            variant="surface"
-            colorPalette="green"
-            borderRadius="sm"
+            minW='10ch'
+            variant='surface'
+            colorPalette='green'
+            borderRadius='sm'
             onClick={handleSave}
-            className="mt-3"
+            className='mt-3'
           >
             Сохранить
           </Button>
