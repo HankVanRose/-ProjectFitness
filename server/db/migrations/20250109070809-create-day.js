@@ -19,6 +19,10 @@ module.exports = {
       points: {
         type: Sequelize.INTEGER,
       },
+      description: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

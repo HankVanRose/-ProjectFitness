@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { Plan } = require('../../db/models');
+
 router.route('/').get(async (req, res) => {
   try {
     const plans = await Plan.findAll();

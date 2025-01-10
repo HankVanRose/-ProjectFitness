@@ -1,4 +1,3 @@
-import { useAppDispatch, useAppSelector } from '@/store/hooks/hooks';
 import {
   Box,
   Button,
@@ -16,14 +15,25 @@ import { useEffect, useState } from 'react';
 import { Field } from '@/components/ui/field';
 import axiosInstance from '@/axiosInstance';
 import { setError, setLoading } from '@/store/appSlice';
-import { DayExercise, ExerciseType } from '@/types';
+import { DayExercise, ExerciseType, PlanType } from '@/types';
 
-export default function NewPlanForm({ planId }: { planId: number }) {
+export default function NewPlanForm() {
   const { VITE_API } = import.meta.env;
-
-  const [points, setPoints] = useState<string>('');
+  const [plan, setPlan] = useState<PlanType>({
+    id: 0,
+    name: '',
+    shortDescription: '',
+    equipment: '',
+    difficulty: '',
+    image: '',
+    slogan: '',
+    weeksDuration: 0,
+    numOfSessions: 0,
+    longDescription: '',
+    weeksDescription: '',
+    sessionsPerWeek: 0,
+  });
   const [days, setDays] = useState<DayExercise[]>([]);
-  //   const [exerciseIds, setExerciseIds] = useState<number[]>([]);
   const [allExercises, setAllExercises] = useState<ExerciseType[]>([]);
 
   useEffect(() => {
@@ -42,42 +52,47 @@ export default function NewPlanForm({ planId }: { planId: number }) {
     allExercises();
   }, [VITE_API]);
 
+  const handleChange = (field: keyof PlanType, value: string | number) => {
+    setPlan((prevPlan) => ({ ...prevPlan, [field]: value }));
+  }
+
   const addDay = () => {
-    setDays((prevDays) => [...prevDays, { exercises: [], points: 0 }]);
+    setDays((prevDays) => [...prevDays, { points: 0, Exercises: [] }]);
   };
 
-  const updateDay = (
-    dayIndex: number,
-    field: string,
-    value: string | number
-  ) => {
-    setDays((prevDays) =>
-      prevDays.map((day, index) =>
-        index === dayIndex ? { ...day, [field]: value } : day
-      )
-    );
+  const removeDay = (index: number) => {
+    setDays((prevDays) => prevDays.filter((_, ind) => ind !== index));
   };
-
+  
   const addExercise = (dayIndex: number) => {
-    setDays((prevDays) =>
-      prevDays.map((day, index) =>
-        index === dayIndex
-          ? { ...day, Exercises: [...day.Exercises, null] }
-          : day
-      )
-    );
-  };
+      setDays((prevDays) => {
+          const updatedDays = [...prevDays];
+          updatedDays[dayIndex].Exercises.push(null); //! почему строка? 
+          return updatedDays;
+        })  
+    };
 
-  const handleCreateDay = async () => {
+      const updateDay = (
+        dayIndex: number,
+        field: string,
+        value: string | number
+      ) => {
+        setDays((prevDays) => 
+          prevDays.map((day, index) =>
+            index === dayIndex ? { ...day, [field]: value } : day
+          )
+        );
+      };
+    
+  const handleSubmit = async () => {
     try {
-      const response = await axiosInstance.post(`${VITE_API}/days`, {
-        planId,
-        points: Number(points),
-        exerciseIds: days.flatMap((day) =>
-          day.Exercises.filter((exerciseId) => exerciseId != null)
-        ),
-      });
-      setDays(response.data);
+      const resp = await axiosInstance.post(
+        `${VITE_API}/days/newPlan/day/exercises`,
+        { ...plan,
+            days,
+        }
+      );
+      console.log(resp.data);
     } catch (error) {
       setError('Ошибка при добавлении дня');
       console.error(error);
@@ -103,19 +118,35 @@ export default function NewPlanForm({ planId }: { planId: number }) {
       <Heading mb={6}>Создать новый план</Heading>
       <VStack gap={6} as='form'>
         <Field label='Название'>
-          <Input placeholder='Название плана' name='name' />
+          <Input
+            placeholder='Название плана'
+            name={plan.name}
+            onChange={(e) => handleChange('name', e.target.value)}
+          />
         </Field>
 
         <Field label='Краткое описание'>
-          <Input placeholder='Краткое описание' name='shortDescription' />
+          <Input
+            placeholder='Краткое описание'
+            name={plan.shortDescription}
+            onChange={(e) => handleChange('shortDescription', e.target.value)}
+          />
         </Field>
 
         <Field label='Детальное описание'>
-          <Input placeholder='Детальное описание' name='longDescription' />
+          <Input
+            placeholder='Детальное описание'
+            name={plan.longDescription}
+            onChange={(e) => handleChange('longDescription', e.target.value)}
+          />
         </Field>
 
         <Field label='Оборудование'>
-          <Input placeholder='Укажите оборудование' name='equipment' />
+          <Input
+            placeholder='Укажите оборудование'
+            name={plan.equipment}
+            onChange={(e) => handleChange('equipment', e.target.value)}
+          />
         </Field>
 
         <Field label='Сложность'>
@@ -137,7 +168,8 @@ export default function NewPlanForm({ planId }: { planId: number }) {
           <Input
             type='number'
             placeholder='Количество недель'
-            name='weeksDuration'
+            name={plan.weeksDuration.toString()}
+            onChange={(e) => handleChange('weeksDuration', e.target.value)}
             min={1}
           />
         </Field>
@@ -146,7 +178,8 @@ export default function NewPlanForm({ planId }: { planId: number }) {
           <Input
             type='number'
             placeholder='Количество тренировок в неделю'
-            name='sessionsPerWeek'
+            name={plan.sessionsPerWeek.toString()}
+            onChange={(e) => handleChange('sessionsPerWeek', e.target.value)}
             min={1}
           />
         </Field>
@@ -185,16 +218,16 @@ export default function NewPlanForm({ planId }: { planId: number }) {
                   onValueChange={(value) => {
                     const updatedExercises = [...day.Exercises];
                     updatedExercises[exerciseIndex] = Number(value);
-                    updateDay(dayIndex, 'exercises', updatedExercises);
+                    updateDay(dayIndex, 'Exercises', updatedExercises);
                   }}
                 >
                   <SelectTrigger>
                     <SelectValueText placeholder='Выберите упражнение'>
-                    {exerciseId
-                      ? exercisesOptions.items.find(
-                          (item) => item.value === exerciseId.toString()
-                        )?.label
-                      : ''}
+                      {exerciseId
+                        ? exercisesOptions.items.find(
+                            (item) => item.value === exerciseId.toString()
+                          )?.label
+                        : ''}
                     </SelectValueText>
                   </SelectTrigger>
                   <SelectContent>
@@ -222,7 +255,13 @@ export default function NewPlanForm({ planId }: { planId: number }) {
           Добавить день
         </Button>
 
-        <Button type='submit' colorScheme='teal' size='lg' mt={6}>
+        <Button
+          type='submit'
+          colorScheme='teal'
+          size='lg'
+          mt={6}
+          onClick={handleSubmit}
+        >
           Создать план
         </Button>
       </VStack>

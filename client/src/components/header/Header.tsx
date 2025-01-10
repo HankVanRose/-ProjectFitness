@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks/hooks';
-import { fetchUserLogout } from '@/store/thunkActions';
+import { fetchUserLogout, userActivePlan } from '@/store/thunkActions';
 import { Box, Flex, Container, Link, Image, Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SignupModal from './SignupModal';
 import SigninModal from './SigninModal';
 import { setError } from '@/store/appSlice';
@@ -16,6 +16,12 @@ export default function Header() {
     signUp: false,
     signIn: false,
   });
+
+  // useEffect(() => {
+  //   dispatch(userActivePlan(user?.id))
+  // }, [user?.id])
+
+  // const {userplan} = useAppSelector((store)=> store.appSlice)
 
   const handleLogOut = () => {
     dispatch(fetchUserLogout());
@@ -34,6 +40,7 @@ export default function Header() {
     <>
       <Box bg={{ base: 'white', _dark: 'black' }} py={4} width="100%">
         <Container px={8} mx="auto">
+
           <Flex align="center" justify="space-between">
             <Link
               color={{ base: 'black', _dark: 'white' }}
@@ -47,6 +54,7 @@ export default function Header() {
               BE FIT
             </Link>
 
+            {/* {userplan} */}
             <Flex gap={4}>
               {!user ? (
                 <Flex gap={8}>
