@@ -9,31 +9,77 @@ module.exports = {
         {
           planId: 1,
           points: 100,
+          description: 'biba biba ibbba',
         },
         {
           planId: 1,
+          points: 100,
+          description: 'biba biba ibbba',
+        },
+        {
+          planId: 1,
+          points: 100,
+          description: 'biba biba ibbba',
+        },
+        {
+          planId: 1,
+          points: 100,
+          description: 'biba biba ibbba',
+        },
+        {
+          planId: 1,
+          points: 100,
+          description: 'biba biba ibbba',
+        },
+        {
+          planId: 1,
+          points: 100,
+          description: 'biba biba ibbba',
+        },
+        {
+          planId: 1,
+          points: 100,
+          description: 'biba biba ibbba',
+        },
+        {
+          planId: 1,
+          points: 100,
+          description: 'biba biba ibbba',
+        },
+        {
+          planId: 1,
+          points: 100,
+          description: 'biba biba ibbba',
+        },
+        {
+          planId: 1,
+          points: 100,
+          description: 'biba biba ibbba',
+        },
+        {
+          planId: 1,
+          points: 100,
+          description: 'biba biba ibbba',
+        },
+        {
+          planId: 1,
+          points: 100,
+          description: 'biba biba ibbba',
+        },
+        {
+          planId: 2,
           points: 150,
-        },
-        {
-          planId: 2,
-          points: 200,
-        },
-        {
-          planId: 2,
-          points: 175,
+          description: 'biba biba ibbba',
         },
         {
           planId: 3,
-          points: 225,
-        },
-        // Adding days for plan 4
-        {
-          planId: 4,
-          points: 180,
+          points: 100,
+          description: 'biba biba ibbba',
         },
         {
           planId: 4,
-          points: 190,
+          points: 150,
+          description: 'biba biba ibbba',
         },
       ],
       {}
@@ -106,7 +152,7 @@ module.exports = {
           dayId: 5,
           exerciseId: 29,
         },
-        // Days for plan 4
+        // Days for plan 6
         {
           dayId: 6,
           exerciseId: 3,
@@ -119,6 +165,7 @@ module.exports = {
           dayId: 6,
           exerciseId: 2,
         },
+        // Days for plan 7
         {
           dayId: 7,
           exerciseId: 9,
@@ -130,6 +177,71 @@ module.exports = {
         {
           dayId: 7,
           exerciseId: 17,
+        },
+        // Days for plan 8
+        {
+          dayId: 8,
+          exerciseId: 11,
+        },
+        {
+          dayId: 8,
+          exerciseId: 12,
+        },
+        {
+          dayId: 8,
+          exerciseId: 13,
+        },
+        // Days for plan 9
+        {
+          dayId: 9,
+          exerciseId: 22,
+        },
+        {
+          dayId: 9,
+          exerciseId: 23,
+        },
+        {
+          dayId: 9,
+          exerciseId: 32,
+        },
+        // Days for plan 10
+        {
+          dayId: 10,
+          exerciseId: 24,
+        },
+        {
+          dayId: 10,
+          exerciseId: 12,
+        },
+        {
+          dayId: 10,
+          exerciseId: 1,
+        },
+        // Days for plan 11
+        {
+          dayId: 11,
+          exerciseId: 3,
+        },
+        {
+          dayId: 11,
+          exerciseId: 2,
+        },
+        {
+          dayId: 11,
+          exerciseId: 14,
+        },
+        // Days for plan 12
+        {
+          dayId: 12,
+          exerciseId: 4,
+        },
+        {
+          dayId: 12,
+          exerciseId: 5,
+        },
+        {
+          dayId: 12,
+          exerciseId: 6,
         },
       ],
       {}

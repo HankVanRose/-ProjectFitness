@@ -43,7 +43,6 @@ export default function AddedPlanPage() {
     planToShow(id);
   }, [id]);
 
-
   console.log(singlePlan.numOfTrainings);
   return (
     <>
