@@ -32,9 +32,10 @@ function App() {
   }, [dispatch]);
 
   const bgColor = useColorModeValue('white', 'black');
+  const textColor = useColorModeValue('black', 'white');
 
   return (
-    <Box bg={bgColor} minH='100vh'>
+    <Box bg={bgColor} minH='100vh' color={textColor}>
       <Routes>
         <Route element={<Layout />}>
           <Route path='/' element={<HomePage />} />
