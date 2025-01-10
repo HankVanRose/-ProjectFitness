@@ -11,6 +11,7 @@ import {
 import PasswordInput from './PasswordInput';
 import { useAppSelector } from '@/store/hooks/hooks';
 import { useAuth } from '@/hooks/useAuth';
+import { useColorModeValue } from '../ui/color-mode';
 
 interface SignUpModalProps {
   show: boolean;
@@ -25,6 +26,8 @@ export default function SignupModal({ show, handleClose }: SignUpModalProps) {
     email: '',
     password: '',
   });
+  const bgColor = useColorModeValue('white', 'black');
+  const textColor = useColorModeValue('black', 'white');
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -52,54 +55,54 @@ export default function SignupModal({ show, handleClose }: SignUpModalProps) {
   };
 
   return (
+    <>
+
     <DialogRoot
       size={'md'}
       placement="center"
       open={show}
       onOpenChange={handleClose}
     >
-      <DialogContent p={4} backgroundColor={'white'} color={'black'}>
+      <DialogContent p={7} backgroundColor={bgColor} color={textColor}>
         <DialogHeader>
           <DialogTitle mb={5} fontWeight={600}>
-            Sign Up
+            Регистрация
           </DialogTitle>
-          <DialogCloseTrigger />
+          <DialogCloseTrigger borderRadius="md" />
         </DialogHeader>
         <DialogBody>
           <form onSubmit={handleSubmit}>
             <VStack>
               <Box w="100%">
-                <Text mb={2}>Username</Text>
+                <Text mb={2}>Имя пользователя</Text>
                 <Input
                   p={2}
                   id="username"
                   type="text"
                   name="username"
                   autoComplete="off"
-                  placeholder="Enter username"
+                  placeholder="Введите ваш имя пользователя"
                   value={formData.username}
                   onChange={handleChange}
-                  border={'1px solid black'}
                 />
               </Box>
 
               <Box w="100%">
-                <Text mb={2}>Email address</Text>
+                <Text mb={2}>Электронная почта</Text>
                 <Input
                   p={2}
                   id="email"
                   type="text"
                   name="email"
                   autoComplete="off"
-                  placeholder="Enter email"
+                  placeholder="Введите вашу почту"
                   value={formData.email}
                   onChange={handleChange}
-                  border={'1px solid black'}
                 />
               </Box>
 
               <Box w="100%">
-                <Text mb={2}>Password</Text>
+                <Text mb={2}>Пароль</Text>
                 <PasswordInput
                   value={formData.password}
                   onChange={handleChange}
@@ -110,30 +113,30 @@ export default function SignupModal({ show, handleClose }: SignUpModalProps) {
                 <Button
                   p={3}
                   borderRadius="md"
-                  color={'black'}
+                  color={textColor}
                   variant="outline"
                   type="submit"
                 >
-                  Register
+                  Зарегистрироваться
                 </Button>
               </Flex>
             </VStack>
           </form>
-
           {error && (
-            <Box
-              mt={4}
-              p={3}
-              bg="red.50"
-              border="1px"
-              borderColor="red.500"
-              borderRadius="md"
-            >
-              <Text color="red.500">{error}</Text>
-            </Box>
+
+       <Box
+         mt={4}
+         p={3}
+         bgColor="red.500/20"
+         border="1px"
+         borderRadius="md"
+       >
+         <Text color="red.500" textAlign="center">{error}</Text>
+       </Box>
           )}
         </DialogBody>
       </DialogContent>
     </DialogRoot>
+    </>
   );
 }

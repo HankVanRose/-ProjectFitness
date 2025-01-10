@@ -22,7 +22,7 @@ router.post('/signup', validateSignupData, async (req, res) => {
     });
 
     if (!created) {
-      return res.status(409).json({ message: 'User already exists' });
+      return res.status(409).json({ message: 'Такой пользователь уже существует' });
     }
 
     const plainUser = user.get();
@@ -44,7 +44,7 @@ router.post('/signup', validateSignupData, async (req, res) => {
     console.error('Signup error:', error);
     return res.status(500).json({
       success: false,
-      message: 'Internal server error during signup',
+      message: 'Ошибка сервера, повторите попозже',
     });
   }
 });
@@ -56,13 +56,13 @@ router.post('/signin', validateSigninData, async (req, res) => {
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      return res.status(401).json({ message: 'No user with such email' });
+      return res.status(401).json({ message: 'Нет пользователей с такой почтой' });
     }
 
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
-      return res.status(401).json({ message: 'Incorrect password' });
+      return res.status(401).json({ message: 'Неправильный пароль' });
     }
 
     const plainUser = user.get();
@@ -81,7 +81,7 @@ router.post('/signin', validateSigninData, async (req, res) => {
     console.error('Signin error:', error);
     return res.status(500).json({
       success: false,
-      message: 'Internal server error during signin',
+      message: 'Ошибка сервера, повторите попозже',
     });
   }
 });
@@ -97,7 +97,7 @@ router.get('/signout', (req, res) => {
     console.error('Logout error:', error);
     return res.status(500).json({
       success: false,
-      message: 'Error during logout',
+      message: 'Ошибка сервера, повторите попозже',
     });
   }
 });
