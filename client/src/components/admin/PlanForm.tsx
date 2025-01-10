@@ -12,8 +12,11 @@ import {
   NativeSelectField,
   NativeSelectRoot,
 } from '@/components/ui/native-select';
+import { useColorModeValue } from '../ui/color-mode';
 
 const PlanForm = () => {
+  const bgColor = useColorModeValue('white', 'black');
+
   return (
     <Box
       display="flex"
@@ -35,56 +38,57 @@ const PlanForm = () => {
         <Fieldset.Content>
           <Grid templateColumns="repeat(2, 1fr)" gap={4}>
             <Field label="Название плана">
-              <Input name="name" />
+              <Input name="name" p={2} />
             </Field>
 
             <Field label="URL картинки">
-              <Input name="image" />
+              <Input name="image" p={2} />
             </Field>
 
             <Field label="Краткое описание">
-              <Input name="shortDescription" />
+              <Input name="shortDescription" p={2} />
             </Field>
 
             <Field label="Необходимое оборудование">
-              <Input name="equipment" />
+              <Input name="equipment" p={2} />
             </Field>
 
             <Field label="Сложность">
               <NativeSelectRoot>
                 <NativeSelectField
+                  p={2}
                   name="difficulty"
                   items={['Низкая', 'Средняя', 'Высокая']}
+                  bg={bgColor}
                 />
               </NativeSelectRoot>
             </Field>
 
             <Field label="Длительность в неделях">
-              <Input name="weeksDuration" min={1} />
+              <Input name="weeksDuration" min={1} p={2} />
             </Field>
 
             <Field label="Количество дней">
-              <Input name="numOfSessions" min={1} />
+              <Input name="numOfSessions" min={1} p={2} />
             </Field>
 
             <Field label="Количество дней в неделю">
-              <Input name="sessionsPerWeek" min={1} max={7} />
+              <Input name="sessionsPerWeek" min={1} max={7} p={2} />
             </Field>
 
             <Field label="Слоган">
-              <Input name="slogan" />
+              <Input name="slogan" p={2} />
             </Field>
 
-            {/* Full width items */}
             <Box gridColumn="span 2">
               <Field label="Описание">
-                <Textarea name="longDescription" rows={4} />
+                <Textarea name="longDescription" rows={2} p={2} />
               </Field>
             </Box>
 
             <Box gridColumn="span 2">
               <Field label="Weeks Description">
-                <Textarea name="weeksDescription" rows={4} />
+                <Textarea name="weeksDescription" rows={2} p={2} />
               </Field>
             </Box>
           </Grid>

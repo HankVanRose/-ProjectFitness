@@ -1,268 +1,238 @@
-import { Box, Button, Input, Table, Text } from '@chakra-ui/react';
+import { Box, Button, Input, Table, Text, HStack } from '@chakra-ui/react';
 import { Avatar } from '@/components/ui/avatar';
 import { Tooltip } from '@/components/ui/tooltip';
 import axiosInstance from '@/axiosInstance';
-import { useDeferredValue, useEffect, useState } from 'react';
-import { IoSearchCircleOutline } from 'react-icons/io5';
+import { useEffect, useState } from 'react';
+import { IoSearch } from 'react-icons/io5';
 import { InputGroup } from '../ui/input-group';
+import { useColorModeValue } from '../ui/color-mode';
 
-const users = [
-  {
-    id: 1,
-    username: 'JohnDoe',
-    email: 'john@example.com',
-    avatar: 'https://example.com/avatar1.jpg',
-    gender: 'Male',
-    age: 25,
-    height: '175cm',
-    weight: '70kg',
-    points: 100,
-    calories: 2000,
-    goal: 'Weight Loss',
-  },
-  {
-    id: 2,
-    username: 'SarahSmith',
-    email: 'sarah@example.com',
-    avatar: 'https://example.com/avatar2.jpg',
-    gender: 'Female',
-    age: 30,
-    height: '165cm',
-    weight: '58kg',
-    points: 150,
-    calories: 1800,
-    goal: 'Muscle Gain',
-  },
-  {
-    id: 3,
-    username: 'MikeJohnson',
-    email: 'mike@example.com',
-    avatar: 'https://example.com/avatar3.jpg',
-    gender: 'Male',
-    age: 35,
-    height: '182cm',
-    weight: '85kg',
-    points: 75,
-    calories: 2500,
-    goal: 'Maintenance',
-  },
-  {
-    id: 4,
-    username: 'EmilyDavis',
-    email: 'emily@example.com',
-    avatar: 'https://example.com/avatar4.jpg',
-    gender: 'Female',
-    age: 28,
-    height: '170cm',
-    weight: '63kg',
-    points: 200,
-    calories: 1900,
-    goal: 'Weight Loss',
-  },
-  {
-    id: 5,
-    username: 'AlexWilson',
-    email: 'alex@example.com',
-    avatar: 'https://example.com/avatar5.jpg',
-    gender: 'Male',
-    age: 42,
-    height: '178cm',
-    weight: '78kg',
-    points: 180,
-    calories: 2200,
-    goal: 'Muscle Gain',
-  },
-  {
-    id: 6,
-    username: 'LisaBrown',
-    email: 'lisa@example.com',
-    avatar: 'https://example.com/avatar6.jpg',
-    gender: 'Female',
-    age: 32,
-    height: '168cm',
-    weight: '61kg',
-    points: 120,
-    calories: 1750,
-    goal: 'Maintenance',
-  },
-  {
-    id: 7,
-    username: 'DavidLee',
-    email: 'david@example.com',
-    avatar: 'https://example.com/avatar7.jpg',
-    gender: 'Male',
-    age: 29,
-    height: '173cm',
-    weight: '72kg',
-    points: 90,
-    calories: 2300,
-    goal: 'Weight Loss',
-  },
-  {
-    id: 8,
-    username: 'AmyTaylor',
-    email: 'amy@example.com',
-    avatar: 'https://example.com/avatar8.jpg',
-    gender: 'Female',
-    age: 27,
-    height: '163cm',
-    weight: '55kg',
-    points: 160,
-    calories: 1600,
-    goal: 'Muscle Gainфацсцццццццццццццццццццццццццццццццццццццццццццццццццццццццццццц',
-  },
-  {
-    id: 9,
-    username: 'RobertClark',
-    email: 'robert@example.com',
-    avatar: 'https://example.com/avatar9.jpg',
-    gender: 'Male',
-    age: 38,
-    height: '180cm',
-    weight: '82kg',
-    points: 140,
-    calories: 2400,
-    goal: 'Maintenance',
-  },
-  {
-    id: 10,
-    username: 'JennaWhite',
-    email: 'jenna@example.com',
-    avatar: 'https://example.com/avatar10.jpg',
-    gender: 'Female',
-    age: 31,
-    height: '167cm',
-    weight: '59kg',
-    points: 170,
-    calories: 1850,
-    goal: 'Weight Loss',
-  },
-];
-const handleBlockUser = (userId) => {
-  // Add your blocking logic here
-  console.log(`Blocking user with ID: ${userId}`);
-};
+interface User {
+  id: number;
+  username: string;
+  email: string;
+  avatar: string;
+  gender: string;
+  age: number;
+  height: string;
+  weight: string;
+  points: number;
+  calories: number;
+  goal: string;
+  isAdmin: boolean;
+}
 
-const UserTable = ({ users1 }) => {
+interface PaginatedResponse {
+  users: User[];
+  totalPages: number;
+  currentPage: number;
+  totalUsers: number;
+}
+
+const UserTable = () => {
+  const [users, setUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredUsers, setFilteredUsers] = useState(users);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const limit = 10;
 
-  // Create a deferred value for the search query
-  const deferredSearchQuery = useDeferredValue(searchQuery);
+  const fetchUsers = async (page: number, search: string) => {
+    setIsLoading(true);
+    try {
+      const response = await axiosInstance.get<PaginatedResponse>(
+        `/api/users?page=${page}&limit=${limit}&search=${search}`
+      );
+      setUsers(response.data.users);
+      setTotalPages(response.data.totalPages);
+      setTotalUsers(response.data.totalUsers);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const lupacolor = useColorModeValue('rgba(57, 57, 57, 0.6)', 'white');
+  const bgColor = useColorModeValue('white', 'black');
+  const textColor = useColorModeValue('black', 'white');
 
-  // Use useEffect to trigger search when deferredSearchQuery changes
   useEffect(() => {
-    const searchUsers = async () => {
-      if (!deferredSearchQuery.trim()) {
-        setFilteredUsers(users); // Reset to original users if search is empty
-        return;
-      }
+    const delayDebounceFn = setTimeout(() => {
+      setCurrentPage(1);
+      fetchUsers(1, searchQuery);
+    }, 300);
 
-      setIsLoading(true);
-      try {
-        const response = await axiosInstance.get(
-          `/api/users/search?query=${deferredSearchQuery}`
-        );
-        setFilteredUsers(response.data);
-      } catch (error) {
-        console.error('Error searching users:', error);
-        // Handle error appropriately
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery]);
 
-    searchUsers();
-  }, [deferredSearchQuery]); // Only run effect when deferredSearchQuery changes
+  useEffect(() => {
+    fetchUsers(currentPage, searchQuery);
+  }, [currentPage]);
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const renderPagination = () => {
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(
+        <Button
+          key={i}
+          size="sm"
+          bg={bgColor}
+          color={textColor}
+          variant={currentPage === i ? 'solid' : 'outline'}
+          onClick={() => handlePageChange(i)}
+          mx={1}
+        >
+          {i}
+        </Button>
+      );
+    }
+    return pages;
+  };
+  const handleBlockUser = async (userId: number) => {
+    try {
+      //! пока нет ендпоинта
+      await axiosInstance.put(`/api/users/${userId}/block`);
+      fetchUsers(currentPage, searchQuery);
+    } catch (error) {
+      console.error('Error blocking user:', error);
+    }
+  };
 
   return (
     <Box>
-      <Box>
-        <InputGroup flex="1" startElement={<IoSearchCircleOutline />}>
+      <Box m={4}>
+        <InputGroup
+          flex="1"
+          startElement={
+            <Box pl={2}>
+              <IoSearch color={lupacolor} size={30} />
+            </Box>
+          }
+        >
           <Input
+            pl={12}
             placeholder="Поиск..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            width="300px"
           />
         </InputGroup>
       </Box>
 
-      <Table.Root size="sm" interactive stickyHeader>
-        <Table.Header>
-          <Table.Row>
-            <Table.ColumnHeader p={3}>Аватар</Table.ColumnHeader>
-            <Table.ColumnHeader p={3}>Username</Table.ColumnHeader>
-            {/* <Table.ColumnHeader p={3}>Роль</Table.ColumnHeader> */}
-            <Table.ColumnHeader p={3}>Почта</Table.ColumnHeader>
-            <Table.ColumnHeader p={3}>Пол</Table.ColumnHeader>
-            <Table.ColumnHeader p={3}>Возраст</Table.ColumnHeader>
-            <Table.ColumnHeader p={3}>Рост</Table.ColumnHeader>
-            <Table.ColumnHeader p={3}>Вес</Table.ColumnHeader>
-            <Table.ColumnHeader p={3}>Баллы</Table.ColumnHeader>
-            <Table.ColumnHeader p={3}>
-              Сожженные <br /> калории
-            </Table.ColumnHeader>
-            <Table.ColumnHeader p={3}>Цель</Table.ColumnHeader>
-            <Table.ColumnHeader>Блок</Table.ColumnHeader>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {users.map((user) => (
-            <Table.Row key={user.id}>
-              <Table.Cell p={3}>
-                <Avatar
-                  variant="outline"
-                  name={user.username}
-                  src={user?.avatar}
-                />
-              </Table.Cell>
-              <Table.Cell p={3}>{user?.username}</Table.Cell>
-              {/* <Table.Cell p={3}>{user?.role}</Table.Cell> */}
-              <Table.Cell p={3}>{user.email}</Table.Cell>
-              <Table.Cell p={3}>{user?.gender}</Table.Cell>
-              <Table.Cell p={3}>{user?.age}</Table.Cell>
-              <Table.Cell p={3}>{user?.height}</Table.Cell>
-              <Table.Cell p={3}>{user?.weight}</Table.Cell>
-              <Table.Cell p={3}>{user?.points}</Table.Cell>
-              <Table.Cell p={3}>{user?.calories}</Table.Cell>
-              <Table.Cell p={3}>
-                <Tooltip
-                  content={user?.goal}
-                  positioning={{ placement: 'top' }}
-                  openDelay={300}
-                  closeDelay={100}
-                  contentProps={{
-                    css: {
-                      backgroundColor: 'rgba(2, 149, 7, 0.5)',
-                      padding: 2,
-                    },
-                  }}
-                >
-                  <Text cursor="pointer">
-                    {user?.goal.length > 15
-                      ? user?.goal.slice(0, 15) + '...'
-                      : user?.goal}
-                  </Text>
-                </Tooltip>
-              </Table.Cell>
-              <Table.Cell>
+      {isLoading ? (
+        <Text>Loading...</Text>
+      ) : (
+        <>
+          <Table.Root size="md" interactive stickyHeader>
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeader p={3}>Аватар</Table.ColumnHeader>
+                <Table.ColumnHeader p={3}>Username</Table.ColumnHeader>
+                <Table.ColumnHeader p={3}>Роль</Table.ColumnHeader>
+                <Table.ColumnHeader p={3}>Почта</Table.ColumnHeader>
+                <Table.ColumnHeader p={3}>Пол</Table.ColumnHeader>
+                <Table.ColumnHeader p={3}>Возраст</Table.ColumnHeader>
+                <Table.ColumnHeader p={3}>Рост</Table.ColumnHeader>
+                <Table.ColumnHeader p={3}>Вес</Table.ColumnHeader>
+                <Table.ColumnHeader p={3}>Баллы</Table.ColumnHeader>
+                <Table.ColumnHeader p={3}>
+                  Сожженные <br /> калории
+                </Table.ColumnHeader>
+                <Table.ColumnHeader p={3}>Цель</Table.ColumnHeader>
+                <Table.ColumnHeader>Блок</Table.ColumnHeader>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {users.map((user) => (
+                <Table.Row key={user.id}>
+                  <Table.Cell p={3}>
+                    <Avatar
+                      variant="outline"
+                      name={user.username}
+                      src={user?.avatar}
+                    />
+                  </Table.Cell>
+                  <Table.Cell p={3}>{user?.username}</Table.Cell>
+                  <Table.Cell p={3}>
+                    {user?.isAdmin ? 'admin' : 'basic baby'}
+                  </Table.Cell>
+                  <Table.Cell p={3}>{user.email}</Table.Cell>
+                  <Table.Cell p={3}>{user?.gender}</Table.Cell>
+                  <Table.Cell p={3}>{user?.age}</Table.Cell>
+                  <Table.Cell p={3}>{user?.height}</Table.Cell>
+                  <Table.Cell p={3}>{user?.weight}</Table.Cell>
+                  <Table.Cell p={3}>{user?.points}</Table.Cell>
+                  <Table.Cell p={3}>{user?.calories}</Table.Cell>
+                  <Table.Cell p={3}>
+                    <Tooltip
+                      content={user?.goal}
+                      positioning={{ placement: 'top' }}
+                      openDelay={300}
+                      closeDelay={100}
+                      contentProps={{
+                        css: {
+                          backgroundColor: 'rgba(2, 149, 7, 0.8)',
+                          padding: 2,
+                        },
+                      }}
+                    >
+                      <Text cursor="pointer">
+                        {user?.goal.length > 15
+                          ? user?.goal.slice(0, 15) + '...'
+                          : user?.goal}
+                      </Text>
+                    </Tooltip>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Button
+                      size="sm"
+                      colorPalette="green"
+                      variant="outline"
+                      borderRadius={10}
+                      p={2}
+                      onClick={() => handleBlockUser(user.id)}
+                    >
+                      Block User
+                    </Button>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+          <Box mt={4} p={5}>
+            <HStack justify="space-between" align="center">
+              <Text>
+                Количество найденных всех пользователей: <b>{totalUsers} </b>
+              </Text>
+              <HStack>
                 <Button
+                  bg={bgColor}
+                  color={textColor}
                   size="sm"
-                  colorPalette="green"
-                  variant="outline"
-                  borderRadius={10}
-                  p={2}
-                  onClick={() => handleBlockUser(user.id)}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
                 >
-                  Block User
+                  Previous
                 </Button>
-              </Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table.Root>
+                {renderPagination()}
+                <Button
+                  bg={bgColor}
+                  color={textColor}
+                  size="sm"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </Button>
+              </HStack>
+            </HStack>
+          </Box>
+        </>
+      )}
     </Box>
   );
 };
