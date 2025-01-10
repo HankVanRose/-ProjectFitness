@@ -19,25 +19,26 @@ interface AddedModalProps {
   show: boolean;
   handleClose: () => void;
   activeStep: number;
-  singlePlan:number;
+  singlePlan: number;
 }
 
 export default function AddedModal({
   show,
   handleClose,
   activeStep,
-  singlePlan
+  singlePlan,
 }: AddedModalProps): JSX.Element {
   const { VITE_API } = import.meta.env;
 
   const [dayExercises, setDayExercises] = useState<DayExercise[]>([]);
-  
 
   useEffect(() => {
     const dayExr = async () => {
       try {
         // const res = await axiosInstance.get<DayExercise[]>(`${VITE_API}/days`);
-        const res = await axiosInstance.get<DayExercise[]>(`${VITE_API}/days/${singlePlan}`);
+        const res = await axiosInstance.get<DayExercise[]>(
+          `${VITE_API}/days/${singlePlan}`
+        );
         setDayExercises(res.data);
       } catch (error) {
         console.error(error, 'error');
@@ -50,11 +51,7 @@ export default function AddedModal({
 
   console.log(dayExercises);
 
-   
-
   const currentPlan = dayExercises[activeStep]?.Exercises || [];
-
- 
 
   return (
     <DialogRoot

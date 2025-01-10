@@ -3,7 +3,6 @@ const { Day, Exercise, DayExercise, Plan } = require('../../db/models');
 
 router.get('/:id', async (req, res) => {
   try {
- 
     const days = await Day.findAll({
       where: { planId: req.params.id },
       attributes: { exclude: ['createdAt', 'updatedAt'] },
@@ -20,8 +19,6 @@ router.get('/:id', async (req, res) => {
     });
   }
 });
-
- 
 
 //! создаем день с упражнениями
 router.post('/', async (req, res) => {
