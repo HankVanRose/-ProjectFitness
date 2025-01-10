@@ -22,6 +22,7 @@ import { Box } from '@chakra-ui/react';
 
 import AddedPlanPage from './components/AddedPlanPage/AddedPlanPage';
 import NewPlanForm from './components/NewPlanPage/NewPlanForm';
+import AdminPage from './components/admin/AdminPage';
 
 
 function App() {
@@ -46,6 +47,8 @@ function App() {
           <Route path='/plans/:id' element={<PlanPage />} />
           <Route path='/plans/:id/yourown' element={<AddedPlanPage />} />
           <Route path='/plans/new' element={<NewPlanForm />} />
+          <Route path='/admin' element={<AdminPage />} />
+
         </Route>
       </Routes>
     </Box>
