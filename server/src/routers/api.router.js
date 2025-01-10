@@ -4,7 +4,7 @@ const tokenRouter = require('./token.router');
 const authRouter = require('./auth.router');
 const plansRouter = require('./plans.router'); 
 const exerciseRouter = require('./exercises.router'); 
-const sessionRouter = require('./userplans.router'); 
+const sessionRouter = require('./session.router'); 
 const daysRouter = require('./days.router'); 
 
 router.use('/tokens', tokenRouter);

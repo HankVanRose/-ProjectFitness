@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks/hooks';
 import { ChangeEvent, useEffect, useState } from 'react';
 import SideBarComp from './SideBarComp';
 import styles from './PersonalPage.module.css';
-import { fetchUpdateProfile } from '../../store/thunkActions';
+import { fetchUpdateProfile, userActivePlan } from '../../store/thunkActions';
 import {
   Box,
   Button,
@@ -14,7 +14,7 @@ import {
   InputElement,
   Stack,
   VStack,
-  Text
+  Text,
 } from '@chakra-ui/react';
 import { InputGroup } from '@/components/ui/input-group';
 // import { EditIcon, CheckIcon } from '@chakra-ui/icons';
@@ -50,6 +50,12 @@ export default function ProfileData() {
 
   const [activeTab, setActiveTab] = useState<number>(0);
   const [isFormModified, setIsFormModified] = useState(false); //изменение формы
+
+  useEffect(() => {
+    dispatch(userActivePlan(user?.id));
+  }, [user?.id]);
+
+  const { userplan } = useAppSelector((store) => store.appSlice);
 
   const [formData, setFormData] = useState<FormData>({
     id: 0,
@@ -141,7 +147,7 @@ export default function ProfileData() {
             }
           >
             <Input
-            bgColor={{ base: 'black', _dark: 'white' }}
+              bgColor={{ base: 'black', _dark: 'white' }}
               color={{ base: 'white', _dark: 'black' }}
               type={type}
               placeholder={label}
@@ -185,7 +191,7 @@ export default function ProfileData() {
 
             <Stack>
               <SelectRoot
-               bgColor={{ base: 'black', _dark: 'white' }}
+                bgColor={{ base: 'black', _dark: 'white' }}
                 color={{ base: 'black', _dark: 'black' }}
                 mb={4}
                 collection={frameworks}
@@ -298,12 +304,23 @@ export default function ProfileData() {
 
       case 2:
         return (
-          <Text color={{ base: 'black', _dark: 'white' }}>
-            У вас пока нет плана тренировок.
-          </Text>
+          <>
+            {userplan?.length === 0 ? (
+              <Text color={{ base: 'black', _dark: 'white' }}>
+                Нет тренировок
+              </Text>
+            ) : (
+              // Здесь вы можете добавить код, чтобы отобразить тренировки, если они есть
+              <Text color={{ base: 'black', _dark: 'white' }}>{userplan}</Text>
+            )}
+          </>
         );
       default:
-        return <Text color={{ base: 'black', _dark: 'white' }}>Выберите вкладку.  </Text>
+        return (
+          <Text color={{ base: 'black', _dark: 'white' }}>
+            Выберите вкладку.{' '}
+          </Text>
+        );
     }
   };
 

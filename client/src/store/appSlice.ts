@@ -1,11 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ExercisesType, PlansType, UserType } from '../types';
+import {
+  ExercisesType,
+  PlansType,
+  UserPlan,
+  UserPlans,
+  UserType,
+} from '../types';
 import {
   fetchUpdateProfile,
   fetchUserCheck,
   fetchUserLogout,
   fetchUserSignin,
   fetchUserSignup,
+  userActivePlan,
 } from './thunkActions';
 
 type InitialState = {
@@ -14,6 +21,7 @@ type InitialState = {
   plans: PlansType;
   loading: boolean;
   error: string | null;
+  userplan: string[];
 };
 
 const initialState: InitialState = {
@@ -22,6 +30,7 @@ const initialState: InitialState = {
   plans: [] as PlansType,
   loading: false,
   error: '',
+  userplan: [],
 };
 
 const appSlice = createSlice({
@@ -33,7 +42,7 @@ const appSlice = createSlice({
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -41,6 +50,7 @@ const appSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
+
       .addCase(fetchUserSignup.fulfilled, (state, action) => {
         if ('error' in action.payload && action.payload.error) {
           state.error = action.payload.error;
@@ -88,10 +98,10 @@ const appSlice = createSlice({
 
         if (!action.payload) {
           state.error = 'No data from the server';
-          state.loading = false; 
+          state.loading = false;
           return;
         }
-        
+
         if ('error' in action.payload && action.payload.error) {
           state.error = action.payload.error;
           state.loading = false;
@@ -111,6 +121,14 @@ const appSlice = createSlice({
       .addCase(fetchUpdateProfile.rejected, (state) => {
         state.error = 'failed to update profile';
         state.loading = false;
+      })
+      .addCase(userActivePlan.fulfilled, (state, action) => {
+        state.userplan = [...action.payload];
+
+        state.loading = false;
+      })
+      .addCase(userActivePlan.pending, (state) => {
+        state.loading = true;
       });
   },
 });
