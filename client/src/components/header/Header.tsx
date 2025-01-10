@@ -38,8 +38,9 @@ export default function Header() {
 
   return (
     <>
-      <Box bg={{ base: 'white', _dark: 'black' }} py={4}>
-        <Container maxW="container.lg" px={8}>
+      <Box bg={{ base: 'white', _dark: 'black' }} py={4} width="100%">
+        <Container px={8} mx="auto">
+
           <Flex align="center" justify="space-between">
             <Link
               color={{ base: 'black', _dark: 'white' }}

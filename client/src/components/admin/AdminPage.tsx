@@ -6,6 +6,7 @@ import { LuDumbbell, LuClipboardList, LuUsers } from 'react-icons/lu';
 import UserTable from './UserTable';
 
 export default function AdminPage() {
+  
   return (
     <Tabs.Root defaultValue="plans">
       <Tabs.List p={4}>

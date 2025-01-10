@@ -36,6 +36,7 @@ function App() {
   const textColor = useColorModeValue('black', 'white');
 
   return (
+
     <Box bg={bgColor} minH='100vh' color={textColor}>
       <Routes>
         <Route element={<Layout />}>
