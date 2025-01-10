@@ -38,11 +38,10 @@ export type PlanType = {
   difficulty: string;
   image: string;
   slogan: string;
-  weeksDuration: number;
+
   numOfSessions: number;
   longDescription: string;
   weeksDescription: string;
-  sessionsPerWeek: number;
 };
 
 export type SessionType = {
@@ -57,8 +56,8 @@ export type UserResponseType = {
 };
 export type PlansType = PlanType[];
 
-export type DayExercise = { 
+export type DayExercise = {
   planId: number;
   points: number;
   Exercises: ExercisesType;
-}
+};

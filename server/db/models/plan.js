@@ -21,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
       slogan: DataTypes.STRING,
       weeksDescription: DataTypes.TEXT,
       sessionsPerWeek: DataTypes.INTEGER,
-    },
+     
+    }, 
     {
       sequelize,
       modelName: 'Plan',
