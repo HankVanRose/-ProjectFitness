@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       planId: DataTypes.INTEGER,
       userId: DataTypes.INTEGER,
+      isCompleted: DataTypes.BOOLEAN,
     },
     {
       sequelize,

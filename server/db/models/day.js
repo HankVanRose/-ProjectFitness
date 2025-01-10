@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       planId: DataTypes.INTEGER,
       points: DataTypes.INTEGER,
+      description: DataTypes.TEXT,
     },
     {
       sequelize,
