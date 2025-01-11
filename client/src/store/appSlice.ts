@@ -83,44 +83,69 @@ const appSlice = createSlice({
         state.user = initialState.user;
       })
 
+      .addCase(fetchUserCheck.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(fetchUserCheck.fulfilled, (state, action) => {
         state.user = action.payload;
         state.loading = false;
+        state.error = null;
+      })
+      .addCase(fetchUserCheck.rejected, (state, action) => {
+        state.user = null;
+        state.loading = false;
+        state.error = action.payload as string;
       })
 
       .addCase(fetchUpdateProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
+      // .addCase(fetchUpdateProfile.fulfilled, (state, action) => {
+      //   console.log('Action payload:', action.payload);
+
+      //   if (!action.payload) {
+      //     state.error = 'No data from the server';
+      //     state.loading = false;
+      //     return;
+      //   }
+
+      //   if ('error' in action.payload && action.payload.error) {
+      //     state.error = action.payload.error;
+      //     state.loading = false;
+      //   } else {
+      //     if (state.user) {
+      //       const updatedUser = {
+      //         ...state.user,
+      //         ...action.payload,
+      //       } as UserType;
+      //       updatedUser.id = state.user.id;
+      //       state.user = updatedUser;
+      //     }
+      //     state.loading = false;
+      //     state.error = null;
+      //   }
+      // })
       .addCase(fetchUpdateProfile.fulfilled, (state, action) => {
         console.log('Action payload:', action.payload);
-
-        if (!action.payload) {
-          state.error = 'No data from the server';
-          state.loading = false;
-          return;
-        }
-
-        if ('error' in action.payload && action.payload.error) {
-          state.error = action.payload.error;
-          state.loading = false;
-        } else {
-          if (state.user) {
-            const updatedUser = {
-              ...state.user,
-              ...action.payload,
-            } as UserType;
-            updatedUser.id = state.user.id;
-            state.user = updatedUser;
-          }
+        if (state.user) {
+          state.user = {
+            ...state.user,
+            ...action.payload,
+          };
+         } 
+        //  else {
+        //     state.user = action.payload;
+        //   }
           state.loading = false;
           state.error = null;
-        }
       })
-      .addCase(fetchUpdateProfile.rejected, (state) => {
-        state.error = 'failed to update profile';
+      .addCase(fetchUpdateProfile.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.payload as string;
       })
+
       .addCase(userActivePlan.fulfilled, (state, action) => {
         state.loading = false;
         state.userplan = action.payload;
@@ -133,7 +158,7 @@ const appSlice = createSlice({
         state.loading = false;
         state.error = action.payload || 'An unexpected error';
         state.userplan = null;
-      })
+      });
   },
 });
 

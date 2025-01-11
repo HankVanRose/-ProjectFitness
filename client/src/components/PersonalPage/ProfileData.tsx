@@ -1,7 +1,11 @@
 import { useAppDispatch, useAppSelector } from '../../store/hooks/hooks';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import SideBarComp from './SideBarComp';
-import { fetchUpdateProfile, userActivePlan } from '../../store/thunkActions';
+import {
+  fetchUpdateProfile,
+  fetchUserCheck,
+  userActivePlan,
+} from '../../store/thunkActions';
 import {
   Box,
   Button,
@@ -28,8 +32,8 @@ import {
   SelectValueText,
 } from '@/components/ui/select';
 import { Field } from '@/components/ui/field';
-import { setLoading } from '@/store/appSlice';
 import { useNavigate } from 'react-router-dom';
+import { UserType } from '@/types';
 
 interface FormData {
   id: number;
@@ -48,34 +52,37 @@ export default function ProfileData() {
   const dispatch = useAppDispatch();
   const { userplan } = useAppSelector((store) => store.appSlice);
 
-  const [activeTab, setActiveTab] = useState<number>(0);
-  const [isFormModified, setIsFormModified] = useState(false); //изменение формы
-
-  useEffect(() => {
-    if (user) {
-      dispatch(userActivePlan(user?.id));
-    } else {
-      setLoading(true);
-    }
-  }, [user?.id]);
-
-  const [formData, setFormData] = useState<FormData>({
-    id: 0,
-    age: 0,
-    gender: '',
-    height: '',
-    weight: '',
-    goal: '',
-    username: '',
-    email: '',
-    password: '',
+  const [activeTab, setActiveTab] = useState<number>(() => {
+    const savedTab = localStorage.getItem('activeProfileTab');
+    return savedTab ? Number(savedTab) : 0;
   });
 
+  const navigate = useNavigate();
+  const [isFormModified, setIsFormModified] = useState(false); //изменение формы
   const [isEditing, setIsEditing] = useState<string>('');
 
-  // const focusBg = useColorModeValue('blue.500', 'blue.900'); // фон при фокусе
-  const editingBg = useColorModeValue('green.50', 'green.900'); // фон при изменении
-  const navigate = useNavigate();
+  // const [formData, setFormData] = useState<FormData>({
+  //   id: 0,
+  //   age: 0,
+  //   gender: '',
+  //   height: '',
+  //   weight: '',
+  //   goal: '',
+  //   username: '',
+  //   email: '',
+  //   password: '',
+  // });
+
+  const [formData, setFormData] = useState<Partial<UserType>>({});
+  const [modifiedFields, setModifiedFields] = useState<Set<keyof UserType>>(
+    new Set()
+  );
+
+  useEffect(() => {
+    if (!user) {
+      dispatch(fetchUserCheck());
+    }
+  }, [dispatch, user]);
 
   useEffect(() => {
     if (user) {
@@ -88,46 +95,87 @@ export default function ProfileData() {
         goal: user.goal || '',
         username: user.username || '',
         email: user.email || '',
-        password: '',
+        // password: '',
       });
+      dispatch(userActivePlan(user.id));
     }
-  }, [user]);
+  }, [user, dispatch]);
+
+  useEffect(() => {
+    localStorage.setItem('activeProfileTab', activeTab.toString());
+  }, [activeTab]);
+
+  console.log(formData);
+  // const focusBg = useColorModeValue('blue.500', 'blue.900'); // фон при фокусе
+  const editingBg = useColorModeValue('green.50', 'green.900'); // фон при изменении
 
   // изменение значений в полях
-  const handleInputChange = (field: keyof FormData, value: string) => {
+  const handleInputChange = (field: keyof UserType, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    // setIsFormModified(true);
+    setModifiedFields(prev => {
+      const newModifiedFields = new Set(prev);
+      newModifiedFields.add(field);
+      return newModifiedFields;
+    });
+  };
+
+  const handleGenderChange = (value: string[]) => {
+    setFormData((prev) => ({
+      ...prev,
+      gender: value[0] as string,
+    }));
     setIsFormModified(true);
   };
 
   // редирект на страницу планов, при их отсуствии в ЛК
-
   const redirectPlanHandlet = () => {
-    navigate('/card')
-  }
+    navigate('/card');
+  };
 
   // переключение изменения полей
   const handleEditing = (field: string) => {
     setIsEditing((prev) => (prev === field ? '' : field));
   };
 
-  const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSave = () => {
+    // e.preventDefault();
+    const dataToUpdate: Partial<UserType> = {
+      id: user?.id
+    };
+
+    modifiedFields.forEach(field => {
+      if (field !== 'id') {
+        dataToUpdate[field] = formData[field];
+      }
+    });
+
     dispatch(
-      fetchUpdateProfile({
-        id: user!.id,
-        age: Number(formData.age),
-        gender: formData.gender,
-        height: formData.height,
-        weight: formData.weight,
-        goal: formData.goal,
-        username: formData.username,
-        email: formData.email,
-        password: formData.password,
-      })
-    );
-    setIsFormModified(false);
-    setIsEditing('');
+      fetchUpdateProfile(dataToUpdate)
+      // fetchUpdateProfile({
+      //   id: user!.id,
+      //   age: Number(formData.age),
+      //   gender: formData.gender,
+      //   height: formData.height,
+      //   weight: formData.weight,
+      //   goal: formData.goal,
+      //   username: formData.username,
+      //   email: formData.email,
+      //   password: formData.password,
+      // })
+    ).then((result) => {
+      if (fetchUpdateProfile.fulfilled.match(result)) {
+        setModifiedFields(new Set());
+        console.log('Профиль обновлен');
+        setIsEditing('');
+      } else {
+        console.log('Ошибка обновления');
+      }
+    });
+    // setIsFormModified(false);
   };
+
+  const isSaveButtonDisabled = modifiedFields.size === 0;
 
   const editableField = (
     field: keyof FormData,
@@ -137,9 +185,11 @@ export default function ProfileData() {
     const isEditingField = isEditing === field;
 
     return (
-      <Stack>
-        <Field label={label} mb={4}>
+      <Stack width='100%' minW='20ch'>
+        <Field label={label} mb={4} width='100%' minW='20ch'>
           <InputGroup
+            width='100%'
+            minW='20ch'
             endElement={
               <IconButton
                 h='1.75rem'
@@ -153,6 +203,9 @@ export default function ProfileData() {
             }
           >
             <Input
+              width='500px'
+              minWidth='500px'
+              minW='20ch'
               type={type}
               placeholder={label}
               _placeholder={{
@@ -203,19 +256,30 @@ export default function ProfileData() {
             {editableField('age', 'Возраст', 'number')}
 
             <Stack>
-              <Text textStyle='sm' mb={0}>Пол</Text>
+              <Text textStyle='sm' mb={0}>
+                Пол
+              </Text>
               <SelectRoot
+                maxWidth='500px'
+                minW='20ch'
                 mb={4}
                 collection={frameworks}
-                value={formData.gender ?? ''}
-                onValueChange={(value: ChangeEvent<HTMLSelectElement>) =>
-                  handleInputChange('gender', e.target.value)
-                }
-                disabled={isEditing !== 'gender'}
-                bg={isEditing === 'gender' ? editingBg : undefined}
+                value={[formData.gender]}
+                // onValueChange={(value) =>
+                //   handleInputChange('gender', value)
+                // }
+                onValueChange={handleGenderChange}
+                // disabled={isEditing !== 'gender'}
+                // _disabled={{
+                //   opacity: 1,
+                //   cursor: 'not-allowed',
+                //   color: 'inherit',
+                // }}
                 onClick={() => !isEditing && handleEditing('gender')}
               >
-                <SelectTrigger>
+                <SelectTrigger
+                  bg={isEditing === 'gender' ? editingBg : undefined}
+                >
                   <SelectValueText placeholder='Выберите пол'></SelectValueText>
                 </SelectTrigger>
                 <SelectContent>
@@ -236,19 +300,27 @@ export default function ProfileData() {
                 color={{ base: 'black', _dark: 'white' }}
                 mb={6}
                 collection={goals}
-                value={formData.goal || ''}
-                onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                  handleInputChange('goal', e.target.value)
+                value={[formData.goal]}
+                onValueChange={
+                  (value) => {
+                    setFormData((prev) => ({
+                      ...prev,
+                      goal: value[0] as string,
+                    }));
+                  }
+                  // handleInputChange('goal', value)
                 }
-                disabled={isEditing !== 'goal'}
-                bg={isEditing === 'goal' ? editingBg : undefined}
+                // disabled={isEditing !== 'goal'}
+                // bg={isEditing === 'goal' ? editingBg : undefined}
                 onClick={() => !isEditing && handleEditing('goal')}
               >
                 <SelectLabel>Моя цель</SelectLabel>
-                <SelectTrigger>
+                <SelectTrigger
+                  bg={isEditing === 'goal' ? editingBg : undefined}
+                >
                   <SelectValueText placeholder='Выберите цель'></SelectValueText>
                 </SelectTrigger>
-                <SelectContent color={{ base: 'black', _dark: 'white' }}>
+                <SelectContent>
                   {goals.items.map((one) => (
                     <SelectItem item={one} key={one.value}>
                       {one.label}
@@ -257,25 +329,6 @@ export default function ProfileData() {
                 </SelectContent>
               </SelectRoot>
             </Stack>
-
-            {/* <Form className={styles.form}> */}
-            {/* <Form.Label>Выберите оборудование</Form.Label>
-            {['Коврик', 'Гантели', 'Резинки', 'Утяжелители'].map((item) => (
-              <Form.Check
-                key={item}
-                type='checkbox'
-                id={`checkbox-${item}`}
-                label={item}
-                checked={formData.equipment.includes(item)}
-                onChange={(e) => {
-                  const updatedEquipment = e.target.checked
-                    ? [...formData.equipment, item]
-                    : formData.equipment.filter((equip) => equip !== item);
-                  handleFieldChange('equipment', updatedEquipment);
-                }}
-              />
-            ))} */}
-            {/* </Form> */}
           </>
         );
 
@@ -283,17 +336,17 @@ export default function ProfileData() {
         return (
           <>
             <Stack>
-              <Field
-                label='ID'
-                mb={4}
-                color={{ base: 'black', _dark: 'white' }}
-              >
+              <Field label='ID' mb={4}>
                 <Input
-                  color={{ base: 'black', _dark: 'white' }}
                   type='text'
                   value={user ? `${user?.id}` : 'ID пользователя'}
                   name='id'
                   disabled
+                  _disabled={{
+                    opacity: 1,
+                    cursor: 'not-allowed',
+                    color: 'inherit',
+                  }}
                   pl={4}
                   aria-label='ID пользователя'
                   aria-describedby='basic-addon3'
@@ -313,29 +366,40 @@ export default function ProfileData() {
             {userplan?.length === 0 ? (
               <Text color={{ base: 'black', _dark: 'white' }}>
                 Нет тренировок
-                <Button minW='10ch'
-            variant='surface'
-            colorPalette='green'
-            borderRadius='sm'
-            onClick={redirectPlanHandlet}
-            className='mt-3'> ДОБАВИТЬ ПЛАН </Button>
+                <Button
+                  minW='10ch'
+                  variant='surface'
+                  colorPalette='green'
+                  borderRadius='sm'
+                  onClick={redirectPlanHandlet}
+                  className='mt-3'
+                >
+                  ДОБАВИТЬ ПЛАН
+                </Button>
               </Text>
             ) : (
               <VStack gap={4} align='start'>
                 {userplan?.map((plan) => (
                   <Box
-                  key={plan.planId}
-                  p={4}
-                  borderWidth='1px'
-                  borderRadius='md'
-                  w='full'>
-                    <Text fontWeight='bold'>Название плана: {plan.Plan?.name || "Не указано"}</Text>
-                    <Text>Статус: {plan.isCompleted ? 'Завершен' : 'В процессе'}</Text>
+                    key={plan.planId}
+                    p={4}
+                    borderWidth='1px'
+                    borderRadius='md'
+                    w='full'
+                  >
+                    <Text fontWeight='bold'>
+                      Название плана: {plan.Plan?.name || 'Не указано'}
+                    </Text>
+                    <Text>
+                      Статус: {plan.isCompleted ? 'Завершен' : 'В процессе'}
+                    </Text>
                     {plan.Plan?.image && (
                       <Image
-                      src={plan.Plan.image}
-                      alt={plan.Plan.name || 'План'}
-                      maxW='100%' borderRadius='8px' />
+                        src={plan.Plan.image}
+                        alt={plan.Plan.name || 'План'}
+                        maxW='100%'
+                        borderRadius='8px'
+                      />
                     )}
                   </Box>
                 ))}
@@ -368,6 +432,7 @@ export default function ProfileData() {
             borderRadius='sm'
             onClick={handleSave}
             className='mt-3'
+            disabled={isSaveButtonDisabled}
           >
             Сохранить
           </Button>

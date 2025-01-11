@@ -45,28 +45,44 @@ const fetchUserLogout = createAsyncThunk('user/logout', async () => {
   setAccessToken('');
 });
 
-const fetchUserCheck = createAsyncThunk('user/check', async () => {
-  const response = await axiosInstance.get<UserResponseType>(
-    `${import.meta.env.VITE_API}/tokens/refresh`
-  );
-  setAccessToken(response.data.accessToken);
-  return response.data.user;
+const fetchUserCheck = createAsyncThunk('user/check', async (_, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.get<UserResponseType>(
+      `${import.meta.env.VITE_API}/tokens/refresh`
+    );
+    setAccessToken(response.data.accessToken);
+    return response.data.user;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return rejectWithValue(error.response?.data.message || 'Ошибка при проверке пользователя');
+    }
+    return rejectWithValue('Неизвестная ошибка');
+  }
 });
 
 const fetchUpdateProfile = createAsyncThunk(
   'user/updateProfile',
-  async (profileData: UserType) => {
+  async (profileData: Partial<UserType>, { rejectWithValue }) => {
     try {
+      const filteredData = Object.fromEntries(
+        Object.entries(profileData).filter(([_, value]) => 
+        value !== null && value !== undefined && value !== '')
+      );
+
+      if ('password' in filteredData && filteredData.password === '') {
+        delete filteredData.password;
+      }
+
       const response = await axiosInstance.patch<UserType>(
         `${import.meta.env.VITE_API}/auth/profile`,
-        profileData
+        filteredData
       );
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError && error.response?.data) {
-        return { error: error.response.data.message as string };
+        return rejectWithValue(error.response.data.message);
       }
-      return { error: 'Произошла ошибка, пожалуйста, повторите ещё раз или попробуйте попозже.' }; 
+      return rejectWithValue('Произошла ошибка, пожалуйста, повторите ещё раз или попробуйте попозже.'); 
     }
   }
 );
