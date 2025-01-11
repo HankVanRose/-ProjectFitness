@@ -104,38 +104,21 @@ router.get('/signout', (req, res) => {
 
 router.patch('/profile', async (req, res) => {
   const {
-    password,
-    age,
-    username,
-    email,
-    gender,
-    goal,
-    id,
-    weight,
-    height,
+    id, ...updateData
   } = req.body;
   try {
-    const result = await User.findByPk(id);
- 
-    const updateData = {
-      age, 
-      username,
-      email, 
-      gender, 
-      goal, 
-      weight, 
-      height
-    };
-
-    if (password) {
-      updateData.password = await bcrypt.hash(password, 10);
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ message: "Пользователь не найден" });
     }
-    const updatedUser = await result.update(updateData);
-    updatedUser.password = undefined;
-    res.status(201).json(updatedUser);
+    
+    await user.update(updateData);
+    const updatedUser = user.toJSON();
+    delete updatedUser.password;
+    res.status(200).json(updatedUser);
  
   } catch (error) {
-    console.error(error, 'initial server error');
+    console.error(error, 'Ошибка на сервере при обновлении профиля');
     res.sendStatus(500);
   }
 });
