@@ -9,72 +9,73 @@ module.exports = {
         {
           planId: 1,
           points: 100,
-          description: 'biba biba ibbba',
+          description:
+            'Выполнить 3 раунда за минимальное время:; 3 Выхода на кольца; 6 Взятий на грудь + толчок 60 кг; 9 Подтягиваний; 12 Берпи; 15 Приседаний 60 кг; 18 Отжиманий; 21 Махи гири 24кг; 24 V-up',
         },
         {
           planId: 1,
           points: 100,
-          description: 'biba biba ibbba',
+          description: '2',
         },
         {
           planId: 1,
           points: 100,
-          description: 'biba biba ibbba',
+          description: '3',
         },
         {
           planId: 1,
           points: 100,
-          description: 'biba biba ibbba',
+          description: '4',
         },
         {
           planId: 1,
           points: 100,
-          description: 'biba biba ibbba',
+          description: '5',
         },
         {
           planId: 1,
           points: 100,
-          description: 'biba biba ibbba',
+          description: '6',
         },
         {
           planId: 1,
           points: 100,
-          description: 'biba biba ibbba',
+          description: '7',
         },
         {
           planId: 1,
           points: 100,
-          description: 'biba biba ibbba',
+          description: '8',
         },
         {
           planId: 1,
           points: 100,
-          description: 'biba biba ibbba',
+          description: '9',
         },
         {
           planId: 1,
           points: 100,
-          description: 'biba biba ibbba',
+          description: '10',
         },
         {
           planId: 1,
           points: 100,
-          description: 'biba biba ibbba',
+          description: '11',
         },
         {
           planId: 1,
           points: 100,
-          description: 'biba biba ibbba',
+          description: '12',
         },
         {
           planId: 2,
           points: 150,
-          description: 'biba biba ibbba',
+          description: '5',
         },
         {
           planId: 3,
           points: 100,
-          description: 'biba biba ibbba',
+          description: '5',
         },
         {
           planId: 4,
@@ -90,15 +91,39 @@ module.exports = {
         // Day 1 exercises
         {
           dayId: 1,
+          exerciseId: 34,
+        },
+        {
+          dayId: 1,
+          exerciseId: 36,
+        },
+        {
+          dayId: 1,
+          exerciseId: 35,
+        },
+        {
+          dayId: 1,
+          exerciseId: 10,
+        },
+        {
+          dayId: 1,
           exerciseId: 1,
         },
         {
           dayId: 1,
-          exerciseId: 2,
+          exerciseId: 37,
         },
         {
           dayId: 1,
-          exerciseId: 5,
+          exerciseId: 6,
+        },
+        {
+          dayId: 1,
+          exerciseId: 38,
+        },
+        {
+          dayId: 1,
+          exerciseId: 39,
         },
         // Day 2 exercises
         {

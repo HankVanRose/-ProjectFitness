@@ -11,9 +11,10 @@ import {
 } from '@/components/ui/dialog';
 import { DayExercise } from '@/types';
 import axiosInstance from '@/axiosInstance';
-
 import { setLoading } from '@/store/appSlice';
-import './A.css';
+import { Box, Text, VStack } from '@chakra-ui/react';
+import { Image } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 
 interface AddedModalProps {
   show: boolean;
@@ -35,7 +36,6 @@ export default function AddedModal({
   useEffect(() => {
     const dayExr = async () => {
       try {
-        // const res = await axiosInstance.get<DayExercise[]>(`${VITE_API}/days`);
         const res = await axiosInstance.get<DayExercise[]>(
           `${VITE_API}/days/${singlePlan}`
         );
@@ -49,7 +49,23 @@ export default function AddedModal({
     dayExr();
   }, [singlePlan]);
 
-  console.log(dayExercises);
+  const { id } = useParams();
+  const finishDayHandler = async (id) => {
+    try {
+      const response = await axiosInstance.patch(`${VITE_API}/days/${id}`, {
+        isCompleted: true,
+      });
+      console.log('День завершен:', response.data);
+      handleClose();
+    } catch (error) {
+      console.error('Ошибка при завершении дня:', error);
+    }
+  };
+
+  console.log(id);
+
+  const descr = dayExercises.map((exercise) => exercise.description);
+  const exercisesArray = descr[0]?.split('; ').map((item) => item.trim());
 
   const currentPlan = dayExercises[activeStep]?.Exercises || [];
 
@@ -63,23 +79,81 @@ export default function AddedModal({
       <DialogTrigger asChild>
         <Button visibility={'none'}></Button>
       </DialogTrigger>
-      <DialogContent style={{ width: '90%', maxWidth: '90%' }}>
+      <DialogContent
+        style={{
+          width: '90%',
+          maxWidth: '90%',
+          scrollbarColor: 'blue',
+          overflow: 'scroll',
+          display: 'flex',
+        }}
+      >
         <DialogHeader>
           <DialogTitle>{`ДЕНЬ ${activeStep + 1}`}</DialogTitle>
           <DialogCloseTrigger onClick={handleClose} />
         </DialogHeader>
         <DialogBody>
-          {currentPlan.map((exercise) => (
-            <div key={exercise.id} style={{ marginBottom: '20px' }}>
-              <h3>{exercise.name}</h3>
-              <img
-                src={exercise.image}
-                alt={exercise.name}
-                style={{ width: '100px', height: '100px' }}
-              />
-              <p>{exercise.shortDescription}</p>
-            </div>
-          ))}
+          <Box as="ul" listStylePosition="inside" padding={4}>
+            {exercisesArray?.map((exerciselist, index) => (
+              <Box
+                as="li"
+                key={index}
+                padding={2}
+                borderRadius="md"
+                backgroundColor="gray.100"
+                borderWidth="1px"
+                borderColor="green.300"
+                _hover={{
+                  backgroundColor: 'green.200',
+                  transition: 'transform 0.2s',
+                }}
+              >
+                <Text fontWeight="bold">{exerciselist.toUpperCase()}</Text>
+              </Box>
+            ))}
+            <Text paddingY={1} fontSize="sm" color="gray.600">
+              * Во всех комплексах свободные веса указаны для мужчин. Для
+              девушек вес = 2/3 от мужского.
+            </Text>
+            <Button
+              variant="surface"
+              colorPalette="green"
+              onClick={finishDayHandler}
+            >
+              ЗАВЕРШИТЬ ДЕНЬ
+            </Button>
+          </Box>
+
+          <Text fontSize="lg" fontWeight="semibold" marginBottom={4}>
+            ССЫЛКИ НА УПРАЖНЕНИЕ С ТЕХНИКОЙ ВЫПОЛНЕНИЯ
+          </Text>
+
+          <Box
+            style={{
+              marginBottom: '20px',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              flexWrap: 'wrap',
+            }}
+          >
+            {currentPlan.map((exercise) => (
+              <Box
+                key={exercise.id}
+                margin={2}
+                borderWidth={1}
+                borderRadius="md"
+                overflow="hidden"
+                boxShadow="md"
+              >
+                <Image
+                  src={exercise?.image}
+                  alt={exercise.name}
+                  style={{ width: 300, height: 300 }}
+                />
+              </Box>
+            ))}
+          </Box>
         </DialogBody>
       </DialogContent>
     </DialogRoot>

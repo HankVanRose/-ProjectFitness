@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/select';
 import { Field } from '@/components/ui/field';
 import { setLoading } from '@/store/appSlice';
+import { useNavigate } from 'react-router-dom';
 
 interface FormData {
   id: number;
@@ -74,6 +75,7 @@ export default function ProfileData() {
 
   // const focusBg = useColorModeValue('blue.500', 'blue.900'); // фон при фокусе
   const editingBg = useColorModeValue('green.50', 'green.900'); // фон при изменении
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -96,6 +98,12 @@ export default function ProfileData() {
     setFormData((prev) => ({ ...prev, [field]: value }));
     setIsFormModified(true);
   };
+
+  // редирект на страницу планов, при их отсуствии в ЛК
+
+  const redirectPlanHandlet = () => {
+    navigate('/card')
+  }
 
   // переключение изменения полей
   const handleEditing = (field: string) => {
@@ -305,6 +313,12 @@ export default function ProfileData() {
             {userplan?.length === 0 ? (
               <Text color={{ base: 'black', _dark: 'white' }}>
                 Нет тренировок
+                <Button minW='10ch'
+            variant='surface'
+            colorPalette='green'
+            borderRadius='sm'
+            onClick={redirectPlanHandlet}
+            className='mt-3'> ДОБАВИТЬ ПЛАН </Button>
               </Text>
             ) : (
               <VStack gap={4} align='start'>
