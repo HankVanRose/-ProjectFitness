@@ -2,7 +2,6 @@ const router = require('express').Router();
 
 const { Session, Plan, UserDay, Day } = require('../../db/models');
 
-
 //! все сессии
 router.route('/').get(async (req, res) => {
   try {
@@ -104,4 +103,34 @@ router.route('/').post(async (req, res) => {
     });
   }
 });
+
+router.route('/:id').patch(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isCompleted } = req.body;
+
+    if (typeof isCompleted !== 'boolean') {
+      return res
+        .status(400)
+        .json({ error: 'isCompleted должно быть булевым значением.' });
+    }
+
+    const userDay = await UserDay.findByPk(id);
+
+    if (!userDay) {
+      return res.status(404).json({ error: 'Запись не найдена.' });
+    }
+
+    userDay.isCompleted = isCompleted;
+    await userDay.save();
+
+    return res.status(200).json(userDay);
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ error: 'Произошла ошибка при обновлении записи.' });
+  }
+});
+
 module.exports = router;

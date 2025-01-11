@@ -73,8 +73,8 @@ export default function AddedPlanPage() {
 
               <Collapsible.Content>
                 <Box
-                  padding="4"
-                  borderWidth="2px"
+                  padding="2"
+                  borderWidth="22px"
                   borderColor="gray.300"
                   borderRadius="md"
                   boxShadow="md"
@@ -87,7 +87,7 @@ export default function AddedPlanPage() {
                       count={singlePlan.numOfTrainings}
                       colorPalette="green"
                     >
-                      <StepsList>
+                      <StepsList >
                         {[...Array(singlePlan.numOfTrainings)].map(
                           (_, stepIndex) => (
                             <StepsItem

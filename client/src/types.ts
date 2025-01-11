@@ -64,4 +64,5 @@ export type DayExercise = {
   planId: number;
   points: number;
   Exercises: ExercisesType;
+  
 };
