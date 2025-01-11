@@ -1,7 +1,11 @@
 import { useAppDispatch, useAppSelector } from '../../store/hooks/hooks';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import SideBarComp from './SideBarComp';
-import { fetchUpdateProfile, userActivePlan } from '../../store/thunkActions';
+import {
+  fetchUpdateProfile,
+  fetchUserCheck,
+  userActivePlan,
+} from '../../store/thunkActions';
 import {
   Box,
   Button,
@@ -28,8 +32,8 @@ import {
   SelectValueText,
 } from '@/components/ui/select';
 import { Field } from '@/components/ui/field';
-import { setLoading } from '@/store/appSlice';
 import { useNavigate } from 'react-router-dom';
+import { UserType } from '@/types';
 
 interface FormData {
   id: number;
@@ -48,20 +52,37 @@ export default function ProfileData() {
   const dispatch = useAppDispatch();
   const { userplan } = useAppSelector((store) => store.appSlice);
 
-  const [activeTab, setActiveTab] = useState<number>(0);
-  const [isFormModified, setIsFormModified] = useState(false); //изменение формы
-
-  const [formData, setFormData] = useState<FormData>({
-    id: 0,
-    age: 0,
-    gender: '',
-    height: '',
-    weight: '',
-    goal: '',
-    username: '',
-    email: '',
-    password: '',
+  const [activeTab, setActiveTab] = useState<number>(() => {
+    const savedTab = localStorage.getItem('activeProfileTab');
+    return savedTab ? Number(savedTab) : 0;
   });
+
+  const navigate = useNavigate();
+  const [isFormModified, setIsFormModified] = useState(false); //изменение формы
+  const [isEditing, setIsEditing] = useState<string>('');
+
+  // const [formData, setFormData] = useState<FormData>({
+  //   id: 0,
+  //   age: 0,
+  //   gender: '',
+  //   height: '',
+  //   weight: '',
+  //   goal: '',
+  //   username: '',
+  //   email: '',
+  //   password: '',
+  // });
+
+  const [formData, setFormData] = useState<Partial<UserType>>({});
+  const [modifiedFields, setModifiedFields] = useState<Set<keyof UserType>>(
+    new Set()
+  );
+
+  useEffect(() => {
+    if (!user) {
+      dispatch(fetchUserCheck());
+    }
+  }, [dispatch, user]);
 
   useEffect(() => {
     if (user) {
@@ -74,29 +95,36 @@ export default function ProfileData() {
         goal: user.goal || '',
         username: user.username || '',
         email: user.email || '',
-        password: '',
+        // password: '',
       });
+      dispatch(userActivePlan(user.id));
     }
-  }, [user]);
+  }, [user, dispatch]);
 
   useEffect(() => {
-    if (user) {
-      dispatch(userActivePlan(user?.id));
-    } else {
-      setLoading(true);
-    }
-  }, [user?.id]);
+    localStorage.setItem('activeProfileTab', activeTab.toString());
+  }, [activeTab]);
 
   console.log(formData);
-  const [isEditing, setIsEditing] = useState<string>('');
-
   // const focusBg = useColorModeValue('blue.500', 'blue.900'); // фон при фокусе
   const editingBg = useColorModeValue('green.50', 'green.900'); // фон при изменении
-  const navigate = useNavigate();
 
   // изменение значений в полях
-  const handleInputChange = (field: keyof FormData, value: string) => {
+  const handleInputChange = (field: keyof UserType, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    // setIsFormModified(true);
+    setModifiedFields(prev => {
+      const newModifiedFields = new Set(prev);
+      newModifiedFields.add(field);
+      return newModifiedFields;
+    });
+  };
+
+  const handleGenderChange = (value: string[]) => {
+    setFormData((prev) => ({
+      ...prev,
+      gender: value[0] as string,
+    }));
     setIsFormModified(true);
   };
 
@@ -112,22 +140,42 @@ export default function ProfileData() {
 
   const handleSave = () => {
     // e.preventDefault();
+    const dataToUpdate: Partial<UserType> = {
+      id: user?.id
+    };
+
+    modifiedFields.forEach(field => {
+      if (field !== 'id') {
+        dataToUpdate[field] = formData[field];
+      }
+    });
+
     dispatch(
-      fetchUpdateProfile({
-        id: user!.id,
-        age: Number(formData.age),
-        gender: formData.gender,
-        height: formData.height,
-        weight: formData.weight,
-        goal: formData.goal,
-        username: formData.username,
-        email: formData.email,
-        password: formData.password,
-      })
-    );
-    setIsFormModified(false);
-    setIsEditing('');
+      fetchUpdateProfile(dataToUpdate)
+      // fetchUpdateProfile({
+      //   id: user!.id,
+      //   age: Number(formData.age),
+      //   gender: formData.gender,
+      //   height: formData.height,
+      //   weight: formData.weight,
+      //   goal: formData.goal,
+      //   username: formData.username,
+      //   email: formData.email,
+      //   password: formData.password,
+      // })
+    ).then((result) => {
+      if (fetchUpdateProfile.fulfilled.match(result)) {
+        setModifiedFields(new Set());
+        console.log('Профиль обновлен');
+        setIsEditing('');
+      } else {
+        console.log('Ошибка обновления');
+      }
+    });
+    // setIsFormModified(false);
   };
+
+  const isSaveButtonDisabled = modifiedFields.size === 0;
 
   const editableField = (
     field: keyof FormData,
@@ -220,12 +268,7 @@ export default function ProfileData() {
                 // onValueChange={(value) =>
                 //   handleInputChange('gender', value)
                 // }
-                onValueChange={(value) => {
-                  setFormData((prev) => ({
-                    ...prev,
-                    goal: value[0] as string,
-                  }));
-                }}
+                onValueChange={handleGenderChange}
                 // disabled={isEditing !== 'gender'}
                 // _disabled={{
                 //   opacity: 1,
@@ -233,9 +276,9 @@ export default function ProfileData() {
                 //   color: 'inherit',
                 // }}
                 onClick={() => !isEditing && handleEditing('gender')}
-                >
+              >
                 <SelectTrigger
-                bg={isEditing === 'gender' ? editingBg : undefined}
+                  bg={isEditing === 'gender' ? editingBg : undefined}
                 >
                   <SelectValueText placeholder='Выберите пол'></SelectValueText>
                 </SelectTrigger>
@@ -275,12 +318,9 @@ export default function ProfileData() {
                 <SelectTrigger
                   bg={isEditing === 'goal' ? editingBg : undefined}
                 >
-                  <SelectValueText
-                    placeholder='Выберите цель'
-                  ></SelectValueText>
+                  <SelectValueText placeholder='Выберите цель'></SelectValueText>
                 </SelectTrigger>
-                <SelectContent
-                >
+                <SelectContent>
                   {goals.items.map((one) => (
                     <SelectItem item={one} key={one.value}>
                       {one.label}
@@ -334,8 +374,7 @@ export default function ProfileData() {
                   onClick={redirectPlanHandlet}
                   className='mt-3'
                 >
-                  {' '}
-                  ДОБАВИТЬ ПЛАН{' '}
+                  ДОБАВИТЬ ПЛАН
                 </Button>
               </Text>
             ) : (
@@ -393,7 +432,7 @@ export default function ProfileData() {
             borderRadius='sm'
             onClick={handleSave}
             className='mt-3'
-            disabled={!isFormModified}
+            disabled={isSaveButtonDisabled}
           >
             Сохранить
           </Button>

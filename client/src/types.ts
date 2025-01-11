@@ -58,6 +58,7 @@ export type UserResponseType = {
   success: boolean;
   accessToken: string;
 };
+
 export type PlansType = PlanType[];
 
 export type DayExercise = {

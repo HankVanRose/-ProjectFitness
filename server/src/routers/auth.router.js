@@ -109,7 +109,6 @@ router.patch('/profile', async (req, res) => {
     username,
     email,
     gender,
-    equipment,
     goal,
     id,
     weight,
@@ -118,17 +117,21 @@ router.patch('/profile', async (req, res) => {
   try {
     const result = await User.findByPk(id);
  
-    const updatedUser = await result.update({
-      password: await bcrypt.hash(password, 10),
-      age,
+    const updateData = {
+      age, 
       username,
-      email,
-      gender,
-      equipment,
-      goal,
-      weight,
-      height,
-    });
+      email, 
+      gender, 
+      goal, 
+      weight, 
+      height
+    };
+
+    if (password) {
+      updateData.password = await bcrypt.hash(password, 10);
+    }
+    const updatedUser = await result.update(updateData);
+    updatedUser.password = undefined;
     res.status(201).json(updatedUser);
  
   } catch (error) {
