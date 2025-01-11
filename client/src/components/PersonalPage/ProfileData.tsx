@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../../store/hooks/hooks';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import SideBarComp from './SideBarComp';
 import {
   fetchUpdateProfile,
@@ -20,7 +20,7 @@ import {
   Image,
 } from '@chakra-ui/react';
 import { InputGroup } from '@/components/ui/input-group';
-import { FiEdit, FiCheck } from 'react-icons/fi';
+import { FiEdit, FiCheck, FiEyeOff, FiEye } from 'react-icons/fi';
 import { useColorModeValue } from '../ui/color-mode';
 import { createListCollection } from '@chakra-ui/react';
 import {
@@ -34,6 +34,7 @@ import {
 import { Field } from '@/components/ui/field';
 import { useNavigate } from 'react-router-dom';
 import { UserType } from '@/types';
+import axiosInstance from '@/axiosInstance';
 
 interface FormData {
   id: number;
@@ -48,6 +49,7 @@ interface FormData {
 }
 
 export default function ProfileData() {
+  const { VITE_API } = import.meta.env;
   const { user } = useAppSelector((state) => state.appSlice);
   const dispatch = useAppDispatch();
   const { userplan } = useAppSelector((store) => store.appSlice);
@@ -59,23 +61,25 @@ export default function ProfileData() {
 
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState<string>('');
-
-  // const [formData, setFormData] = useState<FormData>({
-  //   id: 0,
-  //   age: 0,
-  //   gender: '',
-  //   height: '',
-  //   weight: '',
-  //   goal: '',
-  //   username: '',
-  //   email: '',
-  //   password: '',
-  // });
-
   const [formData, setFormData] = useState<Partial<UserType>>({});
   const [modifiedFields, setModifiedFields] = useState<Set<keyof UserType>>(
     new Set()
   );
+
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+
+  const [showPassword, setShowPassword] = useState({
+    currentPassword: false,
+    newPassword: false,
+    confirmPassword: false,
+  });
+
+  const [passwordErrors, setPasswordErrors] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) {
@@ -94,7 +98,6 @@ export default function ProfileData() {
         goal: user.goal || '',
         username: user.username || '',
         email: user.email || '',
-        // password: '',
       });
       dispatch(userActivePlan(user.id));
     }
@@ -104,20 +107,21 @@ export default function ProfileData() {
     localStorage.setItem('activeProfileTab', activeTab.toString());
   }, [activeTab]);
 
-  console.log(formData);
   // const focusBg = useColorModeValue('blue.500', 'blue.900'); // фон при фокусе
   const editingBg = useColorModeValue('green.50', 'green.900'); // фон при изменении
 
   // изменение значений в полях
-  const handleInputChange = (field: keyof UserType, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    // setIsFormModified(true);
-    setModifiedFields((prev) => {
-      const newModifiedFields = new Set(prev);
-      newModifiedFields.add(field);
-      return newModifiedFields;
-    });
-  };
+  const handleInputChange = useCallback(
+    (field: keyof UserType, value: string) => {
+      setFormData((prev) => ({ ...prev, [field]: value }));
+      setModifiedFields((prev) => {
+        const newModifiedFields = new Set(prev);
+        newModifiedFields.add(field);
+        return newModifiedFields;
+      });
+    },
+    []
+  );
 
   const handleGenderChange = (e: { value: string[] }) => {
     const selectedGender = e.value[0];
@@ -145,6 +149,72 @@ export default function ProfileData() {
     });
   };
 
+  const validateEmail = useCallback((email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email && !emailRegex.test(formData.email)) {
+      setEmailError('Некорректный формат email');
+      return false;
+    }
+    setEmailError(null);
+    return true;
+  }, []);
+
+  const handleEmailChange = useCallback(
+    (email: string) => {
+      handleInputChange('email', email);
+      validateEmail(email);
+    },
+    [handleInputChange, validateEmail]
+  );
+
+  const checkCurrentPassword = useCallback(async () => {
+    try {
+      const response = await axiosInstance.post(`${VITE_API}/auth/check-password`, {
+        userId: user?.id,
+        password: passwordData.currentPassword,
+      });
+      return response.data.isMatch;
+    } catch (error) {
+      console.error('Ошибка прокерки пароля', error);
+      return false;
+    }
+  }, [user?.id, passwordData.currentPassword, VITE_API]);
+
+  const validatePassword = useCallback(() => {
+    const errors: string[] = [];
+
+    if (passwordData.newPassword.length < 8) {
+      errors.push('Пароль должен содержать не менее 8 символов');
+    }
+    if (passwordData.confirmPassword !== passwordData.newPassword) {
+      errors.push('Пароли не совпадают');
+    }
+    const errorMessage = errors.length > 0 ? errors.join('. ') : null;
+    setPasswordErrors(errorMessage);
+    return errors.length === 0;
+  }, [passwordData.newPassword, passwordData.confirmPassword]);
+
+  const handlePasswordChange = useCallback(
+    (field: keyof typeof passwordData, value: string) => {
+      setPasswordData((prev) => {
+        const newData = {
+          ...prev,
+          [field]: value,
+        };
+        setPasswordErrors(null);
+        if (field === 'newPassword' && value.length > 0 && value.length < 8) {
+          setPasswordErrors('Пароль должен содержать не менее 8 символов');
+        }
+
+        if (field === 'confirmPassword' && newData.newPassword !== value) {
+          setPasswordErrors('Пароли не совпадают');
+        }
+        return newData;
+      });
+    },
+    []
+  );
+
   // редирект на страницу планов, при их отсуствии в ЛК
   const redirectPlanHandlet = () => {
     navigate('/card');
@@ -155,43 +225,71 @@ export default function ProfileData() {
     setIsEditing((prev) => (prev === field ? '' : field));
   };
 
-  const handleSave = () => {
+  const handleSave = useCallback(async () => {
     // e.preventDefault();
     const dataToUpdate: Partial<UserType> = {
       id: user?.id,
     };
 
-    modifiedFields.forEach((field) => {
+    const updateModifiedFields = new Set(modifiedFields);
+
+    if (formData.email && !validateEmail(formData.email)) {
+      return;
+    }
+
+    if (passwordData.newPassword) {
+      const isCurrentPasswordCorrect = await checkCurrentPassword();
+      if (!isCurrentPasswordCorrect) {
+        setPasswordErrors('Неверный текущий пароль');
+        return;
+      }
+      if (!validatePassword()) return;
+      dataToUpdate.password = passwordData.newPassword;
+      updateModifiedFields.add('password');
+    }
+
+    updateModifiedFields.forEach((field) => {
       if (field !== 'id' && formData[field] !== undefined) {
-        (dataToUpdate[field as keyof UserType] as string | number) = formData[field];
+        (dataToUpdate[field as keyof UserType] as string | number | undefined) =
+          formData[field];
       }
     });
 
-    dispatch(
-      fetchUpdateProfile(dataToUpdate)
-      // fetchUpdateProfile({
-      //   id: user!.id,
-      //   age: Number(formData.age),
-      //   gender: formData.gender,
-      //   height: formData.height,
-      //   weight: formData.weight,
-      //   goal: formData.goal,
-      //   username: formData.username,
-      //   email: formData.email,
-      //   password: formData.password,
-      // })
-    ).then((result) => {
+    // if (passwordData.newPassword) {
+    //   modifiedFields.add('password');
+    // }
+
+    dispatch(fetchUpdateProfile(dataToUpdate)).then((result) => {
       if (fetchUpdateProfile.fulfilled.match(result)) {
         setModifiedFields(new Set());
+        setPasswordData({
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: '',
+        });
         console.log('Профиль обновлен');
         setIsEditing('');
       } else {
         console.log('Ошибка обновления');
       }
     });
-  };
+  }, [
+    user?.id,
+    modifiedFields,
+    formData,
+    passwordData,
+    validateEmail,
+    checkCurrentPassword,
+    validatePassword,
+    dispatch,
+  ]);
 
-  const isSaveButtonDisabled = modifiedFields.size === 0;
+  const isSaveButtonDisabled = useMemo(() => {
+    return (
+      modifiedFields.size === 0 &&
+      (!passwordData.newPassword || !validatePassword())
+    );
+  }, [modifiedFields, passwordData.newPassword, validatePassword]);
 
   const editableField = (
     field: keyof FormData,
@@ -385,7 +483,107 @@ export default function ProfileData() {
 
             {editableField('username', 'Имя пользователя')}
             {editableField('email', 'Email', 'email')}
+            {emailError && <Text color='red.500'>{emailError}</Text>}
+
             {editableField('password', 'Пароль', 'password')}
+            {isEditing === 'password' && (
+              <VStack gap={4} align='stretch' width='100%'>
+                <InputGroup
+                  width='100%'
+                  minW='20ch'
+                  endElement={
+                    <IconButton
+                      variant='ghost'
+                      onClick={() =>
+                        setShowPassword((prev) => ({
+                          ...prev,
+                          currentPassword: !prev.currentPassword,
+                        }))
+                      }
+                    >
+                      {showPassword.currentPassword ? <FiEyeOff /> : <FiEye />}
+                    </IconButton>
+                  }
+                >
+                  <Input
+                    width='500px'
+                    minWidth='500px'
+                    minW='20ch'
+                    type={showPassword.currentPassword ? 'text' : 'password'}
+                    placeholder='Текущий пароль'
+                    value={passwordData.currentPassword}
+                    onChange={(e) => {
+                      handlePasswordChange('currentPassword', e.target.value);
+                      setPasswordErrors(null);
+                    }}
+                  />
+                </InputGroup>
+
+                <InputGroup
+                  width='100%'
+                  minW='20ch'
+                  endElement={
+                    <IconButton
+                      variant='ghost'
+                      onClick={() =>
+                        setShowPassword((prev) => ({
+                          ...prev,
+                          newPassword: !prev.newPassword,
+                        }))
+                      }
+                    >
+                      {showPassword.newPassword ? <FiEyeOff /> : <FiEye />}
+                    </IconButton>
+                  }
+                >
+                  <Input
+                    width='500px'
+                    minWidth='500px'
+                    minW='20ch'
+                    type={showPassword.newPassword ? 'text' : 'password'}
+                    placeholder='Новый пароль'
+                    value={passwordData.newPassword}
+                    onChange={(e) =>
+                      handlePasswordChange('newPassword', e.target.value)
+                    }
+                  />
+                </InputGroup>
+
+                <InputGroup
+                  width='100%'
+                  minW='20ch'
+                  endElement={
+                    <IconButton
+                      variant='ghost'
+                      onClick={() =>
+                        setShowPassword((prev) => ({
+                          ...prev,
+                          confirmPassword: !prev.confirmPassword,
+                        }))
+                      }
+                    >
+                      {showPassword.confirmPassword ? <FiEyeOff /> : <FiEye />}
+                    </IconButton>
+                  }
+                >
+                  <Input
+                    width='500px'
+                    minWidth='500px'
+                    minW='20ch'
+                    type={showPassword.confirmPassword ? 'text' : 'password'}
+                    placeholder='Подтвердите новый пароль'
+                    value={passwordData.confirmPassword}
+                    onChange={(e) =>
+                      handlePasswordChange('confirmPassword', e.target.value)
+                    }
+                  />
+                </InputGroup>
+
+                {passwordErrors && (
+                  <Text color='red.500'>{passwordErrors}</Text>
+                )}
+              </VStack>
+            )}
             <Button
               minW='10ch'
               variant='surface'
@@ -405,9 +603,9 @@ export default function ProfileData() {
           <>
             {userplan?.length === 0 ? (
               <Stack>
-              <Text color={{ base: 'black', _dark: 'white' }}>
-                Пока нет выбранных тренировок
-              </Text>
+                <Text color={{ base: 'black', _dark: 'white' }}>
+                  Пока нет выбранных тренировок
+                </Text>
                 <Button
                   minW='10ch'
                   variant='surface'
@@ -450,11 +648,7 @@ export default function ProfileData() {
           </>
         );
       default:
-        return (
-          <Text>
-            Выберите вкладку
-          </Text>
-        );
+        return <Text>Выберите вкладку</Text>;
     }
   };
 

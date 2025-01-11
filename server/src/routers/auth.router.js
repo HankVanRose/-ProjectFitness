@@ -104,23 +104,59 @@ router.get('/signout', (req, res) => {
 
 router.patch('/profile', async (req, res) => {
   const {
-    id, ...updateData
+    id, email, password, ...otherData
   } = req.body;
   try {
     const user = await User.findByPk(id);
     if (!user) {
       return res.status(404).json({ message: "Пользователь не найден" });
     }
-    
-    await user.update(updateData);
+
+    if(email) {
+      const existingUser = await User.findOne({where: { email }});
+      if (existingUser && existingUser.id !== id) {
+        return res.status(400).json({ message: 'Пользователь с таким email уже зарегистрирован'});
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res
+          .status(400)
+          .json({ message: 'Некорректный формат email' });
+      }
+    }
+
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      otherData.password = hashedPassword;
+    }
+
+    await user.update({...otherData, 
+      ...(email && { email }),
+      ...(password && { password: otherData.password })
+    });
     const updatedUser = user.toJSON();
     delete updatedUser.password;
     res.status(200).json(updatedUser);
- 
   } catch (error) {
     console.error(error, 'Ошибка на сервере при обновлении профиля');
     res.sendStatus(500);
   }
+});
+
+router.post('/check-password', async (req, res) => {
+const {userId, password } = req.body;
+try {
+  const user = await User.findByPk(userId);
+  if(!user) {
+    return res.status(404).json({ message: 'Пользователь не найден' });
+  }
+  const isMatch = await bcrypt.compare(password, user.password);
+  res.json({ isMatch });
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ message: "Ошибка проверки пароля на сервере" });
+};
 });
 
 module.exports = router;
