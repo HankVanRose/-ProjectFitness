@@ -51,14 +51,6 @@ export default function ProfileData() {
   const [activeTab, setActiveTab] = useState<number>(0);
   const [isFormModified, setIsFormModified] = useState(false); //изменение формы
 
-  useEffect(() => {
-    if (user) {
-      dispatch(userActivePlan(user?.id));
-    } else {
-      setLoading(true);
-    }
-  }, [user?.id]);
-
   const [formData, setFormData] = useState<FormData>({
     id: 0,
     age: 0,
@@ -70,12 +62,6 @@ export default function ProfileData() {
     email: '',
     password: '',
   });
-
-  const [isEditing, setIsEditing] = useState<string>('');
-
-  // const focusBg = useColorModeValue('blue.500', 'blue.900'); // фон при фокусе
-  const editingBg = useColorModeValue('green.50', 'green.900'); // фон при изменении
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -93,6 +79,21 @@ export default function ProfileData() {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (user) {
+      dispatch(userActivePlan(user?.id));
+    } else {
+      setLoading(true);
+    }
+  }, [user?.id]);
+
+  console.log(formData);
+  const [isEditing, setIsEditing] = useState<string>('');
+
+  // const focusBg = useColorModeValue('blue.500', 'blue.900'); // фон при фокусе
+  const editingBg = useColorModeValue('green.50', 'green.900'); // фон при изменении
+  const navigate = useNavigate();
+
   // изменение значений в полях
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -100,18 +101,17 @@ export default function ProfileData() {
   };
 
   // редирект на страницу планов, при их отсуствии в ЛК
-
   const redirectPlanHandlet = () => {
-    navigate('/card')
-  }
+    navigate('/card');
+  };
 
   // переключение изменения полей
   const handleEditing = (field: string) => {
     setIsEditing((prev) => (prev === field ? '' : field));
   };
 
-  const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSave = () => {
+    // e.preventDefault();
     dispatch(
       fetchUpdateProfile({
         id: user!.id,
@@ -137,9 +137,11 @@ export default function ProfileData() {
     const isEditingField = isEditing === field;
 
     return (
-      <Stack>
-        <Field label={label} mb={4}>
+      <Stack width='100%' minW='20ch'>
+        <Field label={label} mb={4} width='100%' minW='20ch'>
           <InputGroup
+            width='100%'
+            minW='20ch'
             endElement={
               <IconButton
                 h='1.75rem'
@@ -153,6 +155,9 @@ export default function ProfileData() {
             }
           >
             <Input
+              width='500px'
+              minWidth='500px'
+              minW='20ch'
               type={type}
               placeholder={label}
               _placeholder={{
@@ -203,19 +208,35 @@ export default function ProfileData() {
             {editableField('age', 'Возраст', 'number')}
 
             <Stack>
-              <Text textStyle='sm' mb={0}>Пол</Text>
+              <Text textStyle='sm' mb={0}>
+                Пол
+              </Text>
               <SelectRoot
+                maxWidth='500px'
+                minW='20ch'
                 mb={4}
                 collection={frameworks}
-                value={formData.gender ?? ''}
-                onValueChange={(value: ChangeEvent<HTMLSelectElement>) =>
-                  handleInputChange('gender', e.target.value)
-                }
-                disabled={isEditing !== 'gender'}
-                bg={isEditing === 'gender' ? editingBg : undefined}
+                value={[formData.gender]}
+                // onValueChange={(value) =>
+                //   handleInputChange('gender', value)
+                // }
+                onValueChange={(value) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    goal: value[0] as string,
+                  }));
+                }}
+                // disabled={isEditing !== 'gender'}
+                // _disabled={{
+                //   opacity: 1,
+                //   cursor: 'not-allowed',
+                //   color: 'inherit',
+                // }}
                 onClick={() => !isEditing && handleEditing('gender')}
-              >
-                <SelectTrigger>
+                >
+                <SelectTrigger
+                bg={isEditing === 'gender' ? editingBg : undefined}
+                >
                   <SelectValueText placeholder='Выберите пол'></SelectValueText>
                 </SelectTrigger>
                 <SelectContent>
@@ -236,19 +257,30 @@ export default function ProfileData() {
                 color={{ base: 'black', _dark: 'white' }}
                 mb={6}
                 collection={goals}
-                value={formData.goal || ''}
-                onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                  handleInputChange('goal', e.target.value)
+                value={[formData.goal]}
+                onValueChange={
+                  (value) => {
+                    setFormData((prev) => ({
+                      ...prev,
+                      goal: value[0] as string,
+                    }));
+                  }
+                  // handleInputChange('goal', value)
                 }
-                disabled={isEditing !== 'goal'}
-                bg={isEditing === 'goal' ? editingBg : undefined}
+                // disabled={isEditing !== 'goal'}
+                // bg={isEditing === 'goal' ? editingBg : undefined}
                 onClick={() => !isEditing && handleEditing('goal')}
               >
                 <SelectLabel>Моя цель</SelectLabel>
-                <SelectTrigger>
-                  <SelectValueText placeholder='Выберите цель'></SelectValueText>
+                <SelectTrigger
+                  bg={isEditing === 'goal' ? editingBg : undefined}
+                >
+                  <SelectValueText
+                    placeholder='Выберите цель'
+                  ></SelectValueText>
                 </SelectTrigger>
-                <SelectContent color={{ base: 'black', _dark: 'white' }}>
+                <SelectContent
+                >
                   {goals.items.map((one) => (
                     <SelectItem item={one} key={one.value}>
                       {one.label}
@@ -257,25 +289,6 @@ export default function ProfileData() {
                 </SelectContent>
               </SelectRoot>
             </Stack>
-
-            {/* <Form className={styles.form}> */}
-            {/* <Form.Label>Выберите оборудование</Form.Label>
-            {['Коврик', 'Гантели', 'Резинки', 'Утяжелители'].map((item) => (
-              <Form.Check
-                key={item}
-                type='checkbox'
-                id={`checkbox-${item}`}
-                label={item}
-                checked={formData.equipment.includes(item)}
-                onChange={(e) => {
-                  const updatedEquipment = e.target.checked
-                    ? [...formData.equipment, item]
-                    : formData.equipment.filter((equip) => equip !== item);
-                  handleFieldChange('equipment', updatedEquipment);
-                }}
-              />
-            ))} */}
-            {/* </Form> */}
           </>
         );
 
@@ -283,17 +296,17 @@ export default function ProfileData() {
         return (
           <>
             <Stack>
-              <Field
-                label='ID'
-                mb={4}
-                color={{ base: 'black', _dark: 'white' }}
-              >
+              <Field label='ID' mb={4}>
                 <Input
-                  color={{ base: 'black', _dark: 'white' }}
                   type='text'
                   value={user ? `${user?.id}` : 'ID пользователя'}
                   name='id'
                   disabled
+                  _disabled={{
+                    opacity: 1,
+                    cursor: 'not-allowed',
+                    color: 'inherit',
+                  }}
                   pl={4}
                   aria-label='ID пользователя'
                   aria-describedby='basic-addon3'
@@ -313,29 +326,41 @@ export default function ProfileData() {
             {userplan?.length === 0 ? (
               <Text color={{ base: 'black', _dark: 'white' }}>
                 Нет тренировок
-                <Button minW='10ch'
-            variant='surface'
-            colorPalette='green'
-            borderRadius='sm'
-            onClick={redirectPlanHandlet}
-            className='mt-3'> ДОБАВИТЬ ПЛАН </Button>
+                <Button
+                  minW='10ch'
+                  variant='surface'
+                  colorPalette='green'
+                  borderRadius='sm'
+                  onClick={redirectPlanHandlet}
+                  className='mt-3'
+                >
+                  {' '}
+                  ДОБАВИТЬ ПЛАН{' '}
+                </Button>
               </Text>
             ) : (
               <VStack gap={4} align='start'>
                 {userplan?.map((plan) => (
                   <Box
-                  key={plan.planId}
-                  p={4}
-                  borderWidth='1px'
-                  borderRadius='md'
-                  w='full'>
-                    <Text fontWeight='bold'>Название плана: {plan.Plan?.name || "Не указано"}</Text>
-                    <Text>Статус: {plan.isCompleted ? 'Завершен' : 'В процессе'}</Text>
+                    key={plan.planId}
+                    p={4}
+                    borderWidth='1px'
+                    borderRadius='md'
+                    w='full'
+                  >
+                    <Text fontWeight='bold'>
+                      Название плана: {plan.Plan?.name || 'Не указано'}
+                    </Text>
+                    <Text>
+                      Статус: {plan.isCompleted ? 'Завершен' : 'В процессе'}
+                    </Text>
                     {plan.Plan?.image && (
                       <Image
-                      src={plan.Plan.image}
-                      alt={plan.Plan.name || 'План'}
-                      maxW='100%' borderRadius='8px' />
+                        src={plan.Plan.image}
+                        alt={plan.Plan.name || 'План'}
+                        maxW='100%'
+                        borderRadius='8px'
+                      />
                     )}
                   </Box>
                 ))}
@@ -368,6 +393,7 @@ export default function ProfileData() {
             borderRadius='sm'
             onClick={handleSave}
             className='mt-3'
+            disabled={!isFormModified}
           >
             Сохранить
           </Button>
