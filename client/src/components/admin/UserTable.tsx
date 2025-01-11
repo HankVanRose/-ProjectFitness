@@ -1,4 +1,13 @@
-import { Box, Button, Input, Table, Text, HStack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Input,
+  Table,
+  Text,
+  HStack,
+  Spinner,
+  Badge,
+} from '@chakra-ui/react';
 import { Avatar } from '@/components/ui/avatar';
 import { Tooltip } from '@/components/ui/tooltip';
 import axiosInstance from '@/axiosInstance';
@@ -6,6 +15,12 @@ import { useEffect, useState } from 'react';
 import { IoSearch } from 'react-icons/io5';
 import { InputGroup } from '../ui/input-group';
 import { useColorModeValue } from '../ui/color-mode';
+import {
+  RiArrowLeftLine,
+  RiArrowRightLine,
+  RiUserSearchLine,
+} from 'react-icons/ri';
+import { ImBlocked } from 'react-icons/im';
 
 interface User {
   id: number;
@@ -61,7 +76,7 @@ const UserTable = () => {
     const delayDebounceFn = setTimeout(() => {
       setCurrentPage(1);
       fetchUsers(1, searchQuery);
-    }, 300);
+    }, 500);
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery]);
@@ -81,11 +96,11 @@ const UserTable = () => {
         <Button
           key={i}
           size="sm"
+          borderRadius="md"
           bg={bgColor}
           color={textColor}
           variant={currentPage === i ? 'solid' : 'outline'}
           onClick={() => handlePageChange(i)}
-          mx={1}
         >
           {i}
         </Button>
@@ -123,31 +138,42 @@ const UserTable = () => {
         </InputGroup>
       </Box>
 
-      {isLoading ? (
-        <Text>Loading...</Text>
-      ) : (
-        <>
-          <Table.Root size="md" interactive stickyHeader>
-            <Table.Header>
+      <>
+        <Table.Root size="md" interactive stickyHeader>
+          <Table.Header>
+            <Table.Row>
+              <Table.ColumnHeader p={3}>Аватар</Table.ColumnHeader>
+              <Table.ColumnHeader p={3}>Username</Table.ColumnHeader>
+              <Table.ColumnHeader p={3}>Роль</Table.ColumnHeader>
+              <Table.ColumnHeader p={3}>Почта</Table.ColumnHeader>
+              <Table.ColumnHeader p={3}>Пол</Table.ColumnHeader>
+              <Table.ColumnHeader p={3}>Возраст</Table.ColumnHeader>
+              <Table.ColumnHeader p={3}>Рост</Table.ColumnHeader>
+              <Table.ColumnHeader p={3}>Вес</Table.ColumnHeader>
+              <Table.ColumnHeader p={3}>Баллы</Table.ColumnHeader>
+              <Table.ColumnHeader p={3}>
+                Сожженные <br /> калории
+              </Table.ColumnHeader>
+              <Table.ColumnHeader p={3}>Цель</Table.ColumnHeader>
+              <Table.ColumnHeader>Блок</Table.ColumnHeader>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {isLoading ? (
               <Table.Row>
-                <Table.ColumnHeader p={3}>Аватар</Table.ColumnHeader>
-                <Table.ColumnHeader p={3}>Username</Table.ColumnHeader>
-                <Table.ColumnHeader p={3}>Роль</Table.ColumnHeader>
-                <Table.ColumnHeader p={3}>Почта</Table.ColumnHeader>
-                <Table.ColumnHeader p={3}>Пол</Table.ColumnHeader>
-                <Table.ColumnHeader p={3}>Возраст</Table.ColumnHeader>
-                <Table.ColumnHeader p={3}>Рост</Table.ColumnHeader>
-                <Table.ColumnHeader p={3}>Вес</Table.ColumnHeader>
-                <Table.ColumnHeader p={3}>Баллы</Table.ColumnHeader>
-                <Table.ColumnHeader p={3}>
-                  Сожженные <br /> калории
-                </Table.ColumnHeader>
-                <Table.ColumnHeader p={3}>Цель</Table.ColumnHeader>
-                <Table.ColumnHeader>Блок</Table.ColumnHeader>
+                <Table.Cell colSpan={12} height="80vh" position="relative">
+                  <Box
+                    position="absolute"
+                    top="50%"
+                    left="50%"
+                    transform="translate(-50%, -50%)"
+                  >
+                    <Spinner size="xl" color="green.500" />
+                  </Box>
+                </Table.Cell>
               </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {users.map((user) => (
+            ) : (
+              users.map((user) => (
                 <Table.Row key={user.id}>
                   <Table.Cell p={3}>
                     <Avatar
@@ -158,7 +184,7 @@ const UserTable = () => {
                   </Table.Cell>
                   <Table.Cell p={3}>{user?.username}</Table.Cell>
                   <Table.Cell p={3}>
-                    {user?.isAdmin ? 'admin' : 'basic baby'}
+                    {user?.isAdmin ? 'admin' : 'user'}
                   </Table.Cell>
                   <Table.Cell p={3}>{user.email}</Table.Cell>
                   <Table.Cell p={3}>{user?.gender}</Table.Cell>
@@ -175,7 +201,7 @@ const UserTable = () => {
                       closeDelay={100}
                       contentProps={{
                         css: {
-                          backgroundColor: 'rgba(2, 149, 7, 0.8)',
+                          backgroundColor: 'rgba(23, 193, 29, 0.8)',
                           padding: 2,
                         },
                       }}
@@ -196,43 +222,42 @@ const UserTable = () => {
                       p={2}
                       onClick={() => handleBlockUser(user.id)}
                     >
-                      Block User
+                      Block User <ImBlocked />
                     </Button>
                   </Table.Cell>
                 </Table.Row>
-              ))}
-            </Table.Body>
-          </Table.Root>
-          <Box mt={4} p={5}>
-            <HStack justify="space-between" align="center">
-              <Text>
-                Количество найденных всех пользователей: <b>{totalUsers} </b>
-              </Text>
-              <HStack>
-                <Button
-                  bg={bgColor}
-                  color={textColor}
-                  size="sm"
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </Button>
-                {renderPagination()}
-                <Button
-                  bg={bgColor}
-                  color={textColor}
-                  size="sm"
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </Button>
-              </HStack>
+              ))
+            )}
+          </Table.Body>
+        </Table.Root>
+        <Box mt={4} p={5}>
+          <HStack justify="space-between" align="center">
+            <Badge colorPalette="green" p={2} fontSize="1rem" >
+              <RiUserSearchLine  /> Количество найденных пользователей:{' '}
+              {totalUsers}
+            </Badge>
+            <HStack>
+              <Button
+                bg={bgColor}
+                size="sm"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                <RiArrowLeftLine color={lupacolor} />
+              </Button>
+              {renderPagination()}
+              <Button
+                bg={bgColor}
+                size="sm"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                <RiArrowRightLine color={lupacolor} />
+              </Button>
             </HStack>
-          </Box>
-        </>
-      )}
+          </HStack>
+        </Box>
+      </>
     </Box>
   );
 };
