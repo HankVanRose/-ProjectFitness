@@ -28,6 +28,10 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
+      plannedOn: {
+        type: Sequelize.DATEONLY,
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
