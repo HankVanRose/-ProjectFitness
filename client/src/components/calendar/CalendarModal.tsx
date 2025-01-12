@@ -59,10 +59,21 @@ export function CalendarModal({
   const textColor = useColorModeValue('black', 'white');
 
   useEffect(() => {
+    let isSubscribed = true;
+
     if (selectedDate && userId) {
-      fetchUnplannedDays();
-      fetchPlannedDays();
+      const loadData = async () => {
+        if (isSubscribed) {
+          await fetchUnplannedDays();
+          await fetchPlannedDays();
+        }
+      };
+      loadData();
     }
+
+    return () => {
+      isSubscribed = false;
+    };
   }, [selectedDate, userId]);
 
   const fetchUnplannedDays = async () => {
@@ -70,7 +81,6 @@ export function CalendarModal({
       setIsLoading(true);
       const data = await userDaysService.getUnplannedDays(userId);
       setUnplannedDays(data);
-      console.log(unplannedDays, 'unplannedDays');
     } catch (error) {
       console.error('Error fetching unplanned days:', error);
     } finally {
@@ -145,25 +155,29 @@ export function CalendarModal({
               <Spinner size="md" />
             ) : plannedDays.length > 0 ? (
               <>
-                <Text fontSize="lg" fontWeight="600">
+                <Text fontSize="lg" fontWeight="500">
                   Запланированные тренировки
                 </Text>
                 {plannedDays.map((userDay) => (
                   <Box
                     key={userDay.id}
-                    p={3}
+                    p={5}
                     borderWidth={1}
                     borderRadius="md"
                     borderColor="gray.600"
+                    my={1}
                   >
                     <HStack justify="space-between">
                       <VStack align="start">
-                        <Text fontWeight="700">{userDay.Day?.Plan.name}</Text>
-                        <Text fontSize="sm" color="gray.500">
-                          {userDay.Day?.Exercises.length} упражнений
+                        <Text fontWeight="700">
+                          {userDay.Day?.Plan.name}{' '}
+                          <Text fontSize="sm" color="gray.500">
+                            {userDay.Day?.Exercises.length} упражнений
+                          </Text>
                         </Text>
                       </VStack>
                       <Checkbox
+                        _hover={{ cursor: 'pointer' }}
                         checked={userDay.isCompleted}
                         onChange={() =>
                           handleToggleCompletion(
@@ -172,9 +186,7 @@ export function CalendarModal({
                           )
                         }
                         colorScheme="green"
-                      >
-                        
-                      </Checkbox>
+                      ></Checkbox>
                     </HStack>
                   </Box>
                 ))}
@@ -185,8 +197,8 @@ export function CalendarModal({
               </Text>
             )}
 
-            <Box mt={6}>
-              <Text fontSize="lg" fontWeight="600" mb={3}>
+            <Box mt={3}>
+              <Text fontSize="lg" fontWeight="600">
                 Доступные тренировки
               </Text>
               {isLoading ? (
@@ -195,28 +207,38 @@ export function CalendarModal({
                 <VStack align="stretch">
                   {unplannedDays.map((day) => (
                     <Box
+                      draggable
                       key={day.id}
                       p={4}
                       borderWidth={1}
                       borderRadius="md"
-                      borderColor="gray.200"
-                      cursor="pointer"
+                      borderColor="gray.100"
                       transition="all 0.2s"
+                      my={2}
                       _hover={{
-                        bg: 'gray.50',
-                        borderColor: 'blue.500',
+                        borderColor: 'green.300',
                       }}
-                      onClick={() => handlePlanDay(day.id)}
                     >
                       <HStack justify="space-between">
-                        <VStack align="start">
-                          <Text fontWeight="500">{day.Day?.Plan.name}</Text>
-                          <Text fontSize="sm" color="gray.500">
-                            {day.Day?.Exercises.length} упражнений
+                        <VStack>
+                          <Text fontWeight="600">
+                            {day.Day?.Plan.name}{' '}
+                            <Text fontSize="sm" color="gray.500">
+                              {day.Day?.Exercises.length} упражнений
+                            </Text>
                           </Text>
                         </VStack>
-                        <Button size="sm" colorScheme="blue" variant="ghost">
-                          Добавить
+                        <Button
+                          size="sm"
+                          colorScheme="blue"
+                          variant="ghost"
+                          p={8}
+                          borderRadius="md"
+                          onClick={() => handlePlanDay(day.id)}
+                          textAlign="center"
+                        >
+                          Запланировать на <br />
+                          {selectedDate && formatDate(selectedDate)}
                         </Button>
                       </HStack>
                     </Box>
@@ -230,7 +252,9 @@ export function CalendarModal({
         </DialogBody>
         <DialogFooter>
           <DialogActionTrigger asChild>
-            <Button variant="outline" borderRadius='md' p={3}>Закрыть</Button>
+            <Button variant="outline" borderRadius="md" p={5} mt={4}>
+              Закрыть
+            </Button>
           </DialogActionTrigger>
         </DialogFooter>
         <DialogCloseTrigger borderRadius="10px" m={7} />
