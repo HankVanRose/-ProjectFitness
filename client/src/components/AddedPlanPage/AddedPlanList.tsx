@@ -22,17 +22,9 @@ export default function AddedPlanList() {
         const result = await axiosInstance.get(`${VITE_API}/days/${id}`);
 
        
-        const completionStatus = isCompletedCheck.data.reduce((acc, day) => {
-          acc[day.id] = day.isCompleted;
-          return acc;
-        }, {});
+       
 
-        const updatedPlans = result.data.map((plan) => ({
-          ...plan,
-          isCompleted: completionStatus[plan.id] || false,
-        }));
-
-        setSinglePlan(updatedPlans);  
+        setSinglePlan(result.data);  
       } catch (error) {
         console.error(error);
       } finally {
