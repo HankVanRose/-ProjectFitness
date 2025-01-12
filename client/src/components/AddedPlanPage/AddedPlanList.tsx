@@ -30,6 +30,7 @@ export default function AddedPlanList() {
   if (isLoading) {
     return <div>Loading...</div>;
   }
+ 
 
   return (
     <Container maxW="full" px={4}>
@@ -40,9 +41,9 @@ export default function AddedPlanList() {
               id={plan.id}
               planId={plan.planId}
               points={plan.points}
-              quantityOfTrain={singlePlan.length}  
+              quantityOfTrain={singlePlan.length}
               description={plan.description}
-              cardNumber={index + 1}  
+              cardNumber={index + 1}
               singlePlan={singlePlan}
             />
           </Box>
