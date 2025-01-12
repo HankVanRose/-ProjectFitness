@@ -67,6 +67,7 @@ module.exports = {
           points: 100,
           description: '12',
         },
+       
         {
           planId: 2,
           points: 150,

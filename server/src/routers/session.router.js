@@ -68,7 +68,7 @@ router.route('/plans/:userId').get(async (req, res) => {
 router.route('/:userId').get(async (req, res) => {
   try {
     const { userId } = req.params;
-    const plan = await Session.findAll({
+    const plan = await UserDay.findAll({
       where: { userId },
       attributes: { exclude: ['createdAt', 'updatedAt'] },
     });
@@ -91,10 +91,12 @@ router.route('/').post(async (req, res) => {
     const foundDays = await Day.findAll({ where: { planId } });
     const foundDaysId = foundDays.map((el) => el.id);
 
+ 
     console.log('\n\n\n\n\n\n\n\n\n', foundDaysId);
 
     const userDaysPromises = foundDaysId.map((dayId) => {
       return UserDay.create({ userId, dayId });
+ 
     }); // Ожидаем завершения всех операций
 
     const result = await Promise.all(userDaysPromises);
