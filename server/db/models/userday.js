@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       dayId: DataTypes.INTEGER,
       isCompleted: DataTypes.BOOLEAN,
  
-      order: DataTypes.INTEGER,
+       
  
       plannedOn: DataTypes.DATEONLY
  

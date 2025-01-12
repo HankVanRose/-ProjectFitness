@@ -23,10 +23,7 @@ module.exports = {
           key: 'id',
         },
       },
-      order: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
+       
       isCompleted: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
