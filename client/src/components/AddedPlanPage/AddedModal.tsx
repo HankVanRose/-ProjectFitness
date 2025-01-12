@@ -48,13 +48,19 @@ export default function AddedModal({
     };
     dayExr();
   }, [singlePlan]);
+  console.log('acy ', activeStep);
 
   const { id } = useParams();
-  const finishDayHandler = async (id) => {
+  console.log('id', id, 'singlePlan', singlePlan);
+
+  const finishDayHandler = async () => {
     try {
-      const response = await axiosInstance.patch(`${VITE_API}/days/${id}`, {
-        isCompleted: true,
-      });
+      const response = await axiosInstance.patch(
+        `${VITE_API}/session/${singlePlan} `,
+        {
+          isCompleted: true,
+        }
+      );
       console.log('День завершен:', response.data);
       handleClose();
     } catch (error) {
@@ -62,13 +68,14 @@ export default function AddedModal({
     }
   };
 
-  console.log(id);
+  console.log(dayExercises);
 
   const descr = dayExercises.map((exercise) => exercise.description);
   const exercisesArray = descr[0]?.split('; ').map((item) => item.trim());
 
   const currentPlan = dayExercises[activeStep]?.Exercises || [];
-
+  const currentPlandescr = dayExercises[activeStep]?.description || [];
+  console.log(currentPlandescr);
   return (
     <DialogRoot
       open={show}
@@ -118,7 +125,7 @@ export default function AddedModal({
             <Button
               variant="surface"
               colorPalette="green"
-              onClick={finishDayHandler}
+              onClick={() => finishDayHandler(id)}
             >
               ЗАВЕРШИТЬ ДЕНЬ
             </Button>

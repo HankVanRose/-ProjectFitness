@@ -24,7 +24,8 @@ export default function AllExercisesPage() {
     };
     allExercises();
   }, [VITE_API]);
-
+console.log(exercises);
+  
   if (isLoading) {
     return (
       <Box

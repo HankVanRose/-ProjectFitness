@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 const app = express();
 const cors = require('cors');
+ require('./hooks.js')
 
 const { PORT } = process.env;
 

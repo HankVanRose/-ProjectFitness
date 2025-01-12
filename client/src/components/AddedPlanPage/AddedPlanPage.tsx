@@ -1,14 +1,6 @@
-import { Box, Collapsible, Container, Text } from '@chakra-ui/react';
-import { Group, Stack } from '@chakra-ui/react';
+import { Box, Collapsible, Container, Text, Stack } from '@chakra-ui/react';
 import { Button } from '@/components/ui/button';
-import {
-  StepsCompletedContent,
-  StepsContent,
-  StepsItem,
-  StepsList,
-  StepsNextTrigger,
-  StepsRoot,
-} from '@/components/ui/steps';
+import { StepsCompletedContent, StepsContent, StepsItem, StepsList, StepsRoot } from '@/components/ui/steps';
 import { useEffect, useState } from 'react';
 import { PlanType } from '@/types';
 import axiosInstance from '@/axiosInstance';
@@ -17,7 +9,7 @@ import AddedModal from './AddedModal';
 
 export default function AddedPlanPage() {
   const { VITE_API } = import.meta.env;
-  const { id } = useParams();
+  const { id } = useParams<string>();
   const [isLoading, setIsLoading] = useState(true);
   const [singlePlan, setSinglePlan] = useState<PlanType>([]);
   const [showModal, setShowModal] = useState(false);
@@ -29,106 +21,56 @@ export default function AddedPlanPage() {
   };
 
   useEffect(() => {
-    const planToShow = async (id: number) => {
+    const fetchSinglePlan = async (id: string) => {
       try {
-        const result = await axiosInstance.get(`${VITE_API}/plans/${id}`);
+        const result = await axiosInstance.get(`${VITE_API}/days/${id}`);
         setSinglePlan(result.data);
       } catch (error) {
-        console.error(error, 'error');
+        console.error(error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    planToShow(id);
+    if (id) fetchSinglePlan(id);
   }, [id]);
+  console.log('singe', singlePlan);
 
-  console.log(singlePlan.numOfTrainings);
   return (
     <>
-      <Box
-        padding="20px"
-        display="flex"
-        alignItems="start"
-        justifyContent="center"
-        minHeight="100vh"
-      >
+      <Box padding="20px" display="flex" alignItems="start" justifyContent="center" minHeight="100vh">
         <Container maxW="container.lg">
-          <Container style={{ padding: 0, marginTop: 100 }}>
-            <Text>{singlePlan.weeksDescription}</Text>
-          </Container>
+          <Text>{singlePlan.weeksDescription}</Text>
           <Stack spacing={4}>
             <Collapsible.Root>
-              <Collapsible.Trigger
-                paddingY="3"
-                paddingX="4"
-                backgroundColor="teal.500"
-                color="white"
-                borderRadius="md"
-                style={{ width: '100%', textAlign: 'center' }}
-                _hover={{ backgroundColor: 'teal.600' }}
-              >
-                {`ТВОЯ ПРОГРАММА ТРЕНИРОВОК`}
+              <Collapsible.Trigger paddingY="3" paddingX="4" backgroundColor="teal.500" color="white" borderRadius="md">
+                ТВОЯ ПРОГРАММА ТРЕНИРОВОК
               </Collapsible.Trigger>
-
               <Collapsible.Content>
-                <Box
-                  padding="2"
-                  borderWidth="22px"
-                  borderColor="gray.300"
-                  borderRadius="md"
-                  boxShadow="md"
-                  marginTop="2"
-                  backgroundColor="white"
-                >
-                  <Stack gap="10" width="full">
-                    <StepsRoot
-                      defaultValue={1}
-                      count={singlePlan.numOfTrainings}
-                      colorPalette="green"
-                    >
-                      <StepsList >
-                        {[...Array(singlePlan.numOfTrainings)].map(
-                          (_, stepIndex) => (
-                            <StepsItem
-                              onClick={() => handleOpen(stepIndex)}
-                              key={stepIndex}
-                              index={stepIndex}
-                            />
-                          )
-                        )}
-                      </StepsList>
-                      {[...Array(singlePlan.numOfTrainings)].map(
-                        (_, contentIndex) => (
-                          <StepsContent key={contentIndex} index={contentIndex}>
-                            {`ДЕНЬ ${contentIndex + 1}`}
-                          </StepsContent>
-                        )
-                      )}
-                      <StepsCompletedContent>
-                        ПОЗДРАВЛЯЕМ ТЫ ЗАКОНЧИЛ НЕДЕЛЮ
-                      </StepsCompletedContent>
-                      <Group>
-                        <StepsNextTrigger asChild>
-                          <Button variant="outline" size="sm">
-                            СЛЕДУЮЩИЙ ДЕНЬ
-                          </Button>
-                        </StepsNextTrigger>
-                      </Group>
-                    </StepsRoot>
-                  </Stack>
+                <Box padding="2" borderWidth="22px" borderColor="gray.300" borderRadius="md" boxShadow="md" marginTop="2" backgroundColor="white">
+                  <StepsRoot defaultValue={1} count={singlePlan.numOfTrainings} colorPalette="green">
+                    <StepsList>
+                      {[...Array(singlePlan.numOfTrainings)].map((_, stepIndex) => (
+                        <StepsItem key={stepIndex} onClick={() => handleOpen(stepIndex)} index={stepIndex} />
+                      ))}
+                    </StepsList>
+                    {[...Array(singlePlan.numOfTrainings)].map((_, contentIndex) => (
+                      <StepsContent key={contentIndex} index={contentIndex}>
+                        {`ДЕНЬ ${contentIndex + 1}`}
+                      </StepsContent>
+                    ))}
+                    <StepsCompletedContent>
+                      ПОЗДРАВЛЯЕМ ТЫ ЗАКОНЧИЛ НЕДЕЛЮ
+                    </StepsCompletedContent>
+                    <Button variant="outline" size="sm">СЛЕДУЮЩИЙ ДЕНЬ</Button>
+                  </StepsRoot>
                 </Box>
               </Collapsible.Content>
             </Collapsible.Root>
           </Stack>
         </Container>
       </Box>
-      <AddedModal
-        show={showModal}
-        handleClose={handleClose}
-        activeStep={activeStep}
-        singlePlan={singlePlan.id}
-      />
+      <AddedModal show={showModal} handleClose={handleClose} activeStep={activeStep} singlePlan={singlePlan.id} />
     </>
   );
 }
