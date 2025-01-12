@@ -37,7 +37,7 @@ export default function DayModal({
       console.error('Ошибка при завершении дня:', error);
     }
   };
-  console.log(id);
+  //   console.log(id);
 
   return (
     <>

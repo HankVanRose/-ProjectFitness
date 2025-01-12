@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Box, Container, SimpleGrid } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import AdedPlanCard from './AdedPlanCard';
+import { Button } from 'react-bootstrap';
 
 export default function AddedPlanList() {
   const { VITE_API } = import.meta.env;
@@ -13,9 +14,25 @@ export default function AddedPlanList() {
 
   useEffect(() => {
     const fetchSinglePlan = async (id) => {
+      setIsLoading(true);  
       try {
+        const isCompletedCheck = await axiosInstance.get(
+          `${VITE_API}/session/${id}`
+        );
         const result = await axiosInstance.get(`${VITE_API}/days/${id}`);
-        setSinglePlan(result.data);
+
+       
+        const completionStatus = isCompletedCheck.data.reduce((acc, day) => {
+          acc[day.id] = day.isCompleted;
+          return acc;
+        }, {});
+
+        const updatedPlans = result.data.map((plan) => ({
+          ...plan,
+          isCompleted: completionStatus[plan.id] || false,
+        }));
+
+        setSinglePlan(updatedPlans);  
       } catch (error) {
         console.error(error);
       } finally {
@@ -26,11 +43,9 @@ export default function AddedPlanList() {
     if (id) fetchSinglePlan(id);
   }, [id]);
 
-  // Проверяем, загружаются ли данные
   if (isLoading) {
     return <div>Loading...</div>;
   }
- 
 
   return (
     <Container maxW="full" px={4}>
@@ -45,10 +60,13 @@ export default function AddedPlanList() {
               description={plan.description}
               cardNumber={index + 1}
               singlePlan={singlePlan}
+              isAnyDayCompleted={plan.isCompleted}  
             />
           </Box>
         ))}
       </SimpleGrid>
+      <Box style={{display:'flex', justifyContent:'center'}}><Button variant="solid">ЗАВЕРШИТЬ ПЛАН</Button> </Box>
+      
     </Container>
   );
 }
