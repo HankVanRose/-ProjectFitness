@@ -13,6 +13,7 @@ export default function AuthenticatedNav() {
     navigate('/');
   };
   const textColor = useColorModeValue('black', 'white');
+  const { VITE_TARGET } = import.meta.env;
 
   return (
     <Flex align="center" gap={8}>
@@ -57,7 +58,7 @@ export default function AuthenticatedNav() {
       </Link>
       {user?.avatar && (
         <Image
-          src={user.avatar}
+          src={`${VITE_TARGET}${user.avatar}`}
           alt="User avatar"
           boxSize="40px"
           borderRadius="full"
