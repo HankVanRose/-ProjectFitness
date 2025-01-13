@@ -211,7 +211,7 @@ module.exports = {
         {
           planId: 3,
           points: 100,
-          title: 'SMALL',
+          title: 'BIG',
           type: 'ASAP',
           target: 'Задача: Закончить задание за минимальное время',
           rounds: 3,
@@ -220,7 +220,7 @@ module.exports = {
         {
           planId: 3,
           points: 150,
-          title: 'SMALL',
+          title: 'DADDY',
           type: 'ASAP',
           target: 'Задача: Закончить задание за минимальное время',
           rounds: 1,
@@ -229,7 +229,7 @@ module.exports = {
         {
           planId: 3,
           points: 250,
-          title: 'SMALL',
+          title: 'FRANCHESKA',
           type: 'ASAP',
           target: 'Задача: Закончить задание за минимальное время',
           rounds: 10,
@@ -238,17 +238,29 @@ module.exports = {
         {
           planId: 3,
           points: 300,
+          title: 'REDHOOD',
+          type: 'ASAP',
+          target: 'Задача: Закончить задание за минимальное время',
+          rounds: 1,
           description: '3000 м гребля на тренажере; 300 двойных прыжков через скакалку; 3 мили бега (4,8 км)',
         },
         {
           planId: 3,
           points: 350,
-          description: '5',
+          title: 'REDHOOD',
+          type: 'ASAP',
+          target: 'Задача: Закончить задание за минимальное время',
+          rounds: 1,
+          description: 'Бег 10 км',
         },
         {
           planId: 3,
           points: 500,
-          description: '5',
+          title: 'PUSHMASTER',
+          type: 'ASAP',
+          target: 'Задача: Закончить задание за минимальное время',
+          rounds: 1,
+          description: '300 отжиманий от пола',
         },
          
       ],
