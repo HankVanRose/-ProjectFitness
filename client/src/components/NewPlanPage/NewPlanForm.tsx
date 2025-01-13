@@ -104,7 +104,8 @@ export default function NewPlanForm() {
         longDescription: '',
         weeksDescription: '',
       });
-      setDays([])    } catch (error) {
+      setDays([]);
+    } catch (error) {
       setError('Ошибка при добавлении дня');
       console.error(error);
     }
