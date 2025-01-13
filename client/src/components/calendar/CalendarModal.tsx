@@ -112,7 +112,6 @@ export function CalendarModal({
         selectedDate.toISOString().split('T')[0]
       );
       onUpdateTraining();
-      // Refresh both lists
       fetchUnplannedDays();
       fetchPlannedDays();
     } catch (error) {
@@ -127,7 +126,6 @@ export function CalendarModal({
     try {
       await userDaysService.updateCompletion(userDayId, !currentStatus);
       onUpdateTraining();
-      // Refresh planned days to show updated completion status
       fetchPlannedDays();
     } catch (error) {
       console.error('Error updating completion status:', error);
@@ -185,7 +183,6 @@ export function CalendarModal({
                             userDay.isCompleted
                           )
                         }
-                        colorScheme="green"
                       ></Checkbox>
                     </HStack>
                   </Box>
@@ -216,7 +213,7 @@ export function CalendarModal({
                       transition="all 0.2s"
                       my={2}
                       _hover={{
-                        borderColor: 'green.300',
+                        borderColor: 'yellow.300',
                       }}
                     >
                       <HStack justify="space-between">
