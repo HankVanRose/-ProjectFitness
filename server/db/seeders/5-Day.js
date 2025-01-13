@@ -176,7 +176,7 @@ module.exports = {
           target: 'Задача: Закончить как можно больше раундов за 25 минут',
           rounds: 1,
           description:
-            '15 становая тяга 70/40кг; 20 броски медбола 9/6кг; 25 двойные прыжки на скакалке; 400 метров бег;',
+            '15 становая тяга 70/40кг; 20 выпады с блином на голове 9/6кг; 25 двойные прыжки на скакалке; 400 метров бег;',
         },
         {
           planId: 2,
@@ -196,7 +196,7 @@ module.exports = {
           target: 'Задача: Закончить задание за минимальное время',
           rounds: 6,
           description:
-            '50 выпады с диском над головой 20/10кг; 40 подтягивания на турнике; 30 трастеры со штангой 43/30кг; 20 бурпи; 10 взятий штанги на грудь в сед 60/43кг;',
+            '50 выпады с блином над головой 20/10кг; 40 подтягивания на турнике; 30 кластеры со штангой 43/30кг; 20 бурпи; 10 взятий штанги на грудь в сед 60/43кг;',
         },
         {
           planId: 2,
@@ -206,7 +206,7 @@ module.exports = {
           target: 'Задача: Закончить задание за минимальное время',
           rounds: 6,
           description:
-            '6 трастеры с гантелями 25/15кг; 40 подтягивания на турнике; 6 становая тяга 120/80кг; 10 бурпи;',
+            '6 кластеры с гантелями 25/15кг; 40 подтягивания на турнике; 6 становая тяга 120/80кг; 10 бурпи;',
         },
         {
           planId: 3,
@@ -512,6 +512,131 @@ module.exports = {
           dayId: 13,
           exerciseId: 34,
         },
+        {
+          dayId: 13,
+          exerciseId: 34,
+        },
+        {
+          dayId: 13,
+          exerciseId: 34,
+        },
+        {
+          dayId: 13,
+          exerciseId: 52,
+        },
+        {
+          dayId: 14,
+          exerciseId: 47,
+        },
+        {
+          dayId: 14,
+          exerciseId: 40,
+        },
+        {
+          dayId: 14,
+          exerciseId: 35,
+        },
+        {
+          dayId: 14,
+          exerciseId: 20,
+        },
+        {
+          dayId: 14,
+          exerciseId: 49,
+        },
+        {
+          dayId: 15,
+          exerciseId: 49,
+        },
+        {
+          dayId: 15,
+          exerciseId: 53,
+        },
+        {
+          dayId: 15,
+          exerciseId: 6,
+        },
+        {
+          dayId: 15,
+          exerciseId: 13,
+        },
+        {
+          dayId: 15,
+          exerciseId: 1,
+        },
+        {
+          dayId: 16,
+          exerciseId: 18,
+        },
+        {
+          dayId: 16,
+          exerciseId: 38,
+        },
+        {
+          dayId: 16,
+          exerciseId: 11,
+        },
+        {
+          dayId: 16,
+          exerciseId: 1,
+        },
+        {
+          dayId: 17,
+          exerciseId: 47,
+        },
+        {
+          dayId: 17,
+          exerciseId: 22,
+        },
+        {
+          dayId: 17,
+          exerciseId: 48,
+        },
+        {
+          dayId: 17,
+          exerciseId: 53,
+        },
+        {
+          dayId: 18,
+          exerciseId: 22,
+        },
+        {
+          dayId: 18,
+          exerciseId: 10,
+        },
+        {
+          dayId: 18,
+          exerciseId: 19,
+        },
+        {
+          dayId: 18,
+          exerciseId: 1,
+        },
+        {
+          dayId: 18,
+          exerciseId: 36,
+        },
+        {
+          dayId: 19,
+          exerciseId: 19,
+        },
+        {
+          dayId: 19,
+          exerciseId: 19,
+        },
+        {
+          dayId: 19,
+          exerciseId: 10,
+        },
+        {
+          dayId: 19,
+          exerciseId: 47,
+        },
+        {
+          dayId: 19,
+          exerciseId: 1,
+        },
+       
       ],
       {}
     );

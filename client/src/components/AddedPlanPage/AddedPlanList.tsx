@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Box, Container, SimpleGrid } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import AdedPlanCard from './AdedPlanCard';
-import { Button } from 'react-bootstrap';
+import { Button } from '@chakra-ui/react';
 
 export default function AddedPlanList() {
   const { VITE_API } = import.meta.env;
@@ -34,16 +34,15 @@ export default function AddedPlanList() {
     return <div>Loading...</div>;
   }
 
-  const updatePlanCompletion = (planId) => {
+  const updatePlanCompletion = (planId, dayId) => {
     setSinglePlan((prevPlans) =>
       prevPlans.map((plan) =>
         plan.id === planId
           ? {
               ...plan,
-              UserDays: plan.UserDays.map((day) => ({
-                ...day,
-                isCompleted: true,
-              })),
+              UserDays: plan.UserDays.map((day) =>
+                day.id === dayId ? { ...day, isCompleted: true } : day
+              ),
             }
           : plan
       )
@@ -74,8 +73,9 @@ export default function AddedPlanList() {
                 rounds={plan.rounds}
                 type={plan.type}
                 target={plan.target}
+                cardNumber={index + 1}
                 isAnyDayCompleted={isAnyDayCompleted}
-                updatePlanCompletion={updatePlanCompletion}  
+                updatePlanCompletion={updatePlanCompletion}
               />
             </Box>
           );

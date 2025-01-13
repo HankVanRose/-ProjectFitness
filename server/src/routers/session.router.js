@@ -97,11 +97,11 @@ router.route('/').post(async (req, res) => {
   }
 });
 
-router.patch('/finished/:dayId', verifyAccessToken, async (req, res) => {
+router.patch('/:dayId', verifyAccessToken, async (req, res) => {
   try {
-     const {dayId} = req.params
-    const { isCompleted, userId } = req.body;
-    
+    const { dayId } = req.params;
+    const { isCompleted } = req.body;
+    const userId = res.locals.user.id;
     // console.log('\n\n\n\n\n\n\n\n\n 105105', userId);
     if (typeof isCompleted !== 'boolean') {
       return res
@@ -111,9 +111,10 @@ router.patch('/finished/:dayId', verifyAccessToken, async (req, res) => {
 
     const userDay = await UserDay.findOne({
       where: {
-        userId: userId,  
-        dayId: dayId    
-    }});
+        userId,
+        dayId,
+      },
+    });
 
     // console.log('\n\n\n\n\n\n\n', userDay);
 
@@ -122,7 +123,7 @@ router.patch('/finished/:dayId', verifyAccessToken, async (req, res) => {
     }
 
     userDay.isCompleted = isCompleted;
-
+    
     await userDay.save();
 
     return res.status(200).json(userDay);
