@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Box, Container, SimpleGrid } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import AdedPlanCard from './AdedPlanCard';
+import { Button } from 'react-bootstrap';
 
 export default function AddedPlanList() {
   const { VITE_API } = import.meta.env;
@@ -13,8 +14,10 @@ export default function AddedPlanList() {
 
   useEffect(() => {
     const fetchSinglePlan = async (id) => {
+      setIsLoading(true);
       try {
         const result = await axiosInstance.get(`${VITE_API}/days/${id}`);
+
         setSinglePlan(result.data);
       } catch (error) {
         console.error(error);
@@ -26,11 +29,9 @@ export default function AddedPlanList() {
     if (id) fetchSinglePlan(id);
   }, [id]);
 
-  // Проверяем, загружаются ли данные
   if (isLoading) {
     return <div>Loading...</div>;
   }
- 
 
   return (
     <Container maxW="full" px={4}>
@@ -43,12 +44,21 @@ export default function AddedPlanList() {
               points={plan.points}
               quantityOfTrain={singlePlan.length}
               description={plan.description}
+              title={plan.title}
+              rounds={plan.rounds}
+              type={plan.type}
+              target={plan.target}
               cardNumber={index + 1}
               singlePlan={singlePlan}
+              isAnyDayCompleted={plan.isCompleted}
+              setSinglePlan={setSinglePlan}
             />
           </Box>
         ))}
       </SimpleGrid>
+      <Box style={{ display: 'flex', justifyContent: 'center' }}>
+        <Button variant="solid">ЗАВЕРШИТЬ ПЛАН</Button>{' '}
+      </Box>
     </Container>
   );
 }

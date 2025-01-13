@@ -18,6 +18,11 @@ export default function DayModal({
   description,
   cardNumber,
   id,
+  title,
+  rounds,
+  type,
+  target,
+  singlePlan,
 }) {
   const descriptionLines = description
     .split(';')
@@ -31,13 +36,15 @@ export default function DayModal({
       const response = await axiosInstance.patch(`${VITE_API}/session/${id}`, {
         isCompleted: true,
       });
+      console.log(response);
       console.log('День завершен:', response.data);
       setOpen();
     } catch (error) {
       console.error('Ошибка при завершении дня:', error);
     }
   };
-  console.log(id);
+
+  // console.log(singlePlan);
 
   return (
     <>
@@ -69,8 +76,13 @@ export default function DayModal({
           </DialogHeader>
           <DialogBody>
             <Box marginBottom={4}>
-              <Text fontSize="lg" color="gray.700" marginBottom={2}>
-                Программа:
+              <Text
+                fontSize="lg"
+                color="gray.700"
+                marginBottom={4}
+                marginTop={4}
+              >
+                Название: {title}
               </Text>
               <Box
                 bg="white"
@@ -82,6 +94,30 @@ export default function DayModal({
                 maxHeight="300px"
                 overflowY="auto"
               >
+                <Text
+                  fontSize="sm"
+                  color="gray.700"
+                  marginBottom={2}
+                  style={{ fontWeight: 500 }}
+                >
+                  {target}
+                </Text>
+                <Text
+                  fontSize="sm"
+                  color="gray.700"
+                  marginBottom={2}
+                  style={{ fontWeight: 500 }}
+                >
+                  ТИП: {type}
+                </Text>
+                <Text
+                  fontSize="sm"
+                  color="gray.700"
+                  marginBottom={2}
+                  style={{ fontWeight: 500 }}
+                >
+                  Выполнить: {rounds} раунд
+                </Text>
                 <ul
                   style={{
                     listStyleType: 'disc',
