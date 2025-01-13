@@ -34,31 +34,55 @@ export default function AddedPlanList() {
     return <div>Loading...</div>;
   }
 
+  const updatePlanCompletion = (planId) => {
+    setSinglePlan((prevPlans) =>
+      prevPlans.map((plan) =>
+        plan.id === planId
+          ? {
+              ...plan,
+              UserDays: plan.UserDays.map((day) => ({
+                ...day,
+                isCompleted: true,
+              })),
+            }
+          : plan
+      )
+    );
+  };
+
   return (
     <Container maxW="full" px={4}>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4} p={4}>
-        {singlePlan.map((plan, index) => (
-          <Box key={plan.id} p={4} borderRadius="md">
-            <AdedPlanCard
-              id={plan.id}
-              planId={plan.planId}
-              points={plan.points}
-              quantityOfTrain={singlePlan.length}
-              description={plan.description}
-              title={plan.title}
-              rounds={plan.rounds}
-              type={plan.type}
-              target={plan.target}
-              cardNumber={index + 1}
-              singlePlan={singlePlan}
-              isAnyDayCompleted={plan.isCompleted}
-              setSinglePlan={setSinglePlan}
-            />
-          </Box>
-        ))}
+        {singlePlan.map((plan, index) => {
+          const isAnyDayCompleted = plan.UserDays.some(
+            (day) => day.isCompleted
+          );
+
+          return (
+            <Box
+              key={plan.id}
+              p={4}
+              borderRadius="md"
+              bg={isAnyDayCompleted ? 'gray.300' : 'white'}
+            >
+              <AdedPlanCard
+                id={plan.id}
+                planId={plan.planId}
+                points={plan.points}
+                description={plan.description}
+                title={plan.title}
+                rounds={plan.rounds}
+                type={plan.type}
+                target={plan.target}
+                isAnyDayCompleted={isAnyDayCompleted}
+                updatePlanCompletion={updatePlanCompletion}  
+              />
+            </Box>
+          );
+        })}
       </SimpleGrid>
       <Box style={{ display: 'flex', justifyContent: 'center' }}>
-        <Button variant="solid">ЗАВЕРШИТЬ ПЛАН</Button>{' '}
+        <Button variant="solid">ЗАВЕРШИТЬ ПЛАН</Button>
       </Box>
     </Container>
   );

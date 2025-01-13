@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 const { Session, Plan, UserDay, Day } = require('../../db/models');
+const { verifyAccessToken } = require('../middlewares/verifyToken');
 
 //! все сессии
 router.route('/').get(async (req, res) => {
@@ -96,24 +97,32 @@ router.route('/').post(async (req, res) => {
   }
 });
 
-router.route('/:id').patch(async (req, res) => {
+router.patch('/finished/:dayId', verifyAccessToken, async (req, res) => {
   try {
-    const { id } = req.params;
-    const { isCompleted } = req.body;
-
+     const {dayId} = req.params
+    const { isCompleted, userId } = req.body;
+    
+    // console.log('\n\n\n\n\n\n\n\n\n 105105', userId);
     if (typeof isCompleted !== 'boolean') {
       return res
         .status(400)
         .json({ error: 'isCompleted должно быть булевым значением.' });
     }
 
-    const userDay = await UserDay.findByPk(id);
+    const userDay = await UserDay.findOne({
+      where: {
+        userId: userId,  
+        dayId: dayId    
+    }});
+
+    // console.log('\n\n\n\n\n\n\n', userDay);
 
     if (!userDay) {
       return res.status(404).json({ error: 'Запись не найдена.' });
     }
 
     userDay.isCompleted = isCompleted;
+
     await userDay.save();
 
     return res.status(200).json(userDay);

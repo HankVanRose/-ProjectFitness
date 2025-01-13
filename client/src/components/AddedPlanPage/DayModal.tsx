@@ -10,7 +10,7 @@ import {
 import ExecriseHelpToModal from './ExecriseHelpToModal';
 import { useEffect, useState } from 'react';
 import axiosInstance from '../../axiosInstance';
-import { DayExercise } from '@/types';
+import { useAppSelector } from '@/store/hooks/hooks';
 
 export default function DayModal({
   open,
@@ -22,29 +22,35 @@ export default function DayModal({
   rounds,
   type,
   target,
-  singlePlan,
+  updatePlanCompletion,
 }) {
   const descriptionLines = description
     .split(';')
     .map((line) => line.trim())
     .filter((line) => line);
 
+  const { user } = useAppSelector((store) => store.appSlice);
+
   const { VITE_API } = import.meta.env;
 
   const finishDayHandler = async (id) => {
     try {
-      const response = await axiosInstance.patch(`${VITE_API}/session/${id}`, {
-        isCompleted: true,
-      });
-      console.log(response);
+      const response = await axiosInstance.patch(
+        `${VITE_API}/session/finished/${id}`,
+        {
+          isCompleted: true,
+          userId: user?.id,
+          dayId: id,
+        }
+      );
+      updatePlanCompletion(id);
+      console.log(id);
       console.log('День завершен:', response.data);
       setOpen();
     } catch (error) {
       console.error('Ошибка при завершении дня:', error);
     }
   };
-
-  // console.log(singlePlan);
 
   return (
     <>
