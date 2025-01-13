@@ -60,28 +60,30 @@ export default function PlanPage() {
         const response = await axiosInstance.get(
           `${import.meta.env.VITE_API}/plans/${id}`
         );
+        console.log(response.data);
         setPlan(response.data);
 
-        const sessionResponse = await axiosInstance.get<SessionType[]>(
-          `${VITE_API}/session`,
-          {
-            params: { userId: user?.id },
-          }
+        const sessionResponse = await axiosInstance.get(
+          `${VITE_API}/session/${id}/user/${user?.id}`
         );
 
-        const existingPlan = sessionResponse.data.find(
-          (session) => session.planId === response.data.id
-        );
-
-        setPlanExists(!!existingPlan);
+        // const existingPlan = sessionResponse.data.find(
+        //   (session) => session.planId === response.data.id
+        // );
+        // console.log(existingPlan);
+        console.log(sessionResponse.data);
+        if (sessionResponse.data.plan) {
+          setPlanExists(true);
+        }
       } catch (error) {
         console.error('Error fetching plan:', error);
       } finally {
         setLoading(false);
       }
     };
-    fetchPlan();
-  }, [id, user?.id, VITE_API]);
+
+    if (user) fetchPlan();
+  }, [id, user?.id]);
 
   if (loading) {
     return (
