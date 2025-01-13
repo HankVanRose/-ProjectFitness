@@ -94,6 +94,7 @@ const appSlice = createSlice({
         state.user = action.payload;
         state.loading = false;
         state.error = null;
+         
       })
       .addCase(fetchUserCheck.rejected, (state, action) => {
         state.user = null;

@@ -1,7 +1,9 @@
 const router = require('express').Router();
 
+const cookieConfig = require('../../configs/cookieConfig');
 const { Session, Plan, UserDay, Day, User } = require('../../db/models');
 const { verifyAccessToken } = require('../middlewares/verifyToken');
+const generateToken = require('../utils/generateToken');
 
 //! все сессии
 router.route('/').get(async (req, res) => {
@@ -115,13 +117,16 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
       },
     });
 
+    const findUser = await User.findOne({ where: { id: userId } });
+
     if (points) {
-      const findUser = await User.findOne({ where: { id: userId } });
       findUser.points += points;
       await findUser.save();
+     
     }
 
-   
+    const { accessToken, refreshToken } = generateToken({ user: findUser });
+    
 
     // console.log(
     //   '\n\n\n\n\n\n\n\n\n105105\n\n\n\n\n\n\n\n\n105105\n\n\n\n\n\n\n\n\n105105',
@@ -137,8 +142,16 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
     userDay.isCompleted = isCompleted;
 
     await userDay.save();
-
-    return res.status(200).json(userDay);
+   
+    res
+      .status(200)
+      .cookie('refreshToken', refreshToken, cookieConfig.refresh)
+      .json({
+        message: 'Профиль успешно обновлен',
+        user: findUser,
+        userDay,
+        accessToken,
+      });
   } catch (error) {
     console.error(error);
     return res
