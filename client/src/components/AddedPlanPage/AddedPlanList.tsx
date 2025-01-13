@@ -14,17 +14,14 @@ export default function AddedPlanList() {
 
   useEffect(() => {
     const fetchSinglePlan = async (id) => {
-      setIsLoading(true);  
+      setIsLoading(true);
       try {
         const isCompletedCheck = await axiosInstance.get(
           `${VITE_API}/session/${id}`
         );
         const result = await axiosInstance.get(`${VITE_API}/days/${id}`);
 
-       
-       
-
-        setSinglePlan(result.data);  
+        setSinglePlan(result.data);
       } catch (error) {
         console.error(error);
       } finally {
@@ -50,15 +47,20 @@ export default function AddedPlanList() {
               points={plan.points}
               quantityOfTrain={singlePlan.length}
               description={plan.description}
+              title={plan.title}
+              rounds={plan.rounds}
+              type={plan.type}
+              target={plan.target}
               cardNumber={index + 1}
               singlePlan={singlePlan}
-              isAnyDayCompleted={plan.isCompleted}  
+              isAnyDayCompleted={plan.isCompleted}
             />
           </Box>
         ))}
       </SimpleGrid>
-      <Box style={{display:'flex', justifyContent:'center'}}><Button variant="solid">ЗАВЕРШИТЬ ПЛАН</Button> </Box>
-      
+      <Box style={{ display: 'flex', justifyContent: 'center' }}>
+        <Button variant="solid">ЗАВЕРШИТЬ ПЛАН</Button>{' '}
+      </Box>
     </Container>
   );
 }

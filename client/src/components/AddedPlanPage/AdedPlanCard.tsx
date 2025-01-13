@@ -1,8 +1,8 @@
 import { Button, Card, Text, Badge } from '@chakra-ui/react';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import DayModal from './DayModal';
 
-export default function AdedPlanCard({
+function AdedPlanCard({
   id,
   planId,
   points,
@@ -10,6 +10,10 @@ export default function AdedPlanCard({
   cardNumber,
   singlePlan,
   isAnyDayCompleted,
+  title,
+  rounds,
+  type,
+  target,
 }) {
   const [open, setOpen] = useState(false);
 
@@ -80,7 +84,13 @@ export default function AdedPlanCard({
         id={id}
         description={description}
         cardNumber={cardNumber}
+        title={title}
+        rounds={rounds}
+        type={type}
+        target={target}
       />
     </>
   );
 }
+
+export default memo(AdedPlanCard);

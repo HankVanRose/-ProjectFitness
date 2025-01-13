@@ -18,6 +18,10 @@ export default function DayModal({
   description,
   cardNumber,
   id,
+  title,
+  rounds,
+  type,
+  target,
 }) {
   const descriptionLines = description
     .split(';')
@@ -69,8 +73,8 @@ export default function DayModal({
           </DialogHeader>
           <DialogBody>
             <Box marginBottom={4}>
-              <Text fontSize="lg" color="gray.700" marginBottom={2}>
-                Программа:
+              <Text fontSize="lg" color="gray.700" marginBottom={4} marginTop={4}>
+                Название: {title}
               </Text>
               <Box
                 bg="white"
@@ -82,6 +86,12 @@ export default function DayModal({
                 maxHeight="300px"
                 overflowY="auto"
               >
+                <Text fontSize="sm" color="gray.700" marginBottom={2} style={{fontWeight: 500}}>
+                  {target}
+                </Text>
+                <Text fontSize="sm" color="gray.700" marginBottom={2} style={{fontWeight: 500}}>
+                  Выполнить: {rounds} раунд
+                </Text>
                 <ul
                   style={{
                     listStyleType: 'disc',
