@@ -80,7 +80,7 @@ function AdedPlanCard({
 
       <DayModal
         open={open}
-         
+        planId={planId}
         setOpen={handleClose}
         id={id}
         description={description}

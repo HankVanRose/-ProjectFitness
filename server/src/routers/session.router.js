@@ -100,8 +100,8 @@ router.route('/').post(async (req, res) => {
 router.patch('/:dayId', verifyAccessToken, async (req, res) => {
   try {
     const { dayId } = req.params;
-    const { isCompleted } = req.body;
-    const userId = res.locals.user.id;
+    const { isCompleted, userId } = req.body;
+     
     // console.log('\n\n\n\n\n\n\n\n\n 105105', userId);
     if (typeof isCompleted !== 'boolean') {
       return res

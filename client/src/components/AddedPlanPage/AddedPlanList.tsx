@@ -5,12 +5,14 @@ import { Box, Container, SimpleGrid } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import AdedPlanCard from './AdedPlanCard';
 import { Button } from '@chakra-ui/react';
+import { useAppSelector } from '@/store/hooks/hooks';
 
 export default function AddedPlanList() {
   const { VITE_API } = import.meta.env;
   const [singlePlan, setSinglePlan] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
+   const { user } = useAppSelector((store) => store.appSlice);
 
   useEffect(() => {
     const fetchSinglePlan = async (id) => {
@@ -54,8 +56,9 @@ export default function AddedPlanList() {
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4} p={4}>
         {singlePlan.map((plan, index) => {
           const isAnyDayCompleted = plan.UserDays.some(
-            (day) => day.isCompleted
-          );
+            (day) => day.isCompleted && day.userId === user?.id
+          )
+          
 
           return (
             <Box
@@ -76,6 +79,8 @@ export default function AddedPlanList() {
                 cardNumber={index + 1}
                 isAnyDayCompleted={isAnyDayCompleted}
                 updatePlanCompletion={updatePlanCompletion}
+     
+                
               />
             </Box>
           );
