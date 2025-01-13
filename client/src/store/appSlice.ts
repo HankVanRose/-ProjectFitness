@@ -1,10 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-  ExercisesType,
-  PlansType,
-  SessionType,
-  UserType,
-} from '../types';
+import { ExercisesType, PlansType, SessionType, UserType } from '../types';
 import {
   fetchUpdateProfile,
   fetchUserCheck,
@@ -41,6 +36,14 @@ const appSlice = createSlice({
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
+    },
+    setPoints: (state, action: PayloadAction<number>) => {
+      if (state.user) {
+        state.user.points += action.payload;
+        console.log('Updated points:', state.user.points);
+      } else {
+        console.warn('User not found! Points not updated.');
+      }
     },
   },
   extraReducers: (builder) => {
@@ -134,12 +137,12 @@ const appSlice = createSlice({
             ...state.user,
             ...action.payload,
           };
-         } 
+        }
         //  else {
         //     state.user = action.payload;
         //   }
-          state.loading = false;
-          state.error = null;
+        state.loading = false;
+        state.error = null;
       })
       .addCase(fetchUpdateProfile.rejected, (state, action) => {
         state.loading = false;
@@ -163,4 +166,4 @@ const appSlice = createSlice({
 });
 
 export default appSlice.reducer;
-export const { setError, setLoading } = appSlice.actions;
+export const { setError, setLoading, setPoints } = appSlice.actions;

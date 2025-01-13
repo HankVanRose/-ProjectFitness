@@ -9,22 +9,20 @@ function AdedPlanCard({
   points,
   description,
   cardNumber,
-  
   isAnyDayCompleted,
   title,
   rounds,
   type,
   target,
-  updatePlanCompletion
+  updatePlanCompletion,
 }) {
   const [open, setOpen] = useState(false);
   const { user } = useAppSelector((store) => store.appSlice);
 
   const handleOpen = () => {
-    setOpen(true);
-    console.log(`day`, id);
-    console.log(`План`, planId);
-    console.log(`userId`, user?.id);
+    if (!isAnyDayCompleted) {
+      setOpen(true);
+    }
   };
 
   const handleClose = () => {
@@ -33,8 +31,15 @@ function AdedPlanCard({
 
   return (
     <>
-      <Card.Root maxW="sm" overflow="hidden">
-        <Card.Body gap="2">
+      <Card.Root
+        maxW="sm"
+        overflow="hidden"
+        display={'flex'}
+        width={700}
+        opacity={isAnyDayCompleted ? 0.6 : 1} // изменяем прозрачность для завершенных
+        pointerEvents={isAnyDayCompleted ? 'none' : 'auto'} // отключаем события для завершенных
+      >
+        <Card.Body gap="5" onClick={handleOpen}>
           <Text
             textStyle="2x2"
             fontWeight="medium"
@@ -46,9 +51,14 @@ function AdedPlanCard({
           </Text>
           <Card.Description
             textAlign={'center'}
-            style={{ color: 'red', fontWeight: 600 }}
+            style={{
+              color: isAnyDayCompleted ? 'green' : 'red',
+              fontWeight: 600,
+            }}
           >
-            ТЫ ЗАРАБОТАЕШЬ: {points} points
+            {isAnyDayCompleted
+              ? `ТЫ ЗАРАБОТАЛ: ${points} points`
+              : `ТЫ ЗАРАБОТАЕШЬ: ${points} points`}
           </Card.Description>
         </Card.Body>
         <Card.Footer
@@ -58,20 +68,30 @@ function AdedPlanCard({
         >
           <Button
             variant="solid"
+            colorScheme="teal"
+            size="sm"
+            _hover={{
+              bg: 'teal.600',
+            }}
+            _active={{ bg: 'teal.700' }}
+            px={2}
             onClick={handleOpen}
-            display={isAnyDayCompleted ? 'none' : 'block'}
+            display={isAnyDayCompleted ? 'none' : 'block'} // скрываем кнопку
+            mb={2}
           >
             ОТКРЫТЬ
           </Button>
           <Badge
             colorPalette="red"
             display={isAnyDayCompleted ? 'none' : 'block'}
+            mb={2}
           >
             НЕ ЗАКОНЧЕНА
           </Badge>
           <Badge
             colorPalette="green"
             display={isAnyDayCompleted ? 'block' : 'none'}
+            mb={2}
           >
             ЗАВЕРШЕНА
           </Badge>
@@ -89,6 +109,7 @@ function AdedPlanCard({
         rounds={rounds}
         type={type}
         target={target}
+        points={points}
         updatePlanCompletion={updatePlanCompletion}
       />
     </>

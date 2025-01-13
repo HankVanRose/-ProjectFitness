@@ -29,7 +29,7 @@ router.get('/:id', async (req, res) => {
       ],
       order: [['id']],
     });
-    console.log('\n\n\n\n\n\n\n\n', days);
+    // console.log('\n\n\n\n\n\n\n\n', days);
     res.status(200).json(days);
   } catch (error) {
     console.error(error);
