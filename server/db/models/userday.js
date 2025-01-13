@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       userId: DataTypes.INTEGER,
       dayId: DataTypes.INTEGER,
       isCompleted: DataTypes.BOOLEAN,
+ 
+       
+ 
+      plannedOn: DataTypes.DATEONLY
+ 
     },
     {
       sequelize,

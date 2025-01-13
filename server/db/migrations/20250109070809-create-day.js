@@ -23,6 +23,22 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true,
       },
+
+      title: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      type: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      target: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      rounds: {
+        type: Sequelize.INTEGER,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

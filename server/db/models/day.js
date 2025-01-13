@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
       planId: DataTypes.INTEGER,
       points: DataTypes.INTEGER,
       description: DataTypes.TEXT,
+      title: DataTypes.STRING,
+      type: DataTypes.STRING,
+      target: DataTypes.TEXT,
+      rounds: DataTypes.INTEGER,
     },
     {
       sequelize,

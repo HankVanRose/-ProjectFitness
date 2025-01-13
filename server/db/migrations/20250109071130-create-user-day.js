@@ -23,10 +23,15 @@ module.exports = {
           key: 'id',
         },
       },
+       
       isCompleted: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+      },
+      plannedOn: {
+        type: Sequelize.DATEONLY,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,

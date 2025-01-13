@@ -68,7 +68,7 @@ router.route('/plans/:userId').get(async (req, res) => {
 router.route('/:userId').get(async (req, res) => {
   try {
     const { userId } = req.params;
-    const plan = await Session.findAll({
+    const plan = await UserDay.findAll({
       where: { userId },
       attributes: { exclude: ['createdAt', 'updatedAt'] },
     });
@@ -82,20 +82,27 @@ router.route('/:userId').get(async (req, res) => {
   }
 });
 
-//! создание сессии юзера
-
+//! создание сессии юзера + userdays на каждый день из плана
 router.route('/').post(async (req, res) => {
   try {
     const { userId, planId } = req.body;
     const plan = await Session.create({ userId, planId });
+
     const foundDays = await Day.findAll({ where: { planId } });
     const foundDaysId = foundDays.map((el) => el.id);
+
+ 
     console.log('\n\n\n\n\n\n\n\n\n', foundDaysId);
+
     const userDaysPromises = foundDaysId.map((dayId) => {
       return UserDay.create({ userId, dayId });
+ 
     }); // Ожидаем завершения всех операций
+
     const result = await Promise.all(userDaysPromises);
+
     res.status(200).json({ plan, userDays: result });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({

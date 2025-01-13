@@ -17,7 +17,10 @@ const fetchUserSignup = createAsyncThunk(
       if (error instanceof AxiosError && error.response?.data) {
         return { error: error.response.data.message as string };
       }
-      return { error: 'Произошла ошибка, пожалуйста, повторите ещё раз или попробуйте попозже.' }; 
+      return {
+        error:
+          'Произошла ошибка, пожалуйста, повторите ещё раз или попробуйте попозже.',
+      };
     }
   }
 );
@@ -35,7 +38,10 @@ const fetchUserSignin = createAsyncThunk(
       if (error instanceof AxiosError && error.response?.data) {
         return { error: error.response.data.message as string };
       }
-      return { error: 'Произошла ошибка, пожалуйста, повторите ещё раз или попробуйте попозже.' }; 
+      return {
+        error:
+          'Произошла ошибка, пожалуйста, повторите ещё раз или попробуйте попозже.',
+      };
     }
   }
 );
@@ -45,28 +51,34 @@ const fetchUserLogout = createAsyncThunk('user/logout', async () => {
   setAccessToken('');
 });
 
-const fetchUserCheck = createAsyncThunk('user/check', async (_, { rejectWithValue }) => {
-  try {
-    const response = await axiosInstance.get<UserResponseType>(
-      `${import.meta.env.VITE_API}/tokens/refresh`
-    );
-    setAccessToken(response.data.accessToken);
-    return response.data.user;
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      return rejectWithValue(error.response?.data.message || 'Ошибка при проверке пользователя');
+const fetchUserCheck = createAsyncThunk(
+  'user/check',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get<UserResponseType>(
+        `${import.meta.env.VITE_API}/tokens/refresh`
+      );
+      setAccessToken(response.data.accessToken);
+      return response.data.user;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(
+          error.response?.data.message || 'Ошибка при проверке пользователя'
+        );
+      }
+      return rejectWithValue('Неизвестная ошибка');
     }
-    return rejectWithValue('Неизвестная ошибка');
   }
-});
+);
 
 const fetchUpdateProfile = createAsyncThunk(
   'user/updateProfile',
   async (profileData: Partial<UserType>, { rejectWithValue }) => {
     try {
       const filteredData = Object.fromEntries(
-        Object.entries(profileData).filter(([_, value]) => 
-        value !== null && value !== undefined && value !== '')
+        Object.entries(profileData).filter(
+          ([_, value]) => value !== null && value !== undefined && value !== ''
+        )
       );
 
       if ('password' in filteredData && filteredData.password === '') {
@@ -82,7 +94,9 @@ const fetchUpdateProfile = createAsyncThunk(
       if (error instanceof AxiosError && error.response?.data) {
         return rejectWithValue(error.response.data.message);
       }
-      return rejectWithValue('Произошла ошибка, пожалуйста, повторите ещё раз или попробуйте попозже.'); 
+      return rejectWithValue(
+        'Произошла ошибка, пожалуйста, повторите ещё раз или попробуйте попозже.'
+      );
     }
   }
 );

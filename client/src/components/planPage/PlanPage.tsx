@@ -103,7 +103,7 @@ export default function PlanPage() {
   return (
     <>
       <Box
-        backgroundColor="#f9f9f9"
+        color={{ base: 'black', _dark: 'white' }}
         padding="20px"
         display="flex"
         alignItems="center"
@@ -133,7 +133,7 @@ export default function PlanPage() {
             >
               <Heading fontSize="2rem">Уровень сложности:</Heading>
               <Text fontSize="1.3rem" lineHeight="1.6" textAlign="justify">
-                {plan.difficulty}
+                {plan.difficulty?.toUpperCase()}
               </Text>
               <Heading fontSize="2rem">Необходимое оборудование:</Heading>
               <Text fontSize="1.3rem" lineHeight="1.6" textAlign="justify">
@@ -143,13 +143,11 @@ export default function PlanPage() {
               <Text fontSize="1.3rem" lineHeight="1.6" textAlign="justify">
                 {plan.shortDescription}
               </Text>
+
               <Heading fontSize="2rem">
-                Продолжительность в неделях: {plan.weeksDuration}
+                Общее количество тренировочных дней: {plan.numOfTrainings}
               </Heading>
-              <Heading fontSize="2rem">
-                Общее количество тренировочных дней: {plan.numOfSessions}
-              </Heading>
-              <Heading fontSize="2rem">Подробнее о {plan.name}</Heading>
+              <Heading fontSize="2rem">Подробнее о: {plan.name}</Heading>
               <Text fontSize="1.3rem" lineHeight="1.6" textAlign="justify">
                 {plan.longDescription}
               </Text>

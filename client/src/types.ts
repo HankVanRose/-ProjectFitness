@@ -40,6 +40,7 @@ export type PlanType = {
   numOfTrainings: number;
   longDescription: string;
   weeksDescription: string;
+   
   
 };
 

@@ -1,15 +1,21 @@
 const router = require('express').Router();
-const { Day, Exercise, DayExercise, Plan } = require('../../db/models');
+const { Day, Exercise, DayExercise, Plan, UserDay  } = require('../../db/models');
 
 router.get('/:id', async (req, res) => {
   try {
     const days = await Day.findAll({
       where: { planId: req.params.id },
       attributes: { exclude: ['createdAt', 'updatedAt'] },
-      include: {
-        model: Exercise,
-        attributes: { exclude: ['createdAt', 'updatedAt'] },
-      },
+      include: [
+        {
+          model: Exercise,
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
+        },
+        {
+          model: UserDay,
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
+        }
+      ],
     });
     console.log('\n\n\n\n\n\n\n\n',  days);
     res.status(200).json(days);

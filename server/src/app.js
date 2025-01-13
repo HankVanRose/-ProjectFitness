@@ -5,7 +5,11 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 const app = express();
 const cors = require('cors');
+ 
 const path = require('path');
+ 
+ require('./hooks.js')
+ 
 
 const { PORT } = process.env;
 
