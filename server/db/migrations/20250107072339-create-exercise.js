@@ -38,7 +38,7 @@ module.exports = {
         allowNull: true,
       },
       points: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: true,
       },
       calories: {

@@ -2,6 +2,9 @@ import {
   Box,
   Button,
   createListCollection,
+  Fieldset,
+  Flex,
+  Grid,
   Heading,
   Input,
   SelectContent,
@@ -9,38 +12,42 @@ import {
   SelectRoot,
   SelectTrigger,
   SelectValueText,
-  VStack,
+  Stack,
+  Text,
+  Textarea,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { Field } from '@/components/ui/field';
 import axiosInstance from '@/axiosInstance';
 import { setError, setLoading } from '@/store/appSlice';
 import { DayExercise, ExerciseType, PlanType } from '@/types';
+import { IoAddCircleOutline } from 'react-icons/io5';
+import { MdOutlineCreateNewFolder } from 'react-icons/md';
+import { useColorModeValue } from '../ui/color-mode';
 
 export default function NewPlanForm() {
   const { VITE_API } = import.meta.env;
   const [plan, setPlan] = useState<PlanType>({
-    id: 0,
     name: '',
     shortDescription: '',
     equipment: '',
     difficulty: '',
     image: '',
     slogan: '',
-    weeksDuration: 0,
-    numOfSessions: 0,
+    numOfTrainings: 0,
     longDescription: '',
     weeksDescription: '',
-    sessionsPerWeek: 0,
   });
-  const [days, setDays] = useState<DayExercise[]>([]);
+
+  const [days, setDays] = useState<Omit<DayExercise[], 'planId'>>([]);
   const [allExercises, setAllExercises] = useState<ExerciseType[]>([]);
 
   useEffect(() => {
-    const allExercises = async () => {
+    const fetchExercises = async () => {
       try {
         setLoading(true);
-        const res = await axiosInstance.get(`${VITE_API}/exercise`);
+        const res = await axiosInstance.get(`/api/exercise`);
+        console.log(res.data);
         setAllExercises(res.data);
       } catch (error) {
         setError('Ошибка при загрузке упражнений');
@@ -49,51 +56,55 @@ export default function NewPlanForm() {
         setLoading(false);
       }
     };
-    allExercises();
-  }, [VITE_API]);
+    fetchExercises();
+  }, []);
 
   const handleChange = (field: keyof PlanType, value: string | number) => {
     setPlan((prevPlan) => ({ ...prevPlan, [field]: value }));
-  }
+  };
 
   const addDay = () => {
-    setDays((prevDays) => [...prevDays, { points: 0, Exercises: [] }]);
+    setDays((prevDays) => [
+      ...prevDays,
+      {
+        points: 0,
+        description: '',
+        title: '',
+        type: '',
+        target: '',
+        rounds: 0,
+        Exercises: [] as ExerciseType[],
+      } as DayExercise,
+    ]);
   };
 
-  const removeDay = (index: number) => {
-    setDays((prevDays) => prevDays.filter((_, ind) => ind !== index));
-  };
-  
   const addExercise = (dayIndex: number) => {
-      setDays((prevDays) => {
-          const updatedDays = [...prevDays];
-          updatedDays[dayIndex].Exercises.push(null); //! почему строка? 
-          return updatedDays;
-        })  
-    };
+    setDays((prevDays) => {
+      const updatedDays = [...prevDays];
+      updatedDays[dayIndex].Exercises.push({} as ExerciseType);
+      return updatedDays;
+    });
+  };
 
-      const updateDay = (
-        dayIndex: number,
-        field: string,
-        value: string | number
-      ) => {
-        setDays((prevDays) => 
-          prevDays.map((day, index) =>
-            index === dayIndex ? { ...day, [field]: value } : day
-          )
-        );
-      };
-    
   const handleSubmit = async () => {
     try {
       const resp = await axiosInstance.post(
         `${VITE_API}/days/newPlan/day/exercises`,
-        { ...plan,
-            days,
-        }
+        { ...plan, days }
       );
       console.log(resp.data);
-    } catch (error) {
+      setPlan({
+        name: '',
+        shortDescription: '',
+        equipment: '',
+        difficulty: '',
+        image: '',
+        slogan: '',
+        numOfTrainings: 0,
+        longDescription: '',
+        weeksDescription: '',
+      });
+      setDays([])    } catch (error) {
       setError('Ошибка при добавлении дня');
       console.error(error);
     }
@@ -108,163 +119,266 @@ export default function NewPlanForm() {
 
   const exercisesOptions = createListCollection({
     items: allExercises.map((exercise) => ({
-      value: exercise.id.toString(),
+      value: exercise.id,
+      points: +exercise.points,
       label: exercise.name,
     })),
   });
+  const textColor = useColorModeValue('black', 'white');
+  const updatePoints = (dayIndex: number, field: string, value: number) => {
+    const updatedDays = [...days];
+    updatedDays[dayIndex] = {
+      ...updatedDays[dayIndex],
+      [field]: value,
+    };
+    setDays(updatedDays);
+  };
+  const updateExercises = (dayIndex: number, exercises: ExerciseType[]) => {
+    const updatedDays = [...days];
+    updatedDays[dayIndex].Exercises = exercises;
+    setDays(updatedDays);
+  };
 
   return (
-    <Box maxW='container.md' mx='auto' py={8}>
-      <Heading mb={6}>Создать новый план</Heading>
-      <VStack gap={6} as='form'>
-        <Field label='Название'>
-          <Input
-            placeholder='Название плана'
-            name={plan.name}
-            onChange={(e) => handleChange('name', e.target.value)}
-          />
-        </Field>
+    <>
+      <Grid templateColumns="repeat(2, 1fr)" p={10}>
+        <Box display="flex" p={5}>
+          <Fieldset.Root size="lg">
+            <Stack>
+              <Fieldset.Legend fontWeight={600}>
+                Создать новый план тренировок
+              </Fieldset.Legend>
+              <Fieldset.HelperText mb={5}>
+                Здесь вы можете создать новый план тренировок
+              </Fieldset.HelperText>
+            </Stack>
 
-        <Field label='Краткое описание'>
-          <Input
-            placeholder='Краткое описание'
-            name={plan.shortDescription}
-            onChange={(e) => handleChange('shortDescription', e.target.value)}
-          />
-        </Field>
+            <Fieldset.Content>
+              <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+                <Field label="Название">
+                  <Input
+                    p={2}
+                    placeholder="Название плана"
+                    name={plan.name}
+                    onChange={(e) => handleChange('name', e.target.value)}
+                  />
+                </Field>
 
-        <Field label='Детальное описание'>
-          <Input
-            placeholder='Детальное описание'
-            name={plan.longDescription}
-            onChange={(e) => handleChange('longDescription', e.target.value)}
-          />
-        </Field>
+                <Field label="URL картинки">
+                  <Input
+                    p={2}
+                    placeholder="URL картинки"
+                    name={plan.image}
+                    onChange={(e) => handleChange('image', e.target.value)}
+                  />
+                </Field>
 
-        <Field label='Оборудование'>
-          <Input
-            placeholder='Укажите оборудование'
-            name={plan.equipment}
-            onChange={(e) => handleChange('equipment', e.target.value)}
-          />
-        </Field>
+                <Field label="Краткое описание">
+                  <Input
+                    p={2}
+                    placeholder="Краткое описание"
+                    name={plan.shortDescription}
+                    onChange={(e) =>
+                      handleChange('shortDescription', e.target.value)
+                    }
+                  />
+                </Field>
 
-        <Field label='Сложность'>
-          <SelectRoot mb={4} collection={difficultyOptions}>
-            <SelectTrigger>
-              <SelectValueText placeholder='Выберите сложность'></SelectValueText>
-            </SelectTrigger>
-            <SelectContent>
-              {difficultyOptions.items.map((option) => (
-                <SelectItem item={option} key={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </SelectRoot>
-        </Field>
+                <Field label="Необходимое оборудование">
+                  <Input
+                    p={2}
+                    placeholder="Укажите оборудование"
+                    name={plan.equipment}
+                    onChange={(e) => handleChange('equipment', e.target.value)}
+                  />
+                </Field>
 
-        <Field label='Продолжительность (в неделях)'>
-          <Input
-            type='number'
-            placeholder='Количество недель'
-            name={plan.weeksDuration.toString()}
-            onChange={(e) => handleChange('weeksDuration', e.target.value)}
-            min={1}
-          />
-        </Field>
+                <Field label="Сложность">
+                  <SelectRoot mb={4} collection={difficultyOptions}>
+                    <SelectTrigger>
+                      <SelectValueText placeholder="Выберите сложность"></SelectValueText>
+                    </SelectTrigger>
+                    <SelectContent>
+                      {difficultyOptions.items.map((option) => (
+                        <SelectItem item={option} key={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </SelectRoot>
+                </Field>
 
-        <Field label='Тренировки в неделю'>
-          <Input
-            type='number'
-            placeholder='Количество тренировок в неделю'
-            name={plan.sessionsPerWeek.toString()}
-            onChange={(e) => handleChange('sessionsPerWeek', e.target.value)}
-            min={1}
-          />
-        </Field>
+                <Field label="Количество тренировок">
+                  <Input
+                    p={2}
+                    type="number"
+                    placeholder="Количество недель"
+                    name={plan.numOfTrainings.toString()}
+                    onChange={(e) =>
+                      handleChange('numOfTrainings', e.target.value)
+                    }
+                    min={1}
+                  />
+                </Field>
 
-        <Heading size='md' mt={8}>
-          Дни
-        </Heading>
-        {days.map((day, dayIndex) => (
-          <Box
-            key={dayIndex}
-            p={4}
-            borderWidth={1}
-            borderRadius='md'
-            mb={4}
-            w='full'
-          >
-            <Field label='Очки за день'>
-              <Input
-                type='number'
-                placeholder='Очки'
-                value={day.points}
-                onChange={(e) =>
-                  updateDay(dayIndex, 'points', Number(e.target.value))
-                }
-              />
-            </Field>
+                <Box gridColumn="span 2">
+                  <Field label="Описание">
+                    <Textarea
+                      p={2}
+                      rows={2}
+                      placeholder="Детальное описание"
+                      name={plan.longDescription}
+                      onChange={(e) =>
+                        handleChange('longDescription', e.target.value)
+                      }
+                    />
+                  </Field>
+                </Box>
 
-            <Heading size='sm' mt={4}>
-              Упражнения
-            </Heading>
-            {day.Exercises.map((exerciseId, exerciseIndex: number) => (
-              <Field key={exerciseIndex} mt={2} label='Выберите упражнение'>
-                <SelectRoot
-                  mb={4}
-                  collection={exercisesOptions}
-                  onValueChange={(value) => {
-                    const updatedExercises = [...day.Exercises];
-                    updatedExercises[exerciseIndex] = Number(value);
-                    updateDay(dayIndex, 'Exercises', updatedExercises);
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValueText placeholder='Выберите упражнение'>
-                      {exerciseId
-                        ? exercisesOptions.items.find(
-                            (item) => item.value === exerciseId.toString()
-                          )?.label
-                        : ''}
-                    </SelectValueText>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {exercisesOptions.items.map((option) => (
-                      <SelectItem item={option} key={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </SelectRoot>
-              </Field>
-            ))}
+                <Box gridColumn="span 2">
+                  <Field label="Weeks Description">
+                    <Textarea
+                      p={2}
+                      rows={2}
+                      placeholder="weeksDescription"
+                      name={plan.weeksDescription}
+                      onChange={(e) =>
+                        handleChange('weeksDescription', e.target.value)
+                      }
+                    />
+                  </Field>
+                </Box>
+              </Grid>
+            </Fieldset.Content>
 
+            <Fieldset.HelperText mt={5}>
+              * Нажмите на эту кнопку только после добавления всех дней
+            </Fieldset.HelperText>
             <Button
+              type="submit"
+              width={200}
+              alignSelf="flex-center"
+              borderRadius={10}
               mt={4}
-              colorScheme='green'
-              onClick={() => addExercise(dayIndex)}
+              onClick={handleSubmit}
             >
-              Добавить упражнение
+              Создать план <MdOutlineCreateNewFolder />
             </Button>
-          </Box>
-        ))}
+          </Fieldset.Root>
+        </Box>
+        <Box p={5}>
+          <Heading fontSize="1.6rem" fontWeight={600}>
+            Дни
+          </Heading>
+          {days.map((day, dayIndex) => (
+            <Box
+              key={dayIndex}
+              p={3}
+              borderWidth={1}
+              borderRadius="lg"
+              mb={6}
+              w="full"
+              boxShadow="sm"
+            >
+              <Flex direction="column" gap={4}>
+                <Field label="Очки за день">
+                  <Input
+                    type="number"
+                    placeholder="Очки"
+                    value={day.points}
+                    p={3}
+                    disabled
+                    borderRadius="xl"
+                    onChange={(e) =>
+                      updatePoints(dayIndex, 'points', Number(e.target.value))
+                    }
+                  />
+                </Field>
 
-        <Button mt={4} colorScheme='green' onClick={addDay}>
-          Добавить день
-        </Button>
+                <Box fontSize="0.7rem">
+                  <Text fontSize="1.2rem" fontWeight={600}>
+                    Упражнения
+                  </Text>
+                  <Stack>
+                    {day.Exercises.map((exercise, exerciseIndex) => (
+                      <Field
+                        fontWeight={300}
+                        key={exerciseIndex}
+                        label="Выберите упражнение"
+                      >
+                        <SelectRoot
+                          color="gray.600"
+                          collection={exercisesOptions}
+                          onValueChange={(ValueChangeDetails) => {
+                            const updatedExercises = [...day.Exercises];
 
-        <Button
-          type='submit'
-          colorScheme='teal'
-          size='lg'
-          mt={6}
-          onClick={handleSubmit}
-        >
-          Создать план
-        </Button>
-      </VStack>
-    </Box>
+                            // Update the exercise
+                            updatedExercises[exerciseIndex] = {
+                              id: Number(ValueChangeDetails.value),
+                            } as ExerciseType;
+
+                            // Calculate total points for the day
+                            const totalPoints = updatedExercises.reduce(
+                              (sum, exercise) => {
+                                const exerciseDetails =
+                                  exercisesOptions.items.find(
+                                    (item) => item.value === exercise.id // Convert to string for comparison
+                                  );
+                                return (
+                                  sum +
+                                  (exerciseDetails?.points
+                                    ? Number(exerciseDetails.points)
+                                    : 0)
+                                ); // Ensure points are converted to numbers
+                              },
+                              0
+                            );
+
+                            // Update exercises and points separately
+                            updateExercises(dayIndex, updatedExercises);
+                            updatePoints(dayIndex, 'points', totalPoints);
+                          }}
+                        >
+                          <SelectTrigger p={2} borderRadius={5}>
+                            <SelectValueText placeholder="Выберите упражнение">
+                              {exercise
+                                ? exercisesOptions.items.find(
+                                    (item) => item.value === exercise.id
+                                  )?.label
+                                : ''}
+                            </SelectValueText>
+                          </SelectTrigger>
+                          <SelectContent color={textColor}>
+                            {exercisesOptions.items.map((option) => (
+                              <SelectItem item={option} key={option.value}>
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </SelectRoot>
+                      </Field>
+                    ))}
+                  </Stack>
+                </Box>
+
+                <Button
+                  size="md"
+                  variant="outline"
+                  borderRadius="xl"
+                  onClick={() => addExercise(dayIndex)}
+                >
+                  <IoAddCircleOutline />
+                  Добавить упражнение
+                </Button>
+              </Flex>
+            </Box>
+          ))}
+
+          <Button p={3} borderRadius="md" onClick={addDay}>
+            Добавить день <IoAddCircleOutline />
+          </Button>
+        </Box>
+      </Grid>
+    </>
   );
 }

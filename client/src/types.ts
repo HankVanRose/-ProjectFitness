@@ -30,15 +30,15 @@ export type ExerciseType = {
 export type ExercisesType = ExerciseType[];
 
 export type PlanType = {
-  id: number;
+  id?: number;
   name: string;
   shortDescription: string;
+  longDescription: string;
   equipment: string;
   difficulty: string;
   image: string;
   slogan: string;
   numOfTrainings: number;
-  longDescription: string;
   weeksDescription: string;
 };
 
@@ -68,5 +68,5 @@ export type DayExercise = {
   type?: string;
   target?: string;
   rounds?: number;
-  Exercises?: ExercisesType;
+  Exercises: ExercisesType;
 };
