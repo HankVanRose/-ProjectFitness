@@ -244,14 +244,14 @@ export default function FitnessCalendar() {
                     onClick={() => handleDateSelect(day)}
                     variant={isSelected ? 'solid' : 'outline'}
                     colorScheme={isSelected ? 'blue' : 'gray'}
-                    color={isToday(day) ? 'green.500' : undefined}
+                    color={isToday(day) ? 'yellow.500' : undefined}
                     size="sm"
                     h="60px"
                     w="full"
                     borderRadius="md"
                     fontWeight="600"
                     _hover={{
-                      bg: isSelected ? 'green.500' : 'gray.100',
+                      bg: isSelected ? 'yellow.500' : 'gray.100',
                     }}
                   >
                     {day}
@@ -263,7 +263,7 @@ export default function FitnessCalendar() {
                       w="4px"
                       h="4px"
                       borderRadius="full"
-                      bg="green.500"
+                      bg="yellow.500"
                       transform="translateY(-8px)"
                     />
                   )}
