@@ -1,11 +1,10 @@
 const router = require('express').Router();
 const { Exercise } = require('../../db/models');
 
-
 router.route('/').get(async (req, res) => {
   try {
-    const plans = await Exercise.findAll();
-    res.status(200).json(plans);
+    const Exercises = await Exercise.findAll();
+    res.status(200).json(Exercises);
   } catch (error) {
     console.error(error);
     res.status(500).json({

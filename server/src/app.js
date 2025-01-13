@@ -8,7 +8,7 @@ const cors = require('cors');
  
 const path = require('path');
  
- require('./hooks.js')
+//  require('./hooks.js')
  
 
 const { PORT } = process.env;

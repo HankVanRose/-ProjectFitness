@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       longMuscleGroup: DataTypes.TEXT,
       type: DataTypes.STRING,
       equipment: DataTypes.STRING,
-      points: DataTypes.STRING,
+      points: DataTypes.INTEGER,
       calories: DataTypes.STRING,
       muscleImage: DataTypes.TEXT,
     },
