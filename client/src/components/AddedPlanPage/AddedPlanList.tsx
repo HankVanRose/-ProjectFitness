@@ -16,9 +16,6 @@ export default function AddedPlanList() {
     const fetchSinglePlan = async (id) => {
       setIsLoading(true);
       try {
-        const isCompletedCheck = await axiosInstance.get(
-          `${VITE_API}/session/${id}`
-        );
         const result = await axiosInstance.get(`${VITE_API}/days/${id}`);
 
         setSinglePlan(result.data);
@@ -54,6 +51,7 @@ export default function AddedPlanList() {
               cardNumber={index + 1}
               singlePlan={singlePlan}
               isAnyDayCompleted={plan.isCompleted}
+              setSinglePlan={setSinglePlan}
             />
           </Box>
         ))}

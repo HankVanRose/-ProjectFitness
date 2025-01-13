@@ -14,6 +14,7 @@ function AdedPlanCard({
   rounds,
   type,
   target,
+  setSinglePlan
 }) {
   const [open, setOpen] = useState(false);
 
@@ -79,6 +80,7 @@ function AdedPlanCard({
 
       <DayModal
         open={open}
+         
         singlePlan={singlePlan}
         setOpen={handleClose}
         id={id}
