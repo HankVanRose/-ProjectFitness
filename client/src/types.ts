@@ -40,8 +40,6 @@ export type PlanType = {
   numOfTrainings: number;
   longDescription: string;
   weeksDescription: string;
-   
-  
 };
 
 export type SessionType = {
@@ -49,9 +47,9 @@ export type SessionType = {
   planId: number;
   isCompleted: boolean;
   Plan?: {
-    name: string,
-    image: string,
-  }
+    name: string;
+    image: string;
+  };
 };
 
 export type UserResponseType = {
@@ -65,6 +63,10 @@ export type PlansType = PlanType[];
 export type DayExercise = {
   planId: number;
   points: number;
-  Exercises: ExercisesType;
-  
+  description?: string;
+  title?: string;
+  type?: string;
+  target?: string;
+  rounds?: number;
+  Exercises?: ExercisesType;
 };

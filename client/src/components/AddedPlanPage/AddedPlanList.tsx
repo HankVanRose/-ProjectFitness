@@ -19,6 +19,7 @@ export default function AddedPlanList() {
         const result = await axiosInstance.get(`${VITE_API}/days/${id}`);
 
         setSinglePlan(result.data);
+        console.log(result.data);
       } catch (error) {
         console.error(error);
       } finally {
