@@ -7,7 +7,7 @@ export type UserType = {
   height?: string;
   password?: string;
   gender?: string;
-  points?: number;
+  points: number;
   age?: number;
   goal?: string;
 };

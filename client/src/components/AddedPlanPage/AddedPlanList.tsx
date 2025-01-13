@@ -52,43 +52,53 @@ export default function AddedPlanList() {
   };
 
   return (
-    <Container maxW="full" px={4}>
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4} p={4}>
-        {singlePlan.map((plan, index) => {
-          const isAnyDayCompleted = plan.UserDays.some(
-            (day) => day.isCompleted && day.userId === user?.id
-          )
-          
-
-          return (
-            <Box
-              key={plan.id}
-              p={4}
-              borderRadius="md"
-              bg={isAnyDayCompleted ? 'gray.300' : 'white'}
-            >
-              <AdedPlanCard
-                id={plan.id}
-                planId={plan.planId}
-                points={plan.points}
-                description={plan.description}
-                title={plan.title}
-                rounds={plan.rounds}
-                type={plan.type}
-                target={plan.target}
-                cardNumber={index + 1}
-                isAnyDayCompleted={isAnyDayCompleted}
-                updatePlanCompletion={updatePlanCompletion}
-     
-                
-              />
-            </Box>
-          );
-        })}
-      </SimpleGrid>
-      <Box style={{ display: 'flex', justifyContent: 'center' }}>
-        <Button variant="solid">ЗАВЕРШИТЬ ПЛАН</Button>
-      </Box>
-    </Container>
+    <Container maxW="full" px={4} py={8} bg="gray.50">
+    <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
+      {singlePlan.map((plan, index) => {
+        const isAnyDayCompleted = plan.UserDays.some(
+          (day) => day.isCompleted && day.userId === user?.id
+        );
+  
+        return (
+          <Box
+            key={plan.id}
+            p={5}
+            borderRadius="3xl"
+            bg={isAnyDayCompleted ? 'gray.300' : 'white'}
+            boxShadow="md"
+            _hover={{ shadow: 'lg', transform: 'scale(1.02)', transition: '0.2s' }}
+            borderWidth={isAnyDayCompleted ? '2px' : '1px'}
+            borderColor={isAnyDayCompleted ? 'green.500' : 'gray.200'}
+          >
+            <AdedPlanCard
+              id={plan.id}
+              planId={plan.planId}
+              points={plan.points}
+              description={plan.description}
+              title={plan.title}
+              rounds={plan.rounds}
+              type={plan.type}
+              target={plan.target}
+              cardNumber={index + 1}
+              isAnyDayCompleted={isAnyDayCompleted}
+              updatePlanCompletion={updatePlanCompletion}
+            />
+          </Box>
+        );
+      })}
+    </SimpleGrid>
+    <Box style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+      <Button 
+        variant="solid"
+        colorScheme="teal"
+        size="lg"
+        _hover={{ bg: 'teal.600', transform: 'scale(1.05)', transition: '0.2s'}}
+        _active={{ bg: 'teal.700' }}
+        px={8}
+      >
+        ЗАВЕРШИТЬ ПЛАН
+      </Button>
+    </Box>
+  </Container>
   );
 }

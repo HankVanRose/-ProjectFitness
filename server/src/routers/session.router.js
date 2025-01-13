@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { Session, Plan, UserDay, Day } = require('../../db/models');
+const { Session, Plan, UserDay, Day, User } = require('../../db/models');
 const { verifyAccessToken } = require('../middlewares/verifyToken');
 
 //! все сессии
@@ -80,7 +80,7 @@ router.route('/').post(async (req, res) => {
     const foundDays = await Day.findAll({ where: { planId } });
     const foundDaysId = foundDays.map((el) => el.id);
 
-    console.log('\n\n\n\n\n\n\n\n\n', foundDaysId);
+    // console.log('\n\n\n\n\n\n\n\n\n', foundDaysId);
 
     const userDaysPromises = foundDaysId.map((dayId) => {
       return UserDay.create({ userId, dayId });
@@ -100,15 +100,14 @@ router.route('/').post(async (req, res) => {
 router.patch('/:dayId', verifyAccessToken, async (req, res) => {
   try {
     const { dayId } = req.params;
-    const { isCompleted, userId } = req.body;
-     
-    // console.log('\n\n\n\n\n\n\n\n\n 105105', userId);
+    const { isCompleted, userId, points } = req.body;
+
     if (typeof isCompleted !== 'boolean') {
       return res
         .status(400)
         .json({ error: 'isCompleted должно быть булевым значением.' });
     }
-
+    console.log('points', points);
     const userDay = await UserDay.findOne({
       where: {
         userId,
@@ -116,14 +115,27 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
       },
     });
 
-    // console.log('\n\n\n\n\n\n\n', userDay);
+    if (points) {
+      const findUser = await User.findOne({ where: { id: userId } });
+      findUser.points += points;
+      await findUser.save();
+    }
+
+   
+
+    // console.log(
+    //   '\n\n\n\n\n\n\n\n\n105105\n\n\n\n\n\n\n\n\n105105\n\n\n\n\n\n\n\n\n105105',
+    //   userDay,
+    //   '\n\n\n\n\n\n\n\n\n105105\n\n\n\n\n\n\n\n\n105105',
+
+    // );
 
     if (!userDay) {
       return res.status(404).json({ error: 'Запись не найдена.' });
     }
 
     userDay.isCompleted = isCompleted;
-    
+
     await userDay.save();
 
     return res.status(200).json(userDay);
