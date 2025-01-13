@@ -7,6 +7,7 @@ router.get('/refresh', verifyRefreshToken, (req, res) => {
   try {
     const { user } = res.locals;
     const { accessToken, refreshToken } = generateToken({ user });
+    console.log(user);
 
     res
       .cookie('refreshToken', refreshToken, cookieConfig.refresh)
