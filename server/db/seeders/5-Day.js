@@ -61,7 +61,8 @@ module.exports = {
           points: 210,
           title: 'FuncBodyTrain',
           type: 'AMRAP',
-          target: 'Задача: Завершить как можно больше раундов за 20 минут (AMRAP 20 min)',
+          target:
+            'Задача: Завершить как можно больше раундов за 20 минут (AMRAP 20 min)',
           rounds: 1,
           description:
             '8 подъемов ног носками к турнику; 10 взятий с виса и толчков гантели 22,5 / 15 кг; 14/12 калорий гребли;',
@@ -74,7 +75,7 @@ module.exports = {
           target: 'Задача: Закончить задание за минимальное время',
           rounds: 10,
           description:
-            '50 одинарных скакалок; 10 подтягиваний (киппинг); 50 одинарных скакалок; 10 сит-ап; 50 одинарных скакалок; 10 отжиманий на брусьях; 50 одинарных скакалок; 10 отжиманий стандартных;',
+            '50 одинарных скакалок; 10 подтягиваний (киппинг); 50 одинарных скакалок; 10 V-ups; 50 одинарных скакалок; 10 отжиманий на брусьях; 50 одинарных скакалок; 10 отжиманий стандартных;',
         },
         {
           planId: 1,
@@ -103,7 +104,8 @@ module.exports = {
           type: 'ASAP',
           target: 'Задача: Закончить задание за минимальное время',
           rounds: 1,
-          description: '50 фронатльных приседаний (60/43 кг); 40 подтягиваний на турнике; 30 толчков штанги (60/43 кг); 50 фронатльных приседаний со штангой на груди (38/30 кг); 40 подтягиваний на турнике; 30 толчков штанги (38/30 кг); 50 приседания со штангой над головой (30/20 кг):; 40 Подтягиваний на турнике; 30 толчков штанги (30/20 кг)',
+          description:
+            '50 фронатльных приседаний (60/43 кг); 40 подтягиваний на турнике; 30 толчков штанги (60/43 кг); 50 фронатльных приседаний со штангой на груди (38/30 кг); 40 подтягиваний на турнике; 30 толчков штанги (38/30 кг); 50 приседания со штангой над головой (30/20 кг):; 40 Подтягиваний на турнике; 30 толчков штанги (30/20 кг)',
         },
         {
           planId: 1,
@@ -112,7 +114,8 @@ module.exports = {
           type: 'ASAP',
           target: 'Задача: Закончить задание за минимальное время',
           rounds: 1,
-          description: '75 приседаний; 50 отжиманий от пола; 20 отжиманий на кольцах; 50 приседаний; 35 подтягиваний на турнике; 15 отжиманий на кольцах; 25 приседаний; 20 подтягиваний на турнике; 10 отжиманий на кольцах',
+          description:
+            '75 приседаний; 50 отжиманий от пола; 20 отжиманий на кольцах; 50 приседаний; 35 подтягиваний на турнике; 15 отжиманий на кольцах; 25 приседаний; 20 подтягиваний на турнике; 10 отжиманий на кольцах',
         },
         {
           planId: 1,
@@ -121,13 +124,89 @@ module.exports = {
           type: 'ASAP',
           target: 'Задача: Закончить задание за минимальное время',
           rounds: 1,
-          description: '10 выбросов гири 2шт по 24кг; 10 силовых взятий штанги на грудь (60 кг); 10 жимовых швунгов (60 кг); 10 становых тяг (60 кг); 10 махов гирей двумя руками (24 кг); 10 выпадов с гантелями (10 кг); 10 бёрпи; 10 ситапов; 10 двойных прыжков со скакалкой; 10 выбросов штанги (60 кг)',
+          description:
+            '10 выбросов гири 2шт по 24кг; 10 силовых взятий штанги на грудь (60 кг); 10 жимовых швунгов (60 кг); 10 становых тяг (60 кг); 10 махов гирей двумя руками (24 кг); 10 выпадов с гантелями (10 кг); 10 бёрпи; 10 ситапов; 10 двойных прыжков со скакалкой; 10 выбросов штанги (60 кг)',
         },
 
         {
           planId: 2,
-          points: 150,
-          description: '5',
+          points: 250,
+          title: 'Nuke',
+          type: 'No Time',
+          target: 'грудь + трицепс + дельты',
+          rounds: 1,
+          description:
+            '12-10-8-6; Жим штанги лежа вес: 75% от максимума; Жим штанги лежа узким хватом вес: 75% от максимума; Жим Арнольда вес: 75% от максимума; Тяга штанги к подбородку широким хватом вес: 75% от максимума',
+        },
+        {
+          planId: 2,
+          points: 350,
+          title: 'BINGO',
+          type: 'No Time',
+          target: 'спина + грудь + дельты',
+          rounds: 1,
+          description:
+            '12-10-8-6; Становая тяга классикой; 75% от максимума; Подтягивания; Тяга штанги вес: 75% от максимума; фронтальный присед вес: 75% от максимума; гребля 20 каллорий;',
+        },
+        {
+          planId: 2,
+          points: 350,
+          title: 'ANDERSON',
+          type: 'ASAP',
+          target: 'Задача: Закончить задание за минимальное время',
+          rounds: 5,
+          description:
+            'бег 200 метров ; 10 отжиманий от пола ; 10 воздушных приседаний; 5 бёрпи ;',
+        },
+        {
+          planId: 2,
+          points: 250,
+          title: 'Gretta',
+          type: 'AMRAP',
+          target: 'Задача: Закончить как можно больше раундов за 20 минут',
+          rounds: 1,
+          description:
+            '10 жимовые швунги со штангой 52/35кг; 10 махи гирей 24/16кг; 10 прыжки на тумбу 60/50см; 5 бёрпи ;',
+        },
+        {
+          planId: 2,
+          points: 170,
+          title: 'NIOH',
+          type: 'AMRAP',
+          target: 'Задача: Закончить как можно больше раундов за 25 минут',
+          rounds: 1,
+          description:
+            '15 становая тяга 70/40кг; 20 выпады с блином на голове 9/6кг; 25 двойные прыжки на скакалке; 400 метров бег;',
+        },
+        {
+          planId: 2,
+          points: 170,
+          title: 'TSUSIMA',
+          type: 'ASAP',
+          target: 'Задача: Закончить задание за минимальное время',
+          rounds: 6,
+          description:
+            '30 воздушных приседаний; 19 взятий штанги на грудь 60/40кг; 7 строгих подтягиваний на турнике; 400 метров бег;',
+        },
+        {
+          planId: 2,
+          points: 170,
+          title: 'SHIBURA',
+          type: 'ASAP',
+          target: 'Задача: Закончить задание за минимальное время',
+          rounds: 6,
+          description:
+            '50 выпады с блином над головой 20/10кг; 40 подтягивания на турнике; 30 кластеры со штангой 43/30кг; 20 бурпи; 10 взятий штанги на грудь в сед 60/43кг;',
+        },
+        {
+          planId: 2,
+          points: 170,
+          title: 'Катастрофа',
+          type: 'ASAP',
+          target: 'Задача: Закончить задание за минимальное время',
+          rounds: 6,
+          description:
+            '6 кластеры с гантелями 25/15кг; 40 подтягивания на турнике; 6 становая тяга 120/80кг; 10 бурпи;',
         },
         {
           planId: 3,
@@ -185,146 +264,379 @@ module.exports = {
         // Day 2 exercises
         {
           dayId: 2,
-          exerciseId: 8,
+          exerciseId: 40,
         },
         {
           dayId: 2,
-          exerciseId: 11,
+          exerciseId: 38,
         },
         {
           dayId: 2,
-          exerciseId: 18,
+          exerciseId: 41,
+        },
+        {
+          dayId: 2,
+          exerciseId: 42,
+        },
+        {
+          dayId: 2,
+          exerciseId: 43,
         },
         // Day 3 exercises
         {
           dayId: 3,
-          exerciseId: 19,
+          exerciseId: 45,
         },
         {
           dayId: 3,
-          exerciseId: 23,
+          exerciseId: 35,
         },
         {
           dayId: 3,
-          exerciseId: 25,
+          exerciseId: 30,
+        },
+        {
+          dayId: 3,
+          exerciseId: 47,
+        },
+        {
+          dayId: 3,
+          exerciseId: 1,
+        },
+        {
+          dayId: 3,
+          exerciseId: 38,
+        },
+        {
+          dayId: 3,
+          exerciseId: 10,
         },
         // Day 4 exercises
         {
           dayId: 4,
-          exerciseId: 28,
+          exerciseId: 48,
         },
         {
           dayId: 4,
-          exerciseId: 30,
+          exerciseId: 11,
         },
         {
           dayId: 4,
-          exerciseId: 33,
+          exerciseId: 48,
+        },
+        {
+          dayId: 4,
+          exerciseId: 11,
+        },
+        {
+          dayId: 4,
+          exerciseId: 48,
+        },
+        {
+          dayId: 4,
+          exerciseId: 11,
+        },
+        {
+          dayId: 4,
+          exerciseId: 48,
+        },
+        {
+          dayId: 4,
+          exerciseId: 11,
         },
         // Day 5 exercises
         {
           dayId: 5,
-          exerciseId: 20,
+          exerciseId: 10,
         },
         {
           dayId: 5,
-          exerciseId: 26,
+          exerciseId: 6,
         },
         {
           dayId: 5,
-          exerciseId: 29,
+          exerciseId: 30,
+        },
+        {
+          dayId: 5,
+          exerciseId: 46,
         },
         // Days for plan 6
         {
           dayId: 6,
-          exerciseId: 3,
+          exerciseId: 30,
         },
         {
           dayId: 6,
-          exerciseId: 4,
+          exerciseId: 32,
         },
         {
           dayId: 6,
-          exerciseId: 2,
+          exerciseId: 49,
         },
         // Days for plan 7
         {
           dayId: 7,
-          exerciseId: 9,
+          exerciseId: 48,
         },
         {
           dayId: 7,
-          exerciseId: 13,
+          exerciseId: 10,
         },
         {
           dayId: 7,
-          exerciseId: 17,
+          exerciseId: 48,
+        },
+        {
+          dayId: 7,
+          exerciseId: 39,
         },
         // Days for plan 8
         {
           dayId: 8,
-          exerciseId: 11,
+          exerciseId: 4,
         },
         {
           dayId: 8,
-          exerciseId: 12,
+          exerciseId: 30,
         },
         {
           dayId: 8,
-          exerciseId: 13,
+          exerciseId: 2,
         },
         // Days for plan 9
         {
           dayId: 9,
-          exerciseId: 22,
+          exerciseId: 10,
         },
         {
           dayId: 9,
-          exerciseId: 23,
+          exerciseId: 6,
         },
         {
           dayId: 9,
-          exerciseId: 32,
+          exerciseId: 2,
+        },
+        {
+          dayId: 9,
+          exerciseId: 13,
         },
         // Days for plan 10
         {
           dayId: 10,
-          exerciseId: 24,
+          exerciseId: 20,
         },
         {
           dayId: 10,
-          exerciseId: 12,
+          exerciseId: 10,
         },
         {
           dayId: 10,
-          exerciseId: 1,
+          exerciseId: 35,
+        },
+        {
+          dayId: 10,
+          exerciseId: 20,
+        },
+        {
+          dayId: 10,
+          exerciseId: 10,
+        },
+        {
+          dayId: 10,
+          exerciseId: 35,
+        },
+        {
+          dayId: 10,
+          exerciseId: 35,
         },
         // Days for plan 11
         {
           dayId: 11,
-          exerciseId: 3,
+          exerciseId: 13,
         },
         {
           dayId: 11,
-          exerciseId: 2,
+          exerciseId: 6,
         },
         {
           dayId: 11,
-          exerciseId: 14,
+          exerciseId: 34,
+        },
+        {
+          dayId: 11,
+          exerciseId: 13,
+        },
+        {
+          dayId: 11,
+          exerciseId: 10,
+        },
+        {
+          dayId: 11,
+          exerciseId: 34,
+        },
+        {
+          dayId: 11,
+          exerciseId: 13,
         },
         // Days for plan 12
         {
           dayId: 12,
-          exerciseId: 4,
+          exerciseId: 40,
         },
         {
           dayId: 12,
-          exerciseId: 5,
+          exerciseId: 36,
         },
         {
           dayId: 12,
+          exerciseId: 18,
+        },
+        {
+          dayId: 12,
+          exerciseId: 47,
+        },
+        {
+          dayId: 12,
+          exerciseId: 38,
+        },
+        {
+          dayId: 12,
+          exerciseId: 22,
+        },
+        {
+          dayId: 12,
+          exerciseId: 1,
+        },
+        {
+          dayId: 13,
+          exerciseId: 34,
+        },
+        {
+          dayId: 13,
+          exerciseId: 34,
+        },
+        {
+          dayId: 13,
+          exerciseId: 34,
+        },
+        {
+          dayId: 13,
+          exerciseId: 52,
+        },
+        {
+          dayId: 14,
+          exerciseId: 47,
+        },
+        {
+          dayId: 14,
+          exerciseId: 40,
+        },
+        {
+          dayId: 14,
+          exerciseId: 35,
+        },
+        {
+          dayId: 14,
+          exerciseId: 20,
+        },
+        {
+          dayId: 14,
+          exerciseId: 49,
+        },
+        {
+          dayId: 15,
+          exerciseId: 49,
+        },
+        {
+          dayId: 15,
+          exerciseId: 53,
+        },
+        {
+          dayId: 15,
           exerciseId: 6,
         },
+        {
+          dayId: 15,
+          exerciseId: 13,
+        },
+        {
+          dayId: 15,
+          exerciseId: 1,
+        },
+        {
+          dayId: 16,
+          exerciseId: 18,
+        },
+        {
+          dayId: 16,
+          exerciseId: 38,
+        },
+        {
+          dayId: 16,
+          exerciseId: 11,
+        },
+        {
+          dayId: 16,
+          exerciseId: 1,
+        },
+        {
+          dayId: 17,
+          exerciseId: 47,
+        },
+        {
+          dayId: 17,
+          exerciseId: 22,
+        },
+        {
+          dayId: 17,
+          exerciseId: 48,
+        },
+        {
+          dayId: 17,
+          exerciseId: 53,
+        },
+        {
+          dayId: 18,
+          exerciseId: 22,
+        },
+        {
+          dayId: 18,
+          exerciseId: 10,
+        },
+        {
+          dayId: 18,
+          exerciseId: 19,
+        },
+        {
+          dayId: 18,
+          exerciseId: 1,
+        },
+        {
+          dayId: 18,
+          exerciseId: 36,
+        },
+        {
+          dayId: 19,
+          exerciseId: 19,
+        },
+        {
+          dayId: 19,
+          exerciseId: 19,
+        },
+        {
+          dayId: 19,
+          exerciseId: 10,
+        },
+        {
+          dayId: 19,
+          exerciseId: 47,
+        },
+        {
+          dayId: 19,
+          exerciseId: 1,
+        },
+       
       ],
       {}
     );

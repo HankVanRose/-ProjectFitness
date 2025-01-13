@@ -1,6 +1,7 @@
 import { Button, Card, Text, Badge } from '@chakra-ui/react';
 import { memo, useState } from 'react';
 import DayModal from './DayModal';
+import { useAppSelector } from '@/store/hooks/hooks';
 
 function AdedPlanCard({
   id,
@@ -8,23 +9,22 @@ function AdedPlanCard({
   points,
   description,
   cardNumber,
-  singlePlan,
+  
   isAnyDayCompleted,
   title,
   rounds,
   type,
   target,
-  setSinglePlan
+  updatePlanCompletion
 }) {
   const [open, setOpen] = useState(false);
-
-  const style = {
-    opacity: isAnyDayCompleted ? 0.5 : 1,
-    pointerEvents: isAnyDayCompleted ? 'none' : 'auto',
-  };
+  const { user } = useAppSelector((store) => store.appSlice);
 
   const handleOpen = () => {
     setOpen(true);
+    console.log(`day`, id);
+    console.log(`План`, planId);
+    console.log(`userId`, user?.id);
   };
 
   const handleClose = () => {
@@ -34,7 +34,7 @@ function AdedPlanCard({
   return (
     <>
       <Card.Root maxW="sm" overflow="hidden">
-        <Card.Body gap="2" style={style}>
+        <Card.Body gap="2">
           <Text
             textStyle="2x2"
             fontWeight="medium"
@@ -80,8 +80,7 @@ function AdedPlanCard({
 
       <DayModal
         open={open}
-         
-        singlePlan={singlePlan}
+        planId={planId}
         setOpen={handleClose}
         id={id}
         description={description}
@@ -90,6 +89,7 @@ function AdedPlanCard({
         rounds={rounds}
         type={type}
         target={target}
+        updatePlanCompletion={updatePlanCompletion}
       />
     </>
   );
