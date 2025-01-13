@@ -1,4 +1,4 @@
 PORT=3000
 DB=postgres://postgres:16072022@localhost:5432/FinalProject
 SECRET_ACCESS_TOKEN='access' 
-SECRET_REFRESH_TOKEN='refresh'  
+SECRET_REFRESH_TOKEN='refresh'

@@ -149,9 +149,13 @@ export default function ProfileData() {
     });
   };
 
-  const validateEmail = useCallback((email: string) => {
+  const validateEmail = useCallback((email: string | undefined): boolean => {
+    if (!email) {
+      setEmailError('Email обязателен');
+      return false;
+    }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (email && !emailRegex.test(formData.email)) {
+    if (!emailRegex.test(email)) {
       setEmailError('Некорректный формат email');
       return false;
     }
@@ -169,10 +173,13 @@ export default function ProfileData() {
 
   const checkCurrentPassword = useCallback(async () => {
     try {
-      const response = await axiosInstance.post(`${VITE_API}/auth/check-password`, {
-        userId: user?.id,
-        password: passwordData.currentPassword,
-      });
+      const response = await axiosInstance.post(
+        `${VITE_API}/auth/check-password`,
+        {
+          userId: user?.id,
+          password: passwordData.currentPassword,
+        }
+      );
       return response.data.isMatch;
     } catch (error) {
       console.error('Ошибка прокерки пароля', error);
@@ -328,7 +335,12 @@ export default function ProfileData() {
               }}
               value={formData[field] ?? ''}
               name={field}
-              onChange={(e) => handleInputChange(field, e.target.value)}
+              onChange={(e) => {
+                if (field === 'email') {
+                  handleEmailChange(e.target.value);
+                }
+                handleInputChange(field, e.target.value);
+              }}
               disabled={!isEditingField}
               _disabled={{
                 opacity: 1,
