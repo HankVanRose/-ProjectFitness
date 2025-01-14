@@ -80,7 +80,7 @@ const fetchUpdateProfile = createAsyncThunk(
           ([_, value]) => value !== null && value !== undefined && value !== ''
         )
       );
-      
+
       if ('password' in filteredData && filteredData.password === '') {
         delete filteredData.password;
       }

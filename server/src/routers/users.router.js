@@ -3,7 +3,8 @@ const router = express.Router();
 const { Op } = require('sequelize');
 const { User } = require('../../db/models');
 const { verifyAccessToken } = require('../middlewares/verifyToken');
-// const upload = require('../middlewares/multer');
+const generateToken = require('../utils/generateToken');
+const cookieConfig = require('../../configs/cookieConfig');
 const fs = require('fs').promises;
 const path = require('path');
 const upload = require('../middlewares/multer');
@@ -69,7 +70,18 @@ router.post('/upload-avatar', verifyAccessToken, upload.single('avatar'), async 
 
     const avatarUrl = `/uploads/avatars/${req.file.filename}`;
     await user.update({ avatar: avatarUrl });
-    res.status(200).json({message: 'Аватар успешно загружен', avatarUrl });
+    console.log('Обновлённый пользователь:', await User.findByPk(userId));
+    const { accessToken, refreshToken } = generateToken({ user });
+
+    return res
+      .status(200)
+      .cookie('refreshToken', refreshToken, cookieConfig.refresh)
+      .json({
+        success: true,
+        user: user,
+        accessToken,
+      });
+    // res.status(200).json({message: 'Аватар успешно загружен', avatarUrl });
   } catch (error) {
     console.error('Upload avatar error:', error);
     if (req.file) {

@@ -215,7 +215,8 @@ module.exports = {
           type: 'ASAP',
           target: 'Задача: Закончить задание за минимальное время',
           rounds: 3,
-          description: 'Гребля на тренажере 1000 метров; 50 берпи; 50 прыжков на ящик, 60 см; Бег 800 метров;',
+          description:
+            'Гребля на тренажере 1000 метров; 50 берпи; 50 прыжков на ящик, 60 см; Бег 800 метров;',
         },
         {
           planId: 3,
@@ -224,7 +225,8 @@ module.exports = {
           type: 'ASAP',
           target: 'Задача: Закончить задание за минимальное время',
           rounds: 1,
-          description: 'Бег 2800 м; Отдых 30 секунд; Бег 800 м с ускорением на последних 100 м; Отдых 15 секунд; Бег 800 м с ускорением на последних 100 м; Отдых 15 секунд; Бег 800 м с ускорением на последних 100 м; Отдых 15 секунд; Бег 800 м с ускорением на последних 100 м; Отдых 15 секунд; Бег 800 м с ускорением на последних 100 м;',
+          description:
+            'Бег 2800 м; Отдых 30 секунд; Бег 800 м с ускорением на последних 100 м; Отдых 15 секунд; Бег 800 м с ускорением на последних 100 м; Отдых 15 секунд; Бег 800 м с ускорением на последних 100 м; Отдых 15 секунд; Бег 800 м с ускорением на последних 100 м; Отдых 15 секунд; Бег 800 м с ускорением на последних 100 м;',
         },
         {
           planId: 3,
@@ -233,7 +235,8 @@ module.exports = {
           type: 'ASAP',
           target: 'Задача: Закончить задание за минимальное время',
           rounds: 10,
-          description: 'Двойные прыжки со скакалкой - 300; Прыжки в длину - 10; ',
+          description:
+            'Двойные прыжки со скакалкой - 300; Упражнение с санями - 25метров; ',
         },
         {
           planId: 3,
@@ -242,7 +245,8 @@ module.exports = {
           type: 'ASAP',
           target: 'Задача: Закончить задание за минимальное время',
           rounds: 1,
-          description: '3000 м гребля на тренажере; 300 двойных прыжков через скакалку; 3 мили бега (4,8 км)',
+          description:
+            '3000 м гребля на тренажере; 300 двойных прыжков через скакалку; 3 мили бега (4,8 км)',
         },
         {
           planId: 3,
@@ -262,7 +266,6 @@ module.exports = {
           rounds: 1,
           description: '300 отжиманий от пола',
         },
-         
       ],
       {}
     );
@@ -553,6 +556,7 @@ module.exports = {
           dayId: 12,
           exerciseId: 1,
         },
+        // Day 13 exercises
         {
           dayId: 13,
           exerciseId: 34,
@@ -569,6 +573,7 @@ module.exports = {
           dayId: 13,
           exerciseId: 52,
         },
+        // Day 14 exercises
         {
           dayId: 14,
           exerciseId: 47,
@@ -589,6 +594,7 @@ module.exports = {
           dayId: 14,
           exerciseId: 49,
         },
+        // Day 15 exercises
         {
           dayId: 15,
           exerciseId: 49,
@@ -609,6 +615,7 @@ module.exports = {
           dayId: 15,
           exerciseId: 1,
         },
+        // Day 16 exercises
         {
           dayId: 16,
           exerciseId: 18,
@@ -625,6 +632,7 @@ module.exports = {
           dayId: 16,
           exerciseId: 1,
         },
+        // Day 17 exercises
         {
           dayId: 17,
           exerciseId: 47,
@@ -641,6 +649,7 @@ module.exports = {
           dayId: 17,
           exerciseId: 53,
         },
+        // Day 18 exercises
         {
           dayId: 18,
           exerciseId: 22,
@@ -661,6 +670,7 @@ module.exports = {
           dayId: 18,
           exerciseId: 36,
         },
+        // Day 19 exercises
         {
           dayId: 19,
           exerciseId: 19,
@@ -681,7 +691,97 @@ module.exports = {
           dayId: 19,
           exerciseId: 1,
         },
-       
+        // Day 20 exercises
+        {
+          dayId: 20,
+          exerciseId: 19,
+        },
+        {
+          dayId: 20,
+          exerciseId: 10,
+        },
+        {
+          dayId: 20,
+          exerciseId: 47,
+        },
+        {
+          dayId: 20,
+          exerciseId: 1,
+        },
+        // Day 21 exercises
+        {
+          dayId: 21,
+          exerciseId: 49,
+        },
+        {
+          dayId: 21,
+          exerciseId: 1,
+        },
+        {
+          dayId: 21,
+          exerciseId: 11,
+        },
+        {
+          dayId: 21,
+          exerciseId: 53,
+        },
+        // Day 22 exercises
+        {
+          dayId: 22,
+          exerciseId: 53,
+        },
+        {
+          dayId: 22,
+          exerciseId: 53,
+        },
+        {
+          dayId: 22,
+          exerciseId: 53,
+        },
+        {
+          dayId: 22,
+          exerciseId: 53,
+        },
+        {
+          dayId: 22,
+          exerciseId: 53,
+        },
+        {
+          dayId: 22,
+          exerciseId: 53,
+        },
+        // Day 23 exercises
+        {
+          dayId: 23,
+          exerciseId: 48,
+        },
+        {
+          dayId: 23,
+          exerciseId: 28,
+        },
+        // Day 24 exercises
+        {
+          dayId: 24,
+          exerciseId: 49,
+        },
+        {
+          dayId: 24,
+          exerciseId: 48,
+        },
+        {
+          dayId: 24,
+          exerciseId: 53,
+        },
+        // Day 25 exercises
+        {
+          dayId: 25,
+          exerciseId: 53,
+        },
+        // Day 26 exercises
+        {
+          dayId: 26,
+          exerciseId: 6,
+        }
       ],
       {}
     );
