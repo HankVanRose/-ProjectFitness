@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { where } = require('sequelize');
 const {
   Day,
   Exercise,
@@ -7,10 +8,32 @@ const {
   UserDay,
 } = require('../../db/models');
 
-router.get('/:id', async (req, res) => {
+router.get('/:planId/user/:userId', async (req, res) => {
   try {
+    
+    const userDays = await UserDay.findAll({
+      where: { userId: req.params.userId },
+      attributes: { exclude: ['createdAt', 'updatedAt'] },
+      include: [
+        {
+          model: Day,
+          where: { planId: req.params.planId },
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
+          include: [
+            {
+              model: Exercise,
+              attributes: { exclude: ['createdAt', 'updatedAt'] },
+            },
+          ],
+        },
+      ],
+      order: [['id']],
+    });
+    // console.log('userDays', userDays.map(el => el.get({plain: true})));
+    
+
     const days = await Day.findAll({
-      where: { planId: req.params.id },
+      where: { planId: req.params.planId },
       attributes: { exclude: ['createdAt', 'updatedAt'] },
       include: [
         {
@@ -19,17 +42,14 @@ router.get('/:id', async (req, res) => {
         },
         {
           model: UserDay,
+          where: { userId: req.params.userId },
           attributes: { exclude: ['createdAt', 'updatedAt'] },
- 
-     
-        
- 
         },
- 
       ],
       order: [['id']],
     });
-    // console.log('\n\n\n\n\n\n\n\n', days);
+    // console.log(days.map(el => el.get({plain: true})));
+
     res.status(200).json(days);
   } catch (error) {
     console.error(error);
@@ -101,34 +121,18 @@ router.post('/newPlan/day/exercises', async (req, res) => {
     //!! POINT NE FLOAT A NUMBER
     await Promise.all(
       days.map(async (day) => {
-        const newDay = await Day.create({ planId: newPlan.id, points: +day.points  });
+        const newDay = await Day.create({
+          planId: newPlan.id,
+          points: +day.points,
+        });
         const dayExercises = day.Exercises.map((exercise) => ({
           dayId: newDay.id,
           exerciseId: exercise.id,
         }));
         await DayExercise.bulkCreate(dayExercises);
-      }),
+      })
     );
-
-
-    // const dayWithExercises = await Day.findAll({
-    //   where: { planId: newPlan.id },
-    //   attributes: { exclude: ['createdAt', 'updatedAt'] },
-    //   include: [
-    //     {
-    //       model: Exercise,
-    //       attributes: { exclude: ['createdAt', 'updatedAt'] },
-    //     },
-    //     {
-    //       model: UserDay,
-    //       attributes: { exclude: ['createdAt', 'updatedAt'] },
-    //     },
-    //   ],
-    // });
-
- 
-    res.status(201).json(newPlan.id)
- 
+    res.status(201).json(newPlan.id);
   } catch (error) {
     console.error(error);
     res.status(500).json({
