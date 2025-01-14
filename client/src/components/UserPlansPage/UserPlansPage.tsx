@@ -13,22 +13,28 @@ export default function UserPlansPage() {
   //id
   useEffect(() => {
     const allPlans = async () => {
-      setIsLoading(true);
-      try {
-        const res = await axiosInstance.get(
-          `${VITE_API}/session/plans/${user?.id}`
-        );
-        setUserPlans(res.data);
-      } catch (error) {
-        console.error(error, 'Ошибка');
-      } finally {
-        setIsLoading(false);
+      if (user?.id) {
+        setIsLoading(true);
+        try {
+          const res = await axiosInstance.get(
+            `${VITE_API}/session/plans/${user?.id}`
+          );
+          console.log(res);
+          setUserPlans(res.data);
+        } catch (error) {
+          console.error(error, 'Ошибка');
+        } finally {
+          setIsLoading(false);
+        }
       }
     };
     if (user?.id) allPlans();
-  }, [user?.id]);
+  }, [user]);
 
-  console.log(userPlans);
+  useEffect(()=>{
+    console.log(userPlans);
+  }, [userPlans])
+ 
 
   return (
     <Container maxW="full" px={4}>
@@ -36,9 +42,9 @@ export default function UserPlansPage() {
         {userPlans.map((plan) => (
           <Box key={plan.id} p={4} borderRadius="md">
             <UserPlanCard
-              image={plan.Plan.image}
-              id={plan.id}
-              name={plan.Plan.name}
+              image={plan.Plan?.image}
+              id={plan?.id}
+              name={plan.Plan?.name}
             />
           </Box>
         ))}

@@ -70,7 +70,7 @@ export default function PlanPage() {
         //   (session) => session.planId === response.data.id
         // );
         // console.log(existingPlan);
-        console.log(sessionResponse.data);
+        // console.log(sessionResponse.data);
         if (sessionResponse.data.plan) {
           setPlanExists(true);
         }

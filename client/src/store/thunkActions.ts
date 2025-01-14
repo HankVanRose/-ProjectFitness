@@ -107,7 +107,7 @@ const userActivePlan = createAsyncThunk<
   SessionType[], // успех
   number, // тип аргумента
   { rejectValue: string } //тип ошибки
->('user/activeplans', async (userId, { rejectWithValue }) => {
+>('user/activeplans', async (userId: number, { rejectWithValue }) => {
   try {
     const response = await axiosInstance.get<SessionType[]>(
       `${import.meta.env.VITE_API}/session/plans/${userId}`

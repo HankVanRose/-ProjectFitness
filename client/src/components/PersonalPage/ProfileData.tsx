@@ -229,7 +229,7 @@ export default function ProfileData() {
 
   // редирект на страницу планов, при их отсуствии в ЛК
   const redirectPlanHandlet = () => {
-    navigate('/card');
+    navigate('/plans');
   };
 
   // переключение изменения полей

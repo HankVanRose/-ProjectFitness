@@ -105,7 +105,7 @@ export default function DayModal({
               letterSpacing="0.02em"
               textTransform="uppercase"
               position="relative"
-              textAlign="center"
+               
               bg={bgColor}
             >
               ДОБРО ПОЖАЛОВАТЬ НА {cardNumber}-Й ТРЕНИРОВОЧНЫЙ ДЕНЬ

@@ -45,7 +45,7 @@ router.route('/plans/:userId').get(async (req, res) => {
         attributes: ['name', 'image'],
       },
     });
-
+    console.log('n\n\n\n\n\n', plans);
     // const planNames = plans.map((plan) => plan.Plan.name);
     // const planNamesWithSpaces = planNames.join(' ');
 

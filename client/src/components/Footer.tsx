@@ -63,7 +63,7 @@ export default function Footer() {
               </Link>
               <Link
                 as={RouterLink}
-                to="/card"
+                to="/plans"
                 color={{ base: 'black', _dark: 'white' }} // Added white color
                 _hover={{ textDecoration: 'none', opacity: 0.8 }}
                 width="100%"
