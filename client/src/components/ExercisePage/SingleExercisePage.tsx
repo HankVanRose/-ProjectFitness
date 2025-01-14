@@ -46,7 +46,7 @@ export default function SingleExercisePage() {
   );
 
   const redirectHandler = () => {
-    navigate('/card');
+    navigate('/plans');
   };
 
   useEffect(() => {
