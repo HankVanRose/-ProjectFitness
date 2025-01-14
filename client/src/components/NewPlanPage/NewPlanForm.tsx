@@ -6,6 +6,7 @@ import {
   Flex,
   Grid,
   Heading,
+  IconButton,
   Input,
   SelectContent,
   SelectItem,
@@ -15,6 +16,7 @@ import {
   Stack,
   Text,
   Textarea,
+  
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { Field } from '@/components/ui/field';
@@ -24,6 +26,10 @@ import { DayExercise, ExerciseType, PlanType } from '@/types';
 import { IoAddCircleOutline } from 'react-icons/io5';
 import { MdOutlineCreateNewFolder } from 'react-icons/md';
 import { useColorModeValue } from '../ui/color-mode';
+import { GiMuscleUp, GiSwordsPower } from 'react-icons/gi';
+import { GrPlan } from 'react-icons/gr';
+import { useNavigate } from 'react-router-dom';
+import { toaster } from '../ui/toaster';
 
 export default function NewPlanForm() {
   const { VITE_API } = import.meta.env;
@@ -41,7 +47,6 @@ export default function NewPlanForm() {
 
   const [days, setDays] = useState<Omit<DayExercise[], 'planId'>>([]);
   const [allExercises, setAllExercises] = useState<ExerciseType[]>([]);
-
   useEffect(() => {
     const fetchExercises = async () => {
       try {
@@ -85,15 +90,11 @@ export default function NewPlanForm() {
       return updatedDays;
     });
   };
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
-      const resp = await axiosInstance.post(
-        `${VITE_API}/days/newPlan/day/exercises`,
-        { ...plan, days }
-      );
-      console.log(resp.data);
-      setPlan({
+      setPlan((prevPlan) => ({
         name: '',
         shortDescription: '',
         equipment: '',
@@ -103,8 +104,25 @@ export default function NewPlanForm() {
         numOfTrainings: 0,
         longDescription: '',
         weeksDescription: '',
-      });
+ 
+      }));
+
+      setDays((prevDays) => []);
+   
+      const response = await axiosInstance.post(
+        `${VITE_API}/days/newPlan/day/exercises`,
+        {
+          ...plan,
+          days,
+        }
+      );
+  
+
+
       setDays([]);
+      // navigate(`/plans/${response.data}`);
+ 
+ 
     } catch (error) {
       setError('Ошибка при добавлении дня');
       console.error(error);
@@ -146,9 +164,17 @@ export default function NewPlanForm() {
         <Box display="flex" p={5}>
           <Fieldset.Root size="lg">
             <Stack>
-              <Fieldset.Legend fontWeight={600}>
-                Создать новый план тренировок
+              <Fieldset.Legend
+                fontWeight={600}
+                display="flex"
+                alignItems="center"
+              >
+                Создать новый план тренировок{' '}
+                <IconButton variant={'ghost'} size="xs" borderRadius={10}>
+                  <GrPlan />
+                </IconButton>
               </Fieldset.Legend>
+
               <Fieldset.HelperText mb={5}>
                 Здесь вы можете создать новый план тренировок
               </Fieldset.HelperText>
@@ -160,7 +186,7 @@ export default function NewPlanForm() {
                   <Input
                     p={2}
                     placeholder="Название плана"
-                    name={plan.name}
+                    value={plan.name}
                     onChange={(e) => handleChange('name', e.target.value)}
                   />
                 </Field>
@@ -169,7 +195,7 @@ export default function NewPlanForm() {
                   <Input
                     p={2}
                     placeholder="URL картинки"
-                    name={plan.image}
+                    value={plan.image}
                     onChange={(e) => handleChange('image', e.target.value)}
                   />
                 </Field>
@@ -178,7 +204,7 @@ export default function NewPlanForm() {
                   <Input
                     p={2}
                     placeholder="Краткое описание"
-                    name={plan.shortDescription}
+                    value={plan.shortDescription}
                     onChange={(e) =>
                       handleChange('shortDescription', e.target.value)
                     }
@@ -189,17 +215,17 @@ export default function NewPlanForm() {
                   <Input
                     p={2}
                     placeholder="Укажите оборудование"
-                    name={plan.equipment}
+                    value={plan.equipment}
                     onChange={(e) => handleChange('equipment', e.target.value)}
                   />
                 </Field>
 
                 <Field label="Сложность">
-                  <SelectRoot mb={4} collection={difficultyOptions}>
-                    <SelectTrigger>
+                  <SelectRoot collection={difficultyOptions}>
+                    <SelectTrigger p={2} borderRadius={4}>
                       <SelectValueText placeholder="Выберите сложность"></SelectValueText>
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent p={4}>
                       {difficultyOptions.items.map((option) => (
                         <SelectItem item={option} key={option.value}>
                           {option.label}
@@ -214,7 +240,7 @@ export default function NewPlanForm() {
                     p={2}
                     type="number"
                     placeholder="Количество недель"
-                    name={plan.numOfTrainings.toString()}
+                    value={plan.numOfTrainings.toString()}
                     onChange={(e) =>
                       handleChange('numOfTrainings', e.target.value)
                     }
@@ -228,7 +254,7 @@ export default function NewPlanForm() {
                       p={2}
                       rows={2}
                       placeholder="Детальное описание"
-                      name={plan.longDescription}
+                      value={plan.longDescription}
                       onChange={(e) =>
                         handleChange('longDescription', e.target.value)
                       }
@@ -242,7 +268,7 @@ export default function NewPlanForm() {
                       p={2}
                       rows={2}
                       placeholder="weeksDescription"
-                      name={plan.weeksDescription}
+                      value={plan.weeksDescription}
                       onChange={(e) =>
                         handleChange('weeksDescription', e.target.value)
                       }
@@ -349,7 +375,7 @@ export default function NewPlanForm() {
                                 : ''}
                             </SelectValueText>
                           </SelectTrigger>
-                          <SelectContent color={textColor}>
+                          <SelectContent p={4} color={textColor}>
                             {exercisesOptions.items.map((option) => (
                               <SelectItem item={option} key={option.value}>
                                 {option.label}

@@ -126,7 +126,9 @@ router.post('/newPlan/day/exercises', async (req, res) => {
     //   ],
     // });
 
-    res.status(201).end()
+ 
+    res.status(201).json(newPlan.id)
+ 
   } catch (error) {
     console.error(error);
     res.status(500).json({
