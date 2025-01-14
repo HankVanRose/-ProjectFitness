@@ -17,7 +17,6 @@ import {
   VStack,
   Text,
   Heading,
-  Image,
 } from '@chakra-ui/react';
 import { InputGroup } from '@/components/ui/input-group';
 import { FiEdit, FiCheck, FiEyeOff, FiEye } from 'react-icons/fi';
@@ -35,6 +34,9 @@ import { Field } from '@/components/ui/field';
 import { useNavigate } from 'react-router-dom';
 import { UserType } from '@/types';
 import axiosInstance from '@/axiosInstance';
+import { toaster } from '@/components/ui/toaster';
+import { setUserplan } from '@/store/appSlice';
+import MyPlanCardsInProfile from './MyPlanCardsInProfile';
 
 interface FormData {
   id: number;
@@ -232,6 +234,36 @@ export default function ProfileData() {
     setIsEditing((prev) => (prev === field ? '' : field));
   };
 
+  const removePlanHandler = async (planId: number): Promise<void> => {
+    try {
+      await axiosInstance.delete(`${VITE_API}/session`, {
+              data: {
+                userId: user?.id,
+                planId,
+              },
+            });
+      const updatedUserplan = userplan?.filter((planofuser) => planofuser.planId !== planId);
+      setUserplan(updatedUserplan);
+      dispatch(setUserplan(updatedUserplan)); //? нужно это здесь? Еще где-то используется состояние, что у user есть план? 
+
+      // toaster.create({
+      //   title: 'План удален',
+      //   description: 'План был успешно удален из ваших планов!',
+      //   type: 'success',
+      //   duration: 5000,
+      // });
+    } catch (error) {
+      console.log(error);
+      // toaster.create({
+      //   title: 'Ошибка.',
+      //   description:
+      //     'Произошла ошибка при удалении плана. Пожалуйста, попробуйте еще раз.',
+      //   type: 'warning',
+      //   duration: 5000,
+      // });
+    }
+  };
+
   const handleSave = useCallback(async () => {
     const dataToUpdate: Partial<UserType> = {
       id: user?.id,
@@ -261,19 +293,19 @@ export default function ProfileData() {
       }
     });
     const result = await dispatch(fetchUpdateProfile(dataToUpdate));
-    
-      if (fetchUpdateProfile.fulfilled.match(result)) {
-        setModifiedFields(new Set());
-        setPasswordData({
-          currentPassword: '',
-          newPassword: '',
-          confirmPassword: '',
-        });
-        console.log('Профиль обновлен');
-        setIsEditing('');
-      } else {
-        console.log('Ошибка обновления');
-      }
+
+    if (fetchUpdateProfile.fulfilled.match(result)) {
+      setModifiedFields(new Set());
+      setPasswordData({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      });
+      console.log('Профиль обновлен');
+      setIsEditing('');
+    } else {
+      console.log('Ошибка обновления');
+    }
   }, [
     user?.id,
     modifiedFields,
@@ -384,9 +416,6 @@ export default function ProfileData() {
               mb={4}
               collection={frameworks}
               value={formData.gender ? [formData.gender] : []}
-              // onValueChange={(value) =>
-              //   handleInputChange('gender', value)
-              // }
               onValueChange={handleGenderChange}
               // disabled={isEditing !== 'gender'}
               // _disabled={{
@@ -399,7 +428,7 @@ export default function ProfileData() {
               <SelectTrigger
                 bg={isEditing === 'gender' ? editingBg : undefined}
               >
-                <SelectValueText placeholder='Выберите пол'>
+                <SelectValueText placeholder='Выберите пол' pl={4}>
                   {(items) => {
                     const selectedGender = frameworks.items.find(
                       (framework) => framework.value === formData.gender
@@ -433,7 +462,7 @@ export default function ProfileData() {
             >
               <SelectLabel>Моя цель</SelectLabel>
               <SelectTrigger bg={isEditing === 'goal' ? editingBg : undefined}>
-                <SelectValueText placeholder='Выберите цель'>
+                <SelectValueText placeholder='Выберите цель' pl={4}>
                   {(items) => {
                     const selectedGoal = goals.items.find(
                       (goal) => goal.value === formData.goal
@@ -626,28 +655,7 @@ export default function ProfileData() {
             ) : (
               <VStack gap={4} align='start'>
                 {userplan?.map((plan) => (
-                  <Box
-                    key={plan.planId}
-                    p={4}
-                    borderWidth='1px'
-                    borderRadius='md'
-                    w='full'
-                  >
-                    <Text fontWeight='bold'>
-                      Название плана: {plan.Plan?.name || 'Не указано'}
-                    </Text>
-                    <Text>
-                      Статус: {plan.isCompleted ? 'Завершен' : 'В процессе'}
-                    </Text>
-                    {plan.Plan?.image && (
-                      <Image
-                        src={plan.Plan.image}
-                        alt={plan.Plan.name || 'План'}
-                        maxW='100%'
-                        borderRadius='8px'
-                      />
-                    )}
-                  </Box>
+                  <MyPlanCardsInProfile key={plan.planId} plan={plan} removePlanHandler={() => removePlanHandler(plan.planId)} />
                 ))}
               </VStack>
             )}

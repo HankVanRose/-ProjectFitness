@@ -51,6 +51,9 @@ const appSlice = createSlice({
         console.warn('User not found! Points not updated.');
       }
     },
+    setUserplan: (state, action) => {
+      state.userplan = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -143,4 +146,4 @@ const appSlice = createSlice({
 });
 
 export default appSlice.reducer;
-export const { setError, setLoading, setPoints } = appSlice.actions;
+export const { setError, setLoading, setPoints, setUserplan } = appSlice.actions;
