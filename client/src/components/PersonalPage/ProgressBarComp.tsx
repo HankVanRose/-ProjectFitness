@@ -3,7 +3,6 @@ import {
   Container,
   Flex,
   HStack,
-  Image,
   Input,
   Text,
   VStack,
@@ -14,9 +13,10 @@ import {
   ProgressRoot,
 } from '@/components/ui/progress';
 import { useAppDispatch, useAppSelector } from '../../store/hooks/hooks';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import axiosInstance from '@/axiosInstance';
 import { fetchUserCheck } from '@/store/thunkActions';
+import { Avatar } from '@/components/ui/avatar';
 
 export default function ProgressBarComp() {
   const now = 60;
@@ -62,9 +62,6 @@ export default function ProgressBarComp() {
     }
   };
 
-   
- 
-
   return (
     <Container maxW='container.xl' py={6}>
       <HStack align='center'>
@@ -76,11 +73,11 @@ export default function ProgressBarComp() {
           cursor='pointer'
           onClick={() => fileInputRef.current?.click()}
         >
-          <Image
+          <Avatar
             src={`${VITE_TARGET}${user?.avatar}`}
-            borderRadius='full'
+            name={user?.username}
+            colorPalette='green'
             boxSize='200px'
-            objectFit='cover'
           />
           {isHovered && (
             <Box
