@@ -12,6 +12,9 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks/hooks';
 import { setPoints } from '@/store/appSlice';
 import { LuCircleCheck } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
+import { ExercisesType } from '@/types';
+import ExecriseHelpToModal from './ExecriseHelpToModal';
+import { useColorModeValue } from '../ui/color-mode';
 
 type DayModalProps = {
   open: boolean;
@@ -27,6 +30,7 @@ type DayModalProps = {
   planId: number;
   points: number;
   isCompleted: boolean;
+  exercises: ExercisesType;
 };
 export default function DayModal({
   open,
@@ -42,6 +46,7 @@ export default function DayModal({
   planId,
   points,
   isCompleted,
+  exercises,
 }: DayModalProps) {
   const descriptionLines = description
     .split(';')
@@ -68,17 +73,31 @@ export default function DayModal({
     }
   };
 
+  const bgColor = useColorModeValue('white', 'black');
+  const textColor = useColorModeValue('black', 'white');
+
   return (
     <>
       <DialogRoot
-      
         open={open}
         onOpenChange={(e) => setOpen(e.open)}
         size="xl"
         placement="center"
         motionPreset="slide-in-bottom"
       >
-        <DialogContent p={7} maxH="700px" shadow="xl" m={2}>
+        <DialogContent
+          p={7}
+          maxH={800}
+          shadow="xl"
+          m={2}
+          overflow={'hidden'}
+          borderRadius="md"
+          boxShadow="lg"
+          border="1px"
+          borderColor="teal.200"
+          bg={bgColor}
+          color={textColor}
+        >
           <DialogHeader>
             <DialogTitle
               fontSize={['1.25rem', '1.5rem']}
@@ -86,6 +105,8 @@ export default function DayModal({
               letterSpacing="0.02em"
               textTransform="uppercase"
               position="relative"
+              textAlign="center"
+              bg={bgColor}
             >
               ДОБРО ПОЖАЛОВАТЬ НА {cardNumber}-Й ТРЕНИРОВОЧНЫЙ ДЕНЬ
               <Text fontWeight="700" fontSize="1rem" mb={4} color="gray.700">
@@ -95,66 +116,62 @@ export default function DayModal({
             <DialogCloseTrigger />
           </DialogHeader>
           <DialogBody>
-            <Box>
-              <Box
-                boxShadow="0px 8px 20px rgba(0, 0, 0, 0.12), 0px 2px 8px rgba(0, 0, 0, 0.07)"
-                borderRadius="xl"
-                p={3}
-                overflowY="auto"
-                maxH="400px"
-                css={{
-                  '&::-webkit-scrollbar': {
-                    width: '8px',
-                    background: 'transparent',
-                  },
-                  '&::-webkit-scrollbar-thumb': {
-                    background: '#CBD5E0',
+            <Box
+              boxShadow="0px 8px 20px rgba(0, 0, 0, 0.12), 0px 2px 8px rgba(0, 0, 0, 0.07)"
+              borderRadius="xl"
+              overflow={'hidden'}
+              p={3}
+              overflowY="auto"
+              maxH={600}
+              css={{
+                '&::-webkit-scrollbar': {
+                  width: '8px',
+                  background: 'transparent',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  background: '#CBD5E0',
+                  borderRadius: '1em',
+                  border: '2px solid transparent',
+                  backgroundClip: 'padding-box',
+                  '&:hover': {
+                    background: '#A0AEC0',
                     borderRadius: '1em',
                     border: '2px solid transparent',
                     backgroundClip: 'padding-box',
-                    '&:hover': {
-                      background: '#A0AEC0',
-                      borderRadius: '1em',
-                      border: '2px solid transparent',
-                      backgroundClip: 'padding-box',
-                    },
                   },
-                  '&::-webkit-scrollbar-track': {
-                    background: 'transparent',
-                    borderRadius: '1em',
-                    margin: '4px',
-                  },
-                  scrollbarWidth: 'thin',
-                  scrollbarColor: 'rgba(0, 155, 72, 0.5) transparent',
-                }}
-              >
-                <Text fontWeight="600" mt={1}>
-                  {target}
-                </Text>
-                <Text fontWeight="600" mt={1}>
-                  Рекомендованное количество подходов: {rounds}
-                </Text>
-                <Text fontWeight="600" mt={1}>
-                  Тип: {type}
-                </Text>
-                <List.Root
-                  my={2}
-                  fontWeight="500"
-                  variant="plain"
-                  align="center"
-                >
-                  {descriptionLines.map((line) => (
-                    <List.Item key={line} p={1}>
-                      <List.Indicator asChild mr={2} color="green">
-                        <LuCircleCheck />
-                      </List.Indicator>
-                      {line}
-                    </List.Item>
-                  ))}
-                </List.Root>
-              </Box>
-              {/* <Box><ExecriseHelpToModal /></Box> */}
+                },
+                '&::-webkit-scrollbar-track': {
+                  background: 'transparent',
+                  borderRadius: '1em',
+                  margin: '4px',
+                },
+                scrollbarWidth: 'thin',
+                scrollbarColor: 'rgba(0, 155, 72, 0.5) transparent',
+              }}
+            >
+              <Text fontWeight="600" mt={1}>
+                {target}
+              </Text>
+              <Text fontWeight="600" mt={1}>
+                Рекомендованное количество подходов: {rounds}
+              </Text>
+              <Text fontWeight="600" mt={1}>
+                Тип: {type}
+              </Text>
+              <List.Root my={2} fontWeight="500" variant="plain" align="center">
+                {descriptionLines.map((line) => (
+                  <List.Item key={line} p={1}>
+                    <List.Indicator asChild mr={2} color="green">
+                      <LuCircleCheck />
+                    </List.Indicator>
+                    {line}
+                  </List.Item>
+                ))}
+              </List.Root>
+
+              <ExecriseHelpToModal exercises={exercises} />
             </Box>
+
             <Box mt={4} display="flex" justifyContent="space-around">
               <Button
                 onClick={() => finishDayHandler(dayId)}

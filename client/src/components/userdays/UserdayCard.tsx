@@ -1,6 +1,7 @@
 import { Card, Text, Badge } from '@chakra-ui/react';
 import { memo, useState } from 'react';
 import DayModal from './DayModal';
+import { ExercisesType } from '@/types';
 
 type UserdayCardProps = {
   dayId: number;
@@ -14,6 +15,7 @@ type UserdayCardProps = {
   type: string;
   target: string;
   updatePlanCompletion: (userDayId: number, dayId: number) => void;
+  exercises: ExercisesType
 };
 
 function UserdayCard({
@@ -28,6 +30,7 @@ function UserdayCard({
   type,
   target,
   updatePlanCompletion,
+  exercises
 }: UserdayCardProps) {
   const [open, setOpen] = useState(false);
   return (
@@ -81,6 +84,7 @@ function UserdayCard({
         points={points}
         updatePlanCompletion={updatePlanCompletion}
         isCompleted={isAnyDayCompleted}
+        exercises={exercises}
       />
     </>
   );
