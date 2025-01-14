@@ -39,7 +39,7 @@ export default function PlanPage() {
         duration: 5000,
       });
       setTimeout(function () {
-        navigate(`/plans/${id}/yourown`);
+        navigate(`/plans/${id}/days`);
       }, 2000);
     } catch (error) {
       console.log(error);
@@ -112,9 +112,9 @@ export default function PlanPage() {
         minHeight='100vh'
       >
         <Toaster />
-        <Container maxW='container.lg' className='py-5'>
-          <VStack spacing={10} align='stretch'>
-            <Heading textAlign='center' fontSize='2.5rem' fontWeight='bold'>
+        <Container maxW="container.lg" className="py-5">
+          <VStack  align="stretch">
+            <Heading textAlign="center" fontSize="2.5rem" fontWeight="bold">
               ПЛАН ТРЕНИРОВОК: {plan.name?.toUpperCase()}
             </Heading>
             <Image
@@ -127,10 +127,9 @@ export default function PlanPage() {
             />
 
             <Stack
-              spacing={4}
-              textAlign='justify'
-              marginX='100px'
-              marginY='15px'
+              textAlign="justify"
+              marginX="100px"
+              marginY="15px"
             >
               <Heading fontSize='2rem'>Уровень сложности:</Heading>
               <Text fontSize='1.3rem' lineHeight='1.6' textAlign='justify'>
@@ -166,7 +165,7 @@ export default function PlanPage() {
               w='100%'
               onClick={
                 planExists
-                  ? () => navigate(`/plans/${id}/yourown`)
+                  ? () => navigate(`/plans/${id}/days`)
                   : addPlanHandler
               }
             >
