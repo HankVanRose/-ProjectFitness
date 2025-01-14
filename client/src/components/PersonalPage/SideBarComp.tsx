@@ -1,15 +1,23 @@
-import { Button, VStack } from "@chakra-ui/react";
-import { useColorModeValue } from "../ui/color-mode";
+import { Button, VStack } from '@chakra-ui/react';
+import { useColorModeValue } from '../ui/color-mode';
 
 interface SideBarProps {
-activeTab: number;
-setActiveTab: (index: number) => void;
+  activeTab: number;
+  setActiveTab: (index: number) => void;
 }
 export default function SideBarComp({ activeTab, setActiveTab }: SideBarProps) {
-const tabs = ['Мой профиль', 'Учетная запись', 'Мои планы'];
-// const activeBg = useColorModeValue('#16a34a', '#16a34a'); // фон активной кнопки (светлая/темная темы)
-// const inactiveBg = useColorModeValue('gray.100', 'undefined'); // фон неактивной кнопки
-const activeColor = useColorModeValue('27272A', '27272A'); // цвет текста активной кнопки
+  const tabs = ['Мой профиль', 'Учетная запись', 'Мои планы', 'Календарь'];
+  // const activeBg = useColorModeValue('#16a34a', '#16a34a'); // фон активной кнопки (светлая/темная темы)
+  // const inactiveBg = useColorModeValue('gray.100', 'undefined'); // фон неактивной кнопки
+  const activeColor = useColorModeValue('27272A', '27272A'); // цвет текста активной кнопки
+
+  // const handleTabClick = (index: number) => {
+  //   if (activeTab === 3) {
+  //     navigate('/calendar');
+  //   } else {
+  //     setActiveTab(index);
+  //   }
+  // };
 
   return (
     <VStack gap={4} align='stretch' w='full' minW='200px'>
@@ -29,6 +37,16 @@ const activeColor = useColorModeValue('27272A', '27272A'); // цвет текс�
           {tab}
         </Button>
       ))}
+      {/* <Button
+        size='lg'
+        variant='surface'
+        colorPalette={activeTab === 3 ? 'green' : undefined}
+        borderRadius='sm'
+        color={activeTab === 3 ? activeColor : undefined}
+        onClick={() => navigate('/calendar')}
+      >
+        Календарь
+      </Button> */}
     </VStack>
   );
 }

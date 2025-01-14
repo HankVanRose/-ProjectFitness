@@ -32,13 +32,14 @@ export default function UserDaysList() {
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const { user } = useAppSelector((store) => store.appSlice);
+  const { VITE_API } = import.meta.env;
 
   useEffect(() => {
     const fetchDaysAndUserDayAndExercise = async () => {
       setIsLoading(true);
       try {
         const result = await axiosInstance.get(
-          `api/days/${id}/user/${user!.id}`
+          `${VITE_API}/days/${id}/user/${user!.id}`
         );
         setDays(result.data);
       } catch (error) {
