@@ -47,7 +47,6 @@ export default function Header() {
               fontSize="xl"
               fontWeight="700"
               textDecoration="none"
-               
             >
               BE FIT
             </Link>

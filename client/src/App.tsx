@@ -27,6 +27,7 @@ import AdminPage from './components/admin/AdminPage';
 import AddedPlanList from './components/AddedPlanPage/AddedPlanList';
  
 import FitnessCalendar from './components/calendar/FitnessCalendar';
+import UserPlansPage from './components/UserPlansPage/UserPlansPage';
  
 
 
@@ -55,6 +56,7 @@ function App() {
           <Route path='/plans/new' element={<NewPlanForm />} />
           <Route path='/admin' element={<AdminPage />} />
           <Route path='/calendar' element={<FitnessCalendar />} />
+          <Route path='/:userId/userplans' element={< UserPlansPage/>} />
 
         </Route>
       </Routes>

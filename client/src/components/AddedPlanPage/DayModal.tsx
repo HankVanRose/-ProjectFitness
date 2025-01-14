@@ -11,8 +11,9 @@ import ExecriseHelpToModal from './ExecriseHelpToModal';
 
 import axiosInstance from '../../axiosInstance';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/hooks';
-import { fetchUserCheck } from '@/store/thunkActions';
+
 import { setPoints } from '@/store/appSlice';
+import { useColorModeValue } from '../ui/color-mode';
 
 export default function DayModal({
   open,
@@ -27,11 +28,16 @@ export default function DayModal({
   updatePlanCompletion,
   planId,
   points,
+  exercises,
 }) {
   const descriptionLines = description
     .split(';')
     .map((line) => line.trim())
     .filter((line) => line);
+
+    const bgColor = useColorModeValue('white', 'black');
+        const textColor = useColorModeValue('black', 'white');
+    
 
   const { user } = useAppSelector((store) => store.appSlice);
   const { VITE_API } = import.meta.env;
@@ -46,9 +52,9 @@ export default function DayModal({
       });
       updatePlanCompletion(planId, id);
       dispatch(setPoints(points));
-      console.log('paaaa', planId);
-      console.log(id);
-      console.log('День завершен:', response.data);
+      // console.log('paaaa', planId);
+      // console.log(id);
+      // console.log('День завершен:', response.data);
       setOpen();
 
       // window.location.reload();
@@ -66,23 +72,27 @@ export default function DayModal({
         placement="center"
         motionPreset="slide-in-bottom"
         
+        
       >
         <DialogContent
-        color={{ base: 'black', _dark: 'white' }}
-          bg="gray.50"
+       
+       
           borderRadius="md"
           boxShadow="lg"
           p={6}
           border="1px"
           borderColor="teal.200"
+          bg={bgColor} color={textColor}
+          
         >
           <DialogHeader>
             <DialogTitle
-            
               fontSize="2xl"
               fontWeight="bold"
               color="teal.500"
               textAlign="center"
+               bg={bgColor} 
+              
             >
               ДОБРО ПОЖАЛОВАТЬ В {cardNumber}-Й ТРЕНИРОВОЧНЫЙ ДЕНЬ
             </DialogTitle>
@@ -92,14 +102,14 @@ export default function DayModal({
             <Box marginBottom={4} >
               <Text
                 fontSize="lg"
-                color="gray.700"
+                color={textColor}
                 marginBottom={4}
                 marginTop={4}
               >
                 Название: {title}
               </Text>
               <Box
-                bg="white"
+                bg={bgColor}
                 borderRadius="md"
                 boxShadow="md"
                 p={4}
@@ -109,9 +119,8 @@ export default function DayModal({
                 overflowY="auto"
               >
                 <Text
-                
                   fontSize="sm"
-                  color="gray.700"
+                  color={textColor}
                   marginBottom={2}
                   style={{ fontWeight: 500 }}
                 >
@@ -119,7 +128,7 @@ export default function DayModal({
                 </Text>
                 <Text
                   fontSize="sm"
-                  color="gray.700"
+                  color={textColor}
                   marginBottom={2}
                   style={{ fontWeight: 500 }}
                 >
@@ -127,14 +136,13 @@ export default function DayModal({
                 </Text>
                 <Text
                   fontSize="sm"
-                  color="gray.700"
+                  color={textColor}
                   marginBottom={2}
                   style={{ fontWeight: 500 }}
                 >
                   Выполнить подходов: {rounds}
                 </Text>
                 <ul
-                
                   style={{
                     listStyleType: 'disc',
                     paddingLeft: '1.5rem',
@@ -152,7 +160,7 @@ export default function DayModal({
                 </ul>
               </Box>
               <Box
-                bg="white"
+               bg={bgColor}
                 borderRadius="md"
                 boxShadow="md"
                 p={4}
@@ -162,7 +170,7 @@ export default function DayModal({
                 maxHeight="300px"
                 overflowY="auto"
               >
-                <ExecriseHelpToModal />
+                <ExecriseHelpToModal exercises={exercises} />
               </Box>
             </Box>
             <Box marginBottom={4} display="flex" justifyContent="space-around">
