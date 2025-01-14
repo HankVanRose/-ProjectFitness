@@ -77,24 +77,34 @@ export default function DayModal({
         placement="center"
         motionPreset="slide-in-bottom"
       >
-        <DialogContent p={7} maxH="700px">
+        <DialogContent p={7} maxH="700px" shadow="xl">
           <DialogHeader>
-            <DialogTitle fontSize="1.5rem" fontWeight="600" mb={1}>
+            <DialogTitle
+              fontSize={['1.25rem', '1.5rem']}
+              fontWeight="800"
+              letterSpacing="0.02em"
+              textTransform="uppercase"
+              position="relative"
+            >
               ДОБРО ПОЖАЛОВАТЬ НА {cardNumber}-Й ТРЕНИРОВОЧНЫЙ ДЕНЬ
+              <Text fontWeight="700" fontSize="1rem" mb={4} color="gray.700">
+                <Link to={`/plans/${planId}`}> {title}</Link>
+              </Text>
             </DialogTitle>
             <DialogCloseTrigger />
           </DialogHeader>
           <DialogBody>
             <Box>
-              <Text fontWeight='700' fontSize="1rem" mb={4} color="gray.700">
-                <Link to={`/plans/${planId}`}> {title}</Link>
-              </Text>
               <Box
-                boxShadow="md"
+                boxShadow="0px 8px 20px rgba(0, 0, 0, 0.12), 0px 2px 8px rgba(0, 0, 0, 0.07)"
                 borderRadius="xl"
-                p={2}
+                p={3}
                 overflowY="auto"
                 maxH="400px"
+                css={{
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: 'rgba(0, 155, 72, 0.5) transparent',
+                }}
               >
                 <Text fontWeight="600" mt={1}>
                   {target}
