@@ -46,7 +46,7 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path='/' element={<HomePage />} />
-          <Route path='/card' element={<PlansBlock />} />
+          <Route path='/plans' element={<PlansBlock />} />
           <Route path='/exercises' element={<AllExercisesPage />} />
           <Route path='/exercises/:id' element={<SingleExercisePage />} />
           <Route path='/account' element={<PersonalPage />} />

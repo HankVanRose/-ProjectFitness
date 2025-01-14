@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Grid,
@@ -72,7 +72,7 @@ export default function FitnessCalendar() {
   };
 
   const { days, firstDay } = getDaysInMonth(currentDate);
-  
+
   const previousMonth = () => {
     setSelectedDay(null);
     setCurrentDate(
@@ -86,21 +86,7 @@ export default function FitnessCalendar() {
       new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
     );
   };
-
-  const formatDate = (date: Date) => {
-    const day = date.getDate();
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-    return `${day} ${month} ${year}`;
-  };
-
-  useEffect(() => {
-    if (user) {
-      fetchCalendarData();
-    }
-  }, [currentDate, user]);
-
-  const fetchCalendarData = async () => {
+  const fetchCalendarData = useCallback(async () => {
     try {
       setIsLoading(true);
       const startDate = new Date(
@@ -120,10 +106,8 @@ export default function FitnessCalendar() {
         endDate.toISOString().split('T')[0]
       );
 
-      // Transform the data to ensure each date has an array
       const transformedData: { [key: string]: UserDay[] } = {};
 
-      // Initialize all days in the month with empty arrays
       for (let d = 1; d <= days; d++) {
         const date = new Date(
           currentDate.getFullYear(),
@@ -134,7 +118,6 @@ export default function FitnessCalendar() {
         transformedData[dateString] = [];
       }
 
-      // Fill in the actual data
       Object.keys(data).forEach((date) => {
         transformedData[date] = data[date];
       });
@@ -145,9 +128,21 @@ export default function FitnessCalendar() {
     } finally {
       setIsLoading(false);
     }
+  }, [currentDate, days, user]);
+
+  const formatDate = (date: Date) => {
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
   };
 
-  // Add this function to handle date selection
+  useEffect(() => {
+    if (user) {
+      fetchCalendarData();
+    }
+  }, [currentDate, user, fetchCalendarData]);
+
   const handleDateSelect = (day: number) => {
     const newDate = new Date(
       currentDate.getFullYear(),
