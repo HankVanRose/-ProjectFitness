@@ -196,6 +196,7 @@ export default function UserDaysList() {
                     cardNumber={index + 1}
                     isAnyDayCompleted={isAnyDayCompleted}
                     updatePlanCompletion={updatePlanCompletion}
+                    exercises={day.Exercises}
                   />
                 </Box>
               </Box>

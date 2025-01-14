@@ -14,6 +14,7 @@ type UserdayCardProps = {
   type: string;
   target: string;
   updatePlanCompletion: (userDayId: number, dayId: number) => void;
+  exercises: string[];
 };
 
 function UserdayCard({
@@ -28,6 +29,7 @@ function UserdayCard({
   type,
   target,
   updatePlanCompletion,
+  exercises
 }: UserdayCardProps) {
   const [open, setOpen] = useState(false);
   return (
@@ -81,6 +83,7 @@ function UserdayCard({
         points={points}
         updatePlanCompletion={updatePlanCompletion}
         isCompleted={isAnyDayCompleted}
+        exercises={exercises}
       />
     </>
   );
