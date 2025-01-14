@@ -25,7 +25,6 @@ export default function ProgressBarComp() {
   const dispatch = useAppDispatch();
   const [isHovered, setIsHovered] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [avatarPreview, setAvatarPreview] = useState(user?.avatar);
   const { VITE_API } = import.meta.env;
   const { VITE_TARGET } = import.meta.env;
 
@@ -47,7 +46,7 @@ export default function ProgressBarComp() {
     formData.append('userId', user?.id.toString() || '');
 
     try {
-      const response = await axiosInstance.post(
+      await axiosInstance.post(
         `${VITE_API}/users/upload-avatar`,
         formData,
         {
@@ -56,9 +55,7 @@ export default function ProgressBarComp() {
           },
         }
       );
-      setAvatarPreview(response.data.avatrUrl);
       dispatch(fetchUserCheck());
-      console.log('avatar url:', user?.avatar)
     } catch (error) {
       console.error('Ошибка при загрузке файла:', error);
       alert('Ошибка при загрузке файла');
@@ -80,7 +77,7 @@ export default function ProgressBarComp() {
           onClick={() => fileInputRef.current?.click()}
         >
           <Image
-            src={avatarPreview || `${VITE_TARGET}${user?.avatar}`}
+            src={`${VITE_TARGET}${user?.avatar}`}
             borderRadius='full'
             boxSize='200px'
             objectFit='cover'
