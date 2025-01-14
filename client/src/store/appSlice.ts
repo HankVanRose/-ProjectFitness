@@ -36,6 +36,12 @@ const appSlice = createSlice({
   name: 'appSlice',
   initialState,
   reducers: {
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
+    clearUser: (state, action) => {
+      state.user = null;
+    },
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
     },
@@ -88,7 +94,7 @@ const appSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchUserCheck.fulfilled, (state, action) => {
-        state.user = action.payload;
+        state.user = action.payload || null;
         state.loading = false;
         state.error = null;
       })
@@ -102,42 +108,10 @@ const appSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      // .addCase(fetchUpdateProfile.fulfilled, (state, action) => {
-      //   console.log('Action payload:', action.payload);
-
-      //   if (!action.payload) {
-      //     state.error = 'No data from the server';
-      //     state.loading = false;
-      //     return;
-      //   }
-
-      //   if ('error' in action.payload && action.payload.error) {
-      //     state.error = action.payload.error;
-      //     state.loading = false;
-      //   } else {
-      //     if (state.user) {
-      //       const updatedUser = {
-      //         ...state.user,
-      //         ...action.payload,
-      //       } as UserType;
-      //       updatedUser.id = state.user.id;
-      //       state.user = updatedUser;
-      //     }
-      //     state.loading = false;
-      //     state.error = null;
-      //   }
-      // })
       .addCase(fetchUpdateProfile.fulfilled, (state, action) => {
-        console.log('Action payload:', action.payload);
         if (state.user) {
-          state.user = {
-            ...state.user,
-            ...action.payload,
-          };
+          state.user = action.payload.user;
          } 
-        //  else {
-        //     state.user = action.payload;
-        //   }
           state.loading = false;
           state.error = null;
       })
