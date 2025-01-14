@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks/hooks';
 import { fetchUserLogout } from '@/store/thunkActions';
-import { Button, Flex, Image, Link } from '@chakra-ui/react';
+import { Button, Flex, HStack, Link } from '@chakra-ui/react';
+import { Avatar } from '@/components/ui/avatar';
 import { useNavigate } from 'react-router-dom';
 import { useColorModeValue } from '../ui/color-mode';
 
@@ -32,7 +33,7 @@ export default function AuthenticatedNav() {
       </Link>
       <Link
         color={textColor}
-        textDecoration="none"
+        textDecoration='none'
         _hover={{
           textDecoration: 'none',
           color: 'gray.300',
@@ -45,7 +46,7 @@ export default function AuthenticatedNav() {
       </Link>
       <Link
         color={textColor}
-        textDecoration="none"
+        textDecoration='none'
         _hover={{
           textDecoration: 'none',
           color: 'gray.300',
@@ -58,7 +59,7 @@ export default function AuthenticatedNav() {
       </Link>
       <Link
         color={textColor}
-        textDecoration="none"
+        textDecoration='none'
         _hover={{
           textDecoration: 'none',
           color: 'gray.300',
@@ -69,17 +70,15 @@ export default function AuthenticatedNav() {
       >
         {user?.username ? user?.username.toUpperCase() : 'Профиль'}
       </Link>
-      {user?.avatar && (
-        <Image
-          src={`${VITE_TARGET}${user.avatar}`}
-          alt="User avatar"
-          boxSize="40px"
-          borderRadius="full"
-          objectFit="cover"
+      <HStack>
+        <Avatar
+          name={user?.username}
+          src={`${VITE_TARGET}${user?.avatar}`}
+          colorPalette='green'
         />
-      )}
+      </HStack>
       <Button
-        variant="ghost"
+        variant='ghost'
         color={textColor}
         onClick={handleLogOut}
         _hover={{ bg: 'whiteAlpha.100' }}

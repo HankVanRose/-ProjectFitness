@@ -122,27 +122,14 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
     if (points) {
       findUser.points += points;
       await findUser.save();
-     
     }
-
     const { accessToken, refreshToken } = generateToken({ user: findUser });
-    
-
-    // console.log(
-    //   '\n\n\n\n\n\n\n\n\n105105\n\n\n\n\n\n\n\n\n105105\n\n\n\n\n\n\n\n\n105105',
-    //   userDay,
-    //   '\n\n\n\n\n\n\n\n\n105105\n\n\n\n\n\n\n\n\n105105',
-
-    // );
 
     if (!userDay) {
       return res.status(404).json({ error: 'Запись не найдена.' });
     }
-
     userDay.isCompleted = isCompleted;
-
     await userDay.save();
-   
     res
       .status(200)
       .cookie('refreshToken', refreshToken, cookieConfig.refresh)
@@ -157,6 +144,27 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
     return res
       .status(500)
       .json({ error: 'Произошла ошибка при обновлении записи.' });
+  }
+});
+
+//! удаляем план у пользователя и userDays, связанные с этим планом
+router.delete('/', async (req, res) => {
+  try {
+    const { userId, planId } = req.body;
+
+    const foundDays = await Day.findAll({ where: { planId } });
+    const foundDaysId = foundDays.map((el) => el.id);
+
+    foundDaysId.map((dayId) => {
+      return UserDay.destroy({ where: { userId, dayId } });
+    }); // Ожидаем завершения всех операций
+    await Session.destroy({ where: { userId, planId } });
+    res.status(200).json({ message: 'План удален у пользователя' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: 'Failed to delete the plan',
+    });
   }
 });
 
