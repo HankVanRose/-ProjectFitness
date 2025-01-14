@@ -36,7 +36,7 @@ import { Field } from '@/components/ui/field';
 import { useNavigate } from 'react-router-dom';
 import { UserType } from '@/types';
 import axiosInstance from '@/axiosInstance';
-import { toaster } from '@/components/ui/toaster';
+import { Toaster, toaster } from '@/components/ui/toaster';
 import { setUserplan } from '@/store/appSlice';
 import MyPlanCardsInProfile from './MyPlanCardsInProfile';
 import FitnessCalendar from '../calendar/FitnessCalendar';
@@ -249,21 +249,21 @@ export default function ProfileData() {
       setUserplan(updatedUserplan);
       dispatch(setUserplan(updatedUserplan)); //? нужно это здесь? Еще где-то используется состояние, что у user есть план? 
 
-      // toaster.create({
-      //   title: 'План удален',
-      //   description: 'План был успешно удален из ваших планов!',
-      //   type: 'success',
-      //   duration: 5000,
-      // });
+      toaster.create({
+        title: 'План удален',
+        description: 'План был успешно удален из ваших планов!',
+        type: 'success',
+        duration: 5000,
+      });
     } catch (error) {
       console.log(error);
-      // toaster.create({
-      //   title: 'Ошибка.',
-      //   description:
-      //     'Произошла ошибка при удалении плана. Пожалуйста, попробуйте еще раз.',
-      //   type: 'warning',
-      //   duration: 5000,
-      // });
+      toaster.create({
+        title: 'Ошибка.',
+        description:
+          'Произошла ошибка при удалении плана. Пожалуйста, попробуйте еще раз.',
+        type: 'warning',
+        duration: 5000,
+      });
     }
   };
 
@@ -639,6 +639,19 @@ export default function ProfileData() {
       case 2:
         return (
           <>
+            <Stack>
+              <Button
+                minW='10ch'
+                variant='surface'
+                colorPalette='green'
+                borderRadius='sm'
+                onClick={() => navigate('/plans/new')}
+                className='mt-3'
+                mb={6}
+              >
+                Создать новый план
+              </Button>
+            </Stack>
             {userplan?.length === 0 ? (
               <Stack>
                 <Text color={{ base: 'black', _dark: 'white' }}>
@@ -687,6 +700,8 @@ export default function ProfileData() {
     //   gap={4}
     // >
     //   <GridItem colSpan={4} rowSpan={1}>
+    <>
+    <Toaster />
     <Container>
         <HStack alignItems='flex-start' w='auto'>
           <VStack mx={10} mt={90}>
@@ -698,6 +713,7 @@ export default function ProfileData() {
           </Box>
         </HStack>
     </Container>
+    </>
     //   </GridItem>
     // </Grid>
   );

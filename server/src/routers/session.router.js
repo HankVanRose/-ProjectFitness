@@ -33,19 +33,18 @@ router.route('/').get(async (req, res) => {
 //   }
 // });
 
-router.route('/plans/:userId').get(async (req, res) => {
+router.get('/plans/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
 
     const plans = await Session.findAll({
       where: { userId },
       attributes: { exclude: ['createdAt', 'updatedAt'] },
-      include: {
+      include: [{
         model: Plan,
         attributes: ['name', 'image'],
-      },
+      }],
     });
-    console.log('n\n\n\n\n\n', plans);
     // const planNames = plans.map((plan) => plan.Plan.name);
     // const planNamesWithSpaces = planNames.join(' ');
 
