@@ -53,7 +53,7 @@ export default function AuthenticatedNav() {
           cursor: 'pointer',
         }}
         _focus={{ outline: 'none', boxShadow: 'none' }}
-        onClick={() => navigate('/card')}
+        onClick={() => navigate('/plans')}
       >
         ПЛАНЫ ТРЕНИРОВОК
       </Link>
