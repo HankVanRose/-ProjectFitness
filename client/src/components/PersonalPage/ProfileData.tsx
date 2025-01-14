@@ -233,7 +233,6 @@ export default function ProfileData() {
   };
 
   const handleSave = useCallback(async () => {
-    // e.preventDefault();
     const dataToUpdate: Partial<UserType> = {
       id: user?.id,
     };
@@ -261,12 +260,8 @@ export default function ProfileData() {
           formData[field];
       }
     });
-
-    // if (passwordData.newPassword) {
-    //   modifiedFields.add('password');
-    // }
-
-    dispatch(fetchUpdateProfile(dataToUpdate)).then((result) => {
+    const result = await dispatch(fetchUpdateProfile(dataToUpdate));
+    
       if (fetchUpdateProfile.fulfilled.match(result)) {
         setModifiedFields(new Set());
         setPasswordData({
@@ -279,7 +274,6 @@ export default function ProfileData() {
       } else {
         console.log('Ошибка обновления');
       }
-    });
   }, [
     user?.id,
     modifiedFields,

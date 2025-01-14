@@ -137,7 +137,17 @@ router.patch('/profile', async (req, res) => {
     });
     const updatedUser = user.toJSON();
     delete updatedUser.password;
-    res.status(200).json(updatedUser);
+
+    const { accessToken, refreshToken } = generateToken({ user: updatedUser });
+
+    return res
+      .status(200)
+      .cookie('refreshToken', refreshToken, cookieConfig.refresh)
+      .json({
+        success: true,
+        user: updatedUser,
+        accessToken,
+      });
   } catch (error) {
     console.error(error, 'Ошибка на сервере при обновлении профиля');
     res.sendStatus(500);

@@ -104,6 +104,7 @@ export default function NewPlanForm() {
         numOfTrainings: 0,
         longDescription: '',
         weeksDescription: '',
+ 
       }));
 
       setDays((prevDays) => []);
@@ -120,6 +121,8 @@ export default function NewPlanForm() {
 
       setDays([]);
       // navigate(`/plans/${response.data}`);
+ 
+ 
     } catch (error) {
       setError('Ошибка при добавлении дня');
       console.error(error);

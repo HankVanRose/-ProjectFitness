@@ -1,6 +1,9 @@
 const router = require('express').Router();
 
-const { Session, Plan, UserDay, Day } = require('../../db/models');
+const cookieConfig = require('../../configs/cookieConfig');
+const { Session, Plan, UserDay, Day, User } = require('../../db/models');
+const { verifyAccessToken } = require('../middlewares/verifyToken');
+const generateToken = require('../utils/generateToken');
 
 //! все сессии
 router.route('/').get(async (req, res) => {
@@ -30,18 +33,6 @@ router.route('/').get(async (req, res) => {
 //   }
 // });
 
-//! все сессии юзера с планами (только названия и картинки)
-//! [
-//!  {
-//!     "id": 1,
-//!     "planId": 2,
-//!     "userId": 1,
-//!     "isCompleted": false,
-//!     "Plan": {
-//!       "name": "CrossFit HELL",
-//!       "image": "https://fitni.ru/wp-content/uploads/2017/07/1500225443_maxresdefault.jpg"
-//!     }
-//!   }]
 router.route('/plans/:userId').get(async (req, res) => {
   try {
     const { userId } = req.params;
@@ -58,22 +49,22 @@ router.route('/plans/:userId').get(async (req, res) => {
     // const planNames = plans.map((plan) => plan.Plan.name);
     // const planNamesWithSpaces = planNames.join(' ');
 
-    res.json(plans);
+    res.status(200).json(plans);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server error' });
   }
 });
 
-router.route('/:userId').get(async (req, res) => {
+router.route('/:planId/user/:userId/').get(async (req, res) => {
   try {
-    const { userId } = req.params;
-    const plan = await UserDay.findAll({
-      where: { userId },
+    const { userId, planId } = req.params;
+    const plan = await Session.findOne({
+      where: { userId, planId },
       attributes: { exclude: ['createdAt', 'updatedAt'] },
     });
 
-    res.status(200).json(plan);
+    res.status(200).json({ plan });
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -91,18 +82,15 @@ router.route('/').post(async (req, res) => {
     const foundDays = await Day.findAll({ where: { planId } });
     const foundDaysId = foundDays.map((el) => el.id);
 
- 
-    console.log('\n\n\n\n\n\n\n\n\n', foundDaysId);
+    // console.log('\n\n\n\n\n\n\n\n\n', foundDaysId);
 
     const userDaysPromises = foundDaysId.map((dayId) => {
       return UserDay.create({ userId, dayId });
- 
     }); // Ожидаем завершения всех операций
 
     const result = await Promise.all(userDaysPromises);
 
     res.status(200).json({ plan, userDays: result });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -111,27 +99,59 @@ router.route('/').post(async (req, res) => {
   }
 });
 
-router.route('/:id').patch(async (req, res) => {
+router.patch('/:dayId', verifyAccessToken, async (req, res) => {
   try {
-    const { id } = req.params;
-    const { isCompleted } = req.body;
+    const { dayId } = req.params;
+    const { isCompleted, userId, points } = req.body;
 
     if (typeof isCompleted !== 'boolean') {
       return res
         .status(400)
         .json({ error: 'isCompleted должно быть булевым значением.' });
     }
+    console.log('points', points);
+    const userDay = await UserDay.findOne({
+      where: {
+        userId,
+        dayId,
+      },
+    });
 
-    const userDay = await UserDay.findByPk(id);
+    const findUser = await User.findOne({ where: { id: userId } });
+
+    if (points) {
+      findUser.points += points;
+      await findUser.save();
+     
+    }
+
+    const { accessToken, refreshToken } = generateToken({ user: findUser });
+    
+
+    // console.log(
+    //   '\n\n\n\n\n\n\n\n\n105105\n\n\n\n\n\n\n\n\n105105\n\n\n\n\n\n\n\n\n105105',
+    //   userDay,
+    //   '\n\n\n\n\n\n\n\n\n105105\n\n\n\n\n\n\n\n\n105105',
+
+    // );
 
     if (!userDay) {
       return res.status(404).json({ error: 'Запись не найдена.' });
     }
 
     userDay.isCompleted = isCompleted;
-    await userDay.save();
 
-    return res.status(200).json(userDay);
+    await userDay.save();
+   
+    res
+      .status(200)
+      .cookie('refreshToken', refreshToken, cookieConfig.refresh)
+      .json({
+        message: 'Профиль успешно обновлен',
+        user: findUser,
+        userDay,
+        accessToken,
+      });
   } catch (error) {
     console.error(error);
     return res

@@ -7,7 +7,7 @@ export type UserType = {
   height?: string;
   password?: string;
   gender?: string;
-  points?: number;
+  points: number;
   age?: number;
   goal?: string;
 };
@@ -40,6 +40,7 @@ export type PlanType = {
   slogan: string;
   numOfTrainings: number;
   weeksDescription: string;
+  UserDays: any[]
 };
 
 export type SessionType = {

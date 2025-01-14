@@ -54,7 +54,7 @@ export default function AuthenticatedNav() {
         _focus={{ outline: 'none', boxShadow: 'none' }}
         onClick={() => navigate('/account')}
       >
-        {user?.username.toUpperCase()}
+        {user?.username ? user?.username.toUpperCase() : 'Профиль'}
       </Link>
       {user?.avatar && (
         <Image
