@@ -13,6 +13,7 @@ import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import { CalendarModal } from './CalendarModal';
 import { userDaysService } from '@/services/userDays.service';
 import { useAppSelector } from '@/store/hooks/hooks';
+import UserDaysBlock from './UserDaysBlock';
 
 interface UserDay {
   id: number;
@@ -170,104 +171,107 @@ export default function FitnessCalendar() {
     );
   }
   return (
-    <Box
-      p={6}
-      maxW="800px"
-      mx="auto"
-      bg={bgColor}
-      borderRadius="xl"
-      boxShadow="xl"
-    >
-      <VStack>
-        {/* Calendar Header */}
-        <HStack w="full" justify="space-between" align="center">
-          <Button onClick={previousMonth} variant="ghost" borderRadius="xl">
-            <MdChevronLeft size="24px" />
-          </Button>
-          <Heading size="md" fontWeight="600">
-            {months[currentDate.getMonth()]} {currentDate.getFullYear()}
-          </Heading>
-          <Button onClick={nextMonth} variant="ghost" borderRadius="xl">
-            <MdChevronRight size="24px" />
-          </Button>
-        </HStack>
+    <>
+      <Box
+        p={6}
+        maxW="800px"
+        mx="auto"
+        bg={bgColor}
+        borderRadius="xl"
+        boxShadow="xl"
+      >
+        <VStack>
+          {/* Calendar Header */}
+          <HStack w="full" justify="space-between" align="center">
+            <Button onClick={previousMonth} variant="ghost" borderRadius="xl">
+              <MdChevronLeft size="24px" />
+            </Button>
+            <Heading size="md" fontWeight="600">
+              {months[currentDate.getMonth()]} {currentDate.getFullYear()}
+            </Heading>
+            <Button onClick={nextMonth} variant="ghost" borderRadius="xl">
+              <MdChevronRight size="24px" />
+            </Button>
+          </HStack>
 
-        {/* Days of Week */}
-        <Grid templateColumns="repeat(7, 1fr)" gap={2} w="full">
-          {daysOfWeek.map((day) => (
-            <Text
-              key={day}
-              textAlign="center"
-              fontWeight="bold"
-              color={dayColor}
-            >
-              {day}
-            </Text>
-          ))}
-        </Grid>
-
-        {/* Calendar Days */}
-        <Grid templateColumns="repeat(7, 1fr)" gap={2} w="full">
-          {[...Array(firstDay)].map((_, index) => (
-            <Box key={`empty-${index}`} />
-          ))}
-          {[...Array(days)].map((_, index) => {
-            const day = index + 1;
-            const isSelected = selectedDay === day;
-            const currentDateString = new Date(
-              currentDate.getFullYear(),
-              currentDate.getMonth(),
-              day
-            )
-              .toISOString()
-              .split('T')[0];
-
-            const dayTrainings = calendarData[currentDateString] || [];
-            const hasTrainingDot = dayTrainings.length > 0;
-
-            return (
-              <CalendarModal
+          {/* Days of Week */}
+          <Grid templateColumns="repeat(7, 1fr)" gap={2} w="full">
+            {daysOfWeek.map((day) => (
+              <Text
                 key={day}
-                selectedDate={selectedDate}
-                bgColor={bgColor}
-                formatDate={formatDate}
-                userId={user.id}
-                onUpdateTraining={fetchCalendarData}
+                textAlign="center"
+                fontWeight="bold"
+                color={dayColor}
               >
-                <VStack position="relative">
-                  <Button
-                    onClick={() => handleDateSelect(day)}
-                    variant={isSelected ? 'solid' : 'outline'}
-                    colorScheme={isSelected ? 'blue' : 'gray'}
-                    color={isToday(day) ? 'yellow.500' : undefined}
-                    size="sm"
-                    h="60px"
-                    w="full"
-                    borderRadius="md"
-                    fontWeight="600"
-                    _hover={{
-                      bg: isSelected ? 'yellow.500' : 'gray.100',
-                    }}
-                  >
-                    {day}
-                  </Button>
-                  {hasTrainingDot && (
-                    <Box
-                      position="absolute"
-                      bottom="0"
-                      w="4px"
-                      h="4px"
-                      borderRadius="full"
-                      bg="yellow.500"
-                      transform="translateY(-8px)"
-                    />
-                  )}
-                </VStack>
-              </CalendarModal>
-            );
-          })}
-        </Grid>
-      </VStack>
-    </Box>
+                {day}
+              </Text>
+            ))}
+          </Grid>
+
+          {/* Calendar Days */}
+          <Grid templateColumns="repeat(7, 1fr)" gap={2} w="full">
+            {[...Array(firstDay)].map((_, index) => (
+              <Box key={`empty-${index}`} />
+            ))}
+            {[...Array(days)].map((_, index) => {
+              const day = index + 1;
+              const isSelected = selectedDay === day;
+              const currentDateString = new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth(),
+                day
+              )
+                .toISOString()
+                .split('T')[0];
+
+              const dayTrainings = calendarData[currentDateString] || [];
+              const hasTrainingDot = dayTrainings.length > 0;
+
+              return (
+                <CalendarModal
+                  key={day}
+                  selectedDate={selectedDate}
+                  bgColor={bgColor}
+                  formatDate={formatDate}
+                  userId={user.id}
+                  onUpdateTraining={fetchCalendarData}
+                >
+                  <VStack position="relative">
+                    <Button
+                      onClick={() => handleDateSelect(day)}
+                      variant={isSelected ? 'solid' : 'outline'}
+                      colorScheme={isSelected ? 'blue' : 'gray'}
+                      color={isToday(day) ? 'yellow.500' : undefined}
+                      size="sm"
+                      h="60px"
+                      w="full"
+                      borderRadius="md"
+                      fontWeight="600"
+                      _hover={{
+                        bg: isSelected ? 'yellow.500' : 'gray.100',
+                      }}
+                    >
+                      {day}
+                    </Button>
+                    {hasTrainingDot && (
+                      <Box
+                        position="absolute"
+                        bottom="0"
+                        w="4px"
+                        h="4px"
+                        borderRadius="full"
+                        bg="yellow.500"
+                        transform="translateY(-8px)"
+                      />
+                    )}
+                  </VStack>
+                </CalendarModal>
+              );
+            })}
+          </Grid>
+        </VStack>
+      </Box>
+      <UserDaysBlock userId={user.id}></UserDaysBlock>
+    </>
   );
 }

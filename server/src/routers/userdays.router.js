@@ -213,5 +213,41 @@ router.get('/unplanned/:userId', async (req, res) => {
       .json({ message: 'Error fetching unplanned days', error: error.message });
   }
 });
+// get all userDays of 1 user
+router.get('/all/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const unplannedDays = await UserDay.findAll({
+      where: {
+        userId,
+      },
+      include: [
+        {
+          model: Day,
+          include: [
+            {
+              model: Exercise,
+              through: DayExercise,
+              attributes: ['id', 'name', 'shortDescription'],
+            },
+            {
+              model: Plan,
+              attributes: ['name'],
+            },
+          ],
+        },
+      ],
+    });
+
+    res.status(200).json(unplannedDays);
+  } catch (error) {
+    console.log(error);
+
+    res
+      .status(500)
+      .json({ message: 'Error fetching unplanned days', error: error.message });
+  }
+});
 
 module.exports = router;
