@@ -29,7 +29,7 @@ axiosInstance.interceptors.response.use(
       const response = await axios.get(
         `${import.meta.env.VITE_BASE_URL}${
           import.meta.env.VITE_API
-        }/token/refresh`,
+        }/tokens/refresh`,
         { withCredentials: true }
       );
       accessToken = response.data.accessToken;
