@@ -63,7 +63,7 @@ module.exports = {
         {
           name: 'Murph Prep',
           image:
-            'https://kuznica.pro/upload/ec40029b-1cfe-482f-af0c-8a4be4d4b5a8.png',
+            'https://sun9-82.userapi.com/impg/hhQ1GInnjiSox3BS9jl0ftWaNcFF6qfcB9BRwg/t4y58LJlF-k.jpg?size=604x420&quality=95&sign=495b3900b90d5794aa66ec78afc91177&type=album',
           shortDescription:
             'Программа тренировок с весом тела на улице в стиле Murph. Эксклюзивная программа, которая подготовит вас к сдаче комплекса Murph, улучшит вашу гимнастику и вашу беговую подготовленность.',
           equipment: 'коврик, перекладина',
