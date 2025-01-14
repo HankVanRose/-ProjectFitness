@@ -8,43 +8,50 @@ import {
   DialogRoot,
 } from '@/components/ui/dialog';
 import ExecriseHelpToModal from './ExecriseHelpToModal';
-import { useEffect, useState } from 'react';
+
 import axiosInstance from '../../axiosInstance';
-import { useAppSelector } from '@/store/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks/hooks';
+import { fetchUserCheck } from '@/store/thunkActions';
+import { setPoints } from '@/store/appSlice';
 
 export default function DayModal({
   open,
   setOpen,
   description,
   cardNumber,
-  id,
+  dayid,
   title,
   rounds,
   type,
   target,
   updatePlanCompletion,
-  planId
+  planId,
+  points,
 }) {
   const descriptionLines = description
     .split(';')
     .map((line) => line.trim())
     .filter((line) => line);
 
-    const {user} = useAppSelector((store)=> store.appSlice)
+  const { user } = useAppSelector((store) => store.appSlice);
   const { VITE_API } = import.meta.env;
+  const dispatch = useAppDispatch();
 
   const finishDayHandler = async (id) => {
     try {
       const response = await axiosInstance.patch(`${VITE_API}/session/${id}`, {
         isCompleted: true,
-        userId: user?.id
+        userId: user?.id,
+        points: points,
       });
-      updatePlanCompletion(planId, id)
+      updatePlanCompletion(planId, id);
+      dispatch(setPoints(points));
       console.log('paaaa', planId);
       console.log(id);
       console.log('День завершен:', response.data);
       setOpen();
-      window.location.reload()
+
+      // window.location.reload();
     } catch (error) {
       console.error('Ошибка при завершении дня:', error);
     }
@@ -58,8 +65,10 @@ export default function DayModal({
         size="xl"
         placement="center"
         motionPreset="slide-in-bottom"
+        
       >
         <DialogContent
+        color={{ base: 'black', _dark: 'white' }}
           bg="gray.50"
           borderRadius="md"
           boxShadow="lg"
@@ -69,6 +78,7 @@ export default function DayModal({
         >
           <DialogHeader>
             <DialogTitle
+            
               fontSize="2xl"
               fontWeight="bold"
               color="teal.500"
@@ -79,7 +89,7 @@ export default function DayModal({
             <DialogCloseTrigger />
           </DialogHeader>
           <DialogBody>
-            <Box marginBottom={4}>
+            <Box marginBottom={4} >
               <Text
                 fontSize="lg"
                 color="gray.700"
@@ -99,6 +109,7 @@ export default function DayModal({
                 overflowY="auto"
               >
                 <Text
+                
                   fontSize="sm"
                   color="gray.700"
                   marginBottom={2}
@@ -123,6 +134,7 @@ export default function DayModal({
                   Выполнить подходов: {rounds}
                 </Text>
                 <ul
+                
                   style={{
                     listStyleType: 'disc',
                     paddingLeft: '1.5rem',
@@ -166,7 +178,7 @@ export default function DayModal({
               <Button
                 variant="surface"
                 colorPalette="teal"
-                onClick={() => finishDayHandler(id)}
+                onClick={() => finishDayHandler(dayid)}
                 mt={4}
                 borderRadius="10px"
               >

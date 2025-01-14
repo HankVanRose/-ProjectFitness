@@ -29,7 +29,7 @@ router.get('/:id', async (req, res) => {
       ],
       order: [['id']],
     });
-    console.log('\n\n\n\n\n\n\n\n', days);
+    // console.log('\n\n\n\n\n\n\n\n', days);
     res.status(200).json(days);
   } catch (error) {
     console.error(error);
@@ -126,7 +126,7 @@ router.post('/newPlan/day/exercises', async (req, res) => {
     //   ],
     // });
 
-    res.status(201)
+    res.status(201).end()
   } catch (error) {
     console.error(error);
     res.status(500).json({

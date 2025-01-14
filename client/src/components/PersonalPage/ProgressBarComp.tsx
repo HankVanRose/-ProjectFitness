@@ -14,13 +14,14 @@ import {
   ProgressRoot,
 } from '@/components/ui/progress';
 import { useAppDispatch, useAppSelector } from '../../store/hooks/hooks';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axiosInstance from '@/axiosInstance';
 import { fetchUserCheck } from '@/store/thunkActions';
 
 export default function ProgressBarComp() {
   const now = 60;
   const { user } = useAppSelector((state) => state.appSlice);
+  
   const dispatch = useAppDispatch();
   const [isHovered, setIsHovered] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -63,6 +64,9 @@ export default function ProgressBarComp() {
       alert('Ошибка при загрузке файла');
     }
   };
+
+   
+ 
 
   return (
     <Container maxW='container.xl' py={6}>
