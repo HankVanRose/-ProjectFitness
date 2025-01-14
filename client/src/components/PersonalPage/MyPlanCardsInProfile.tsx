@@ -29,7 +29,7 @@ export default function MyPlanCardsInProfile({plan, removePlanHandler}: MyPlanCa
         variant='surface'
         colorPalette='green'
         borderRadius='sm'
-        onClick={() => navigate(`/plans/${plan.planId}/yourown`)}
+        onClick={() => navigate(`/plans/${plan.planId}/days`)}
         className='mt-3'
         mt={4}
         mr={4}

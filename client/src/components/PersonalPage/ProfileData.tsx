@@ -17,6 +17,8 @@ import {
   VStack,
   Text,
   Heading,
+  Grid,
+  GridItem,
 } from '@chakra-ui/react';
 import { InputGroup } from '@/components/ui/input-group';
 import { FiEdit, FiCheck, FiEyeOff, FiEye } from 'react-icons/fi';
@@ -37,6 +39,7 @@ import axiosInstance from '@/axiosInstance';
 import { toaster } from '@/components/ui/toaster';
 import { setUserplan } from '@/store/appSlice';
 import MyPlanCardsInProfile from './MyPlanCardsInProfile';
+import FitnessCalendar from '../calendar/FitnessCalendar';
 
 interface FormData {
   id: number;
@@ -655,11 +658,21 @@ export default function ProfileData() {
             ) : (
               <VStack gap={4} align='start'>
                 {userplan?.map((plan) => (
-                  <MyPlanCardsInProfile key={plan.planId} plan={plan} removePlanHandler={() => removePlanHandler(plan.planId)} />
+                  <MyPlanCardsInProfile
+                    key={plan.planId}
+                    plan={plan}
+                    removePlanHandler={() => removePlanHandler(plan.planId)}
+                  />
                 ))}
               </VStack>
             )}
           </>
+        );
+      case 3:
+        return (
+          <Stack w='auto'>
+            <FitnessCalendar />
+          </Stack>
         );
       default:
         return <Text>Выберите вкладку</Text>;
@@ -667,16 +680,25 @@ export default function ProfileData() {
   };
 
   return (
+    // <Grid
+    //   h='200px'
+    //   templateRows='repeat(1, 1fr)'
+    //   templateColumns='repeat(5, 1fr)'
+    //   gap={4}
+    // >
+    //   <GridItem colSpan={4} rowSpan={1}>
     <Container>
-      <HStack alignItems='flex-start'>
-        <VStack mx={10} mt={90}>
-          <SideBarComp activeTab={activeTab} setActiveTab={setActiveTab} />
-        </VStack>
-        <Box flex={1} mr={10}>
-          <Heading mb={7}>Профиль атлета</Heading>
-          {content()}
-        </Box>
-      </HStack>
+        <HStack alignItems='flex-start' w='auto'>
+          <VStack mx={10} mt={90}>
+            <SideBarComp activeTab={activeTab} setActiveTab={setActiveTab} />
+          </VStack>
+          <Box flex={1} mr={10} w='auto'>
+            <Heading mb={7}>Профиль атлета</Heading>
+            {content()}
+          </Box>
+        </HStack>
     </Container>
+    //   </GridItem>
+    // </Grid>
   );
 }
