@@ -5,6 +5,7 @@ import { Box, Container, SimpleGrid, Button, Spinner } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import AdedPlanCard from './AdedPlanCard';
 import { useAppSelector } from '@/store/hooks/hooks';
+import { useColorModeValue } from '../ui/color-mode';
 
 export default function AddedPlanList() {
   const { VITE_API } = import.meta.env;
@@ -12,6 +13,8 @@ export default function AddedPlanList() {
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const { user } = useAppSelector((store) => store.appSlice);
+  const bgColor = useColorModeValue('white', 'black');
+  const textColor = useColorModeValue('black', 'white');
 
   useEffect(() => {
     const fetchSinglePlan = async (id) => {
@@ -45,25 +48,25 @@ export default function AddedPlanList() {
     );
   }
 
-  const updatePlanCompletion = (planId:number, dayId:number) => {
+  console.log(singlePlan.map((el) => el.Exercises));
+
+  const updatePlanCompletion = (planId: number, dayId: number) => {
     setSinglePlan((prevPlans) => {
       const updatedSHit = prevPlans.map((plan) => {
         console.log(`plan.id`, plan.id);
         console.log(`planIIIId`, planId);
         return plan.id === dayId
-        ? {
-            ...plan,
-            UserDays: plan.UserDays.map((day) => {
+          ? {
+              ...plan,
+              UserDays: plan.UserDays.map((day) => {
                 console.log(`dayID`, dayId);
                 console.log(`dayTOCHKAID`, day.id);
                 return day.id == planId ? { ...day, isCompleted: true } : day;
-            }),
-          }
-        : plan
-      }
-       
-      );
-  
+              }),
+            }
+          : plan;
+      });
+
       return updatedSHit;
       // prevPlans.map((plan) =>
       //     plan.id === planId
@@ -79,19 +82,27 @@ export default function AddedPlanList() {
   };
 
   return (
-    <Container maxW="full" px={4} py={8} bg="gray.50">
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={2}>
+    <Container maxW="full" px={4} py={8} bg={bgColor} color={textColor}>
+      <SimpleGrid
+        bg={bgColor}
+        color={textColor}
+        columns={{ base: 1, md: 2, lg: 3 }}
+        spacing={2}
+      >
         {singlePlan.map((plan, index) => {
+          // console.log(plan.Exercises);
           const isAnyDayCompleted = plan.UserDays.some(
             (day) => day.isCompleted && day.userId === user?.id
           );
 
           return (
             <Box
+             
+              color={textColor}
               key={plan.id}
               p={2}
               borderRadius="3xl"
-              bg={isAnyDayCompleted ? 'gray.300' : 'white'}
+              bg={isAnyDayCompleted ? bgColor : bgColor}
               boxShadow="md"
               width={500}
               m={4}
@@ -102,8 +113,8 @@ export default function AddedPlanList() {
                 transform: 'scale(1.02)',
                 transition: '0.2s',
               }}
-              borderWidth={isAnyDayCompleted ? '2px' : '1px'}
-              borderColor={isAnyDayCompleted ? 'green.500' : 'gray.200'}
+              borderWidth={isAnyDayCompleted ? '2px' : '2px'}
+              borderColor={isAnyDayCompleted ? 'green.500' : bgColor}
             >
               <AdedPlanCard
                 dayid={plan.id}
@@ -114,6 +125,7 @@ export default function AddedPlanList() {
                 rounds={plan.rounds}
                 type={plan.type}
                 target={plan.target}
+                exercises={plan.Exercises}
                 cardNumber={index + 1}
                 isAnyDayCompleted={isAnyDayCompleted}
                 updatePlanCompletion={updatePlanCompletion}

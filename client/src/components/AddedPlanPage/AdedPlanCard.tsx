@@ -15,6 +15,7 @@ function AdedPlanCard({
   type,
   target,
   updatePlanCompletion,
+  exercises,
 }) {
   const [open, setOpen] = useState(false);
   const { user } = useAppSelector((store) => store.appSlice);
@@ -39,8 +40,8 @@ function AdedPlanCard({
         overflow="hidden"
         display={'flex'}
         width={700}
-        opacity={isAnyDayCompleted ? 0.6 : 1} // изменяем прозрачность для завершенных
-        pointerEvents={isAnyDayCompleted ? 'none' : 'auto'} // отключаем события для завершенных
+        opacity={isAnyDayCompleted ? 0.6 : 1}
+        pointerEvents={isAnyDayCompleted ? 'none' : 'auto'}
       >
         <Card.Body gap="5" onClick={handleOpen}>
           <Text
@@ -102,6 +103,7 @@ function AdedPlanCard({
       </Card.Root>
 
       <DayModal
+        exercises={exercises}
         open={open}
         planId={planId}
         setOpen={handleClose}

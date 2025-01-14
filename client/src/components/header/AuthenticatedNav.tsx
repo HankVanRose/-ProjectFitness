@@ -17,6 +17,19 @@ export default function AuthenticatedNav() {
 
   return (
     <Flex align="center" gap={8}>
+       <Link
+        color={textColor}
+        textDecoration="none"
+        _hover={{
+          textDecoration: 'none',
+          color: 'gray.300',
+          cursor: 'pointer',
+        }}
+        _focus={{ outline: 'none', boxShadow: 'none' }}
+        onClick={() => navigate(`/${user?.id}/userplans`)}
+      >
+        МОИ ПЛАНЫ
+      </Link>
       <Link
         color={textColor}
         textDecoration="none"
