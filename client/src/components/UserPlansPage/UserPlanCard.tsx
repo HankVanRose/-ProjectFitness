@@ -1,11 +1,13 @@
+import { useAppSelector } from '@/store/hooks/hooks';
 import { PlanType } from '@/types';
 import { Box, Button, Skeleton, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-export default function UserPlanCard({ name, image }: PlanType) {
+export default function UserPlanCard({ id, name, image }: PlanType) {
   const [isLoading, setIsLoading] = useState(true);
-  const { id } = useParams();
+  
+ 
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -16,7 +18,9 @@ export default function UserPlanCard({ name, image }: PlanType) {
 
   const navigate = useNavigate();
 
-  const redirectToSession = (id) => {};
+  const redirectToSession = () => {
+    navigate(`/plans/${id}/days`)
+  };
 
   return (
     <Box
@@ -66,6 +70,7 @@ export default function UserPlanCard({ name, image }: PlanType) {
                 backgroundColor="green.500"
                 _hover={{ bg: 'green.600' }}
                 color={'white'}
+                onClick={redirectToSession}
               >
                 ВЕРНУТЬСЯ К ТРЕНИРОВКАМ
               </Button>

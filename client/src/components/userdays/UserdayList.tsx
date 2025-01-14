@@ -64,6 +64,7 @@ export default function UserDaysList() {
       </div>
     );
   }
+console.log(days.map(el=> el.Exercises));
 
   const updatePlanCompletion = (userDayId: number, dayId: number) => {
     setDays((prevDays) => {
@@ -196,7 +197,7 @@ export default function UserDaysList() {
                     cardNumber={index + 1}
                     isAnyDayCompleted={isAnyDayCompleted}
                     updatePlanCompletion={updatePlanCompletion}
-                    // exercises={day.Exercises}
+                    exercises={day.Exercises}
                   />
                 </Box>
               </Box>
