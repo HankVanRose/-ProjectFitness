@@ -65,19 +65,7 @@ import { useState, useEffect, memo } from 'react';
             </Text>
 
             <Box display="flex" flexDirection="column" marginTop="auto">
-              <Button
-                marginTop="10px"
-                backgroundColor="green.500"
-                borderColor="green.500"
-                fontWeight={600}
-                color={'white'}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Ваш код добавления в план
-                }}
-              >
-                + ДОБАВИТЬ В МОЙ ПЛАН
-              </Button>
+             
 
               <Button
                 marginTop="10px"
@@ -87,7 +75,7 @@ import { useState, useEffect, memo } from 'react';
                 color={'white'}
                 fontWeight={600}
               >
-                ПОДРОБНЕЕ
+                ОПИСАНИЕ УПРАЖНЕНИЯ
               </Button>
             </Box>
           </Box>
