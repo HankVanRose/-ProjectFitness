@@ -6,7 +6,6 @@ import { Route, Routes } from 'react-router-dom';
 
 import Layout from './components/Layout';
 import PlansBlock from './components/plansBlock/PlansBlock';
-import PlanPage from './components/planPage/PlanPage';
 
 import { useEffect } from 'react';
 import { useAppDispatch } from './store/hooks/hooks';
@@ -20,14 +19,14 @@ import HomePage from './components/HomePage/HomePage';
 import { useColorModeValue } from './components/ui/color-mode';
 import { Box } from '@chakra-ui/react';
 
-import AddedPlanPage from './components/AddedPlanPage/AddedPlanPage';
 import NewPlanForm from './components/NewPlanPage/NewPlanForm';
 import AdminPage from './components/admin/AdminPage';
  
-import AddedPlanList from './components/AddedPlanPage/AddedPlanList';
  
 import FitnessCalendar from './components/calendar/FitnessCalendar';
 import UserPlansPage from './components/UserPlansPage/UserPlansPage';
+import UserDaysList from './components/userdays/UserdayList';
+import PlanPage from './components/planPage/PlanPage';
  
 
 
@@ -52,7 +51,7 @@ function App() {
           <Route path='/exercises/:id' element={<SingleExercisePage />} />
           <Route path='/account' element={<PersonalPage />} />
           <Route path='/plans/:id' element={<PlanPage />} />
-          <Route path='/plans/:id/yourown' element={<AddedPlanList />} />
+          <Route path='/plans/:id/days' element={<UserDaysList />} />
           <Route path='/plans/new' element={<NewPlanForm />} />
           <Route path='/admin' element={<AdminPage />} />
           <Route path='/calendar' element={<FitnessCalendar />} />
