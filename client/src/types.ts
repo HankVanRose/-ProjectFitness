@@ -40,6 +40,7 @@ export type PlanType = {
   slogan: string;
   numOfTrainings: number;
   weeksDescription: string;
+  UserDays: any[]
 };
 
 export type SessionType = {

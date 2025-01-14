@@ -19,7 +19,7 @@ export default function DayModal({
   setOpen,
   description,
   cardNumber,
-  id,
+  dayid,
   title,
   rounds,
   type,
@@ -51,7 +51,7 @@ export default function DayModal({
       console.log('День завершен:', response.data);
       setOpen();
 
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.error('Ошибка при завершении дня:', error);
     }
@@ -65,8 +65,10 @@ export default function DayModal({
         size="xl"
         placement="center"
         motionPreset="slide-in-bottom"
+        
       >
         <DialogContent
+        color={{ base: 'black', _dark: 'white' }}
           bg="gray.50"
           borderRadius="md"
           boxShadow="lg"
@@ -76,6 +78,7 @@ export default function DayModal({
         >
           <DialogHeader>
             <DialogTitle
+            
               fontSize="2xl"
               fontWeight="bold"
               color="teal.500"
@@ -86,7 +89,7 @@ export default function DayModal({
             <DialogCloseTrigger />
           </DialogHeader>
           <DialogBody>
-            <Box marginBottom={4}>
+            <Box marginBottom={4} >
               <Text
                 fontSize="lg"
                 color="gray.700"
@@ -106,6 +109,7 @@ export default function DayModal({
                 overflowY="auto"
               >
                 <Text
+                
                   fontSize="sm"
                   color="gray.700"
                   marginBottom={2}
@@ -130,6 +134,7 @@ export default function DayModal({
                   Выполнить подходов: {rounds}
                 </Text>
                 <ul
+                
                   style={{
                     listStyleType: 'disc',
                     paddingLeft: '1.5rem',
@@ -173,7 +178,7 @@ export default function DayModal({
               <Button
                 variant="surface"
                 colorPalette="teal"
-                onClick={() => finishDayHandler(id)}
+                onClick={() => finishDayHandler(dayid)}
                 mt={4}
                 borderRadius="10px"
               >
