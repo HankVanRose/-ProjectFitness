@@ -32,7 +32,6 @@ export default function PlanPage() {
         userId: user?.id,
         planId: plan?.id,
       });
-
       toaster.create({
         title: 'План добавлен.',
         description: 'Ваш план был успешно добавлен!',
@@ -88,12 +87,12 @@ export default function PlanPage() {
   if (loading) {
     return (
       <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        minHeight="100vh"
+        display='flex'
+        alignItems='center'
+        justifyContent='center'
+        minHeight='100vh'
       >
-        <Spinner size="xl" />
+        <Spinner size='xl' />
       </Box>
     );
   }
@@ -106,11 +105,11 @@ export default function PlanPage() {
     <>
       <Box
         color={{ base: 'black', _dark: 'white' }}
-        padding="20px"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        minHeight="100vh"
+        padding='20px'
+        display='flex'
+        alignItems='center'
+        justifyContent='center'
+        minHeight='100vh'
       >
         <Toaster />
         <Container maxW="container.lg" className="py-5">
@@ -121,10 +120,10 @@ export default function PlanPage() {
             <Image
               src={plan.image}
               alt={plan.name?.toUpperCase()}
-              borderRadius="md"
-              maxHeight="768px"
-              objectFit="cover"
-              alignSelf="center"
+              borderRadius='md'
+              maxHeight='768px'
+              objectFit='cover'
+              alignSelf='center'
             />
 
             <Stack
@@ -132,38 +131,38 @@ export default function PlanPage() {
               marginX="100px"
               marginY="15px"
             >
-              <Heading fontSize="2rem">Уровень сложности:</Heading>
-              <Text fontSize="1.3rem" lineHeight="1.6" textAlign="justify">
+              <Heading fontSize='2rem'>Уровень сложности:</Heading>
+              <Text fontSize='1.3rem' lineHeight='1.6' textAlign='justify'>
                 {plan.difficulty?.toUpperCase()}
               </Text>
-              <Heading fontSize="2rem">Необходимое оборудование:</Heading>
-              <Text fontSize="1.3rem" lineHeight="1.6" textAlign="justify">
+              <Heading fontSize='2rem'>Необходимое оборудование:</Heading>
+              <Text fontSize='1.3rem' lineHeight='1.6' textAlign='justify'>
                 {plan.equipment?.toUpperCase()}
               </Text>
-              <Heading fontSize="2rem">Описание:</Heading>
-              <Text fontSize="1.3rem" lineHeight="1.6" textAlign="justify">
+              <Heading fontSize='2rem'>Описание:</Heading>
+              <Text fontSize='1.3rem' lineHeight='1.6' textAlign='justify'>
                 {plan.shortDescription}
               </Text>
 
-              <Heading fontSize="2rem">
+              <Heading fontSize='2rem'>
                 Общее количество тренировочных дней: {plan.numOfTrainings}
               </Heading>
-              <Heading fontSize="2rem">Подробнее о: {plan.name}</Heading>
-              <Text fontSize="1.3rem" lineHeight="1.6" textAlign="justify">
+              <Heading fontSize='2rem'>Подробнее о: {plan.name}</Heading>
+              <Text fontSize='1.3rem' lineHeight='1.6' textAlign='justify'>
                 {plan.longDescription}
               </Text>
-              <Heading fontSize="1.5rem" textAlign="center">
+              <Heading fontSize='1.5rem' textAlign='center'>
                 {plan.slogan?.toUpperCase()}
               </Heading>
             </Stack>
 
             <Button
-              variant="outline"
-              backgroundColor="red.700"
-              borderColor="red.700"
+              variant='outline'
+              backgroundColor='red.700'
+              borderColor='red.700'
               borderRadius={10}
               height={50}
-              w="100%"
+              w='100%'
               onClick={
                 planExists
                   ? () => navigate(`/plans/${id}/days`)

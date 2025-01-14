@@ -81,7 +81,6 @@ router.post('/upload-avatar', verifyAccessToken, upload.single('avatar'), async 
         user: user,
         accessToken,
       });
-    // res.status(200).json({message: 'Аватар успешно загружен', avatarUrl });
   } catch (error) {
     console.error('Upload avatar error:', error);
     if (req.file) {
