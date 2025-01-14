@@ -9,6 +9,7 @@ interface UserDay {
   Day?: {
     id: number;
     name: string;
+    planId: number;
     Exercises: Array<{
       id: number;
       name: string;
@@ -32,7 +33,6 @@ export const userDaysService = {
     const { data } = await axiosInstance.get<UserDay[]>(
       `/api/userdays/user/${userId}/date/${date}`
     );
-    console.log('getDayTrainings', data);
     
     return data;
   },
