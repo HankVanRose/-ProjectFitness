@@ -71,13 +71,14 @@ export default function DayModal({
   return (
     <>
       <DialogRoot
+      
         open={open}
         onOpenChange={(e) => setOpen(e.open)}
         size="xl"
         placement="center"
         motionPreset="slide-in-bottom"
       >
-        <DialogContent p={7} maxH="700px" shadow="xl">
+        <DialogContent p={7} maxH="700px" shadow="xl" m={2}>
           <DialogHeader>
             <DialogTitle
               fontSize={['1.25rem', '1.5rem']}
@@ -102,6 +103,27 @@ export default function DayModal({
                 overflowY="auto"
                 maxH="400px"
                 css={{
+                  '&::-webkit-scrollbar': {
+                    width: '8px',
+                    background: 'transparent',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    background: '#CBD5E0',
+                    borderRadius: '1em',
+                    border: '2px solid transparent',
+                    backgroundClip: 'padding-box',
+                    '&:hover': {
+                      background: '#A0AEC0',
+                      borderRadius: '1em',
+                      border: '2px solid transparent',
+                      backgroundClip: 'padding-box',
+                    },
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    background: 'transparent',
+                    borderRadius: '1em',
+                    margin: '4px',
+                  },
                   scrollbarWidth: 'thin',
                   scrollbarColor: 'rgba(0, 155, 72, 0.5) transparent',
                 }}

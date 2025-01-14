@@ -41,7 +41,6 @@ export default function UserDaysList() {
           `api/days/${id}/user/${user!.id}`
         );
         setDays(result.data);
-        console.log(result.data);
       } catch (error) {
         console.error(error);
       } finally {
