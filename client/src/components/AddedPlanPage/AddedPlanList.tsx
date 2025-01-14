@@ -32,25 +32,50 @@ export default function AddedPlanList() {
 
   if (isLoading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+        }}
+      >
         <Spinner />
       </div>
     );
   }
 
-  const updatePlanCompletion = (planId, dayId) => {
-    setSinglePlan((prevPlans) =>
-      prevPlans.map((plan) =>
-        plan.id === planId
-          ? {
-              ...plan,
-              UserDays: plan.UserDays.map((day) =>
-                day.id === dayId ? { ...day, isCompleted: true } : day
-              ),
-            }
-          : plan
-      )
-    );
+  const updatePlanCompletion = (planId:number, dayId:number) => {
+    setSinglePlan((prevPlans) => {
+      const updatedSHit = prevPlans.map((plan) => {
+        console.log(`plan.id`, plan.id);
+        console.log(`planIIIId`, planId);
+        return plan.id === dayId
+        ? {
+            ...plan,
+            UserDays: plan.UserDays.map((day) => {
+                console.log(`dayID`, dayId);
+                console.log(`dayTOCHKAID`, day.id);
+                return day.id == planId ? { ...day, isCompleted: true } : day;
+            }),
+          }
+        : plan
+      }
+       
+      );
+  
+      return updatedSHit;
+      // prevPlans.map((plan) =>
+      //     plan.id === planId
+      //       ? {
+      //           ...plan,
+      //           UserDays: plan.UserDays.map((day) =>
+      //             day.id == dayId ? { ...day, isCompleted: true } : day
+      //           ),
+      //         }
+      //       : plan
+      //   )
+    });
   };
 
   return (
@@ -81,7 +106,7 @@ export default function AddedPlanList() {
               borderColor={isAnyDayCompleted ? 'green.500' : 'gray.200'}
             >
               <AdedPlanCard
-                id={plan.id}
+                dayid={plan.id}
                 planId={plan.planId}
                 points={plan.points}
                 description={plan.description}
@@ -97,7 +122,9 @@ export default function AddedPlanList() {
           );
         })}
       </SimpleGrid>
-      <Box style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+      <Box
+        style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}
+      >
         <Button
           variant="solid"
           colorScheme="teal"

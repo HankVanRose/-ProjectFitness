@@ -4,7 +4,7 @@ import DayModal from './DayModal';
 import { useAppSelector } from '@/store/hooks/hooks';
 
 function AdedPlanCard({
-  id,
+  dayid,
   planId,
   points,
   description,
@@ -28,6 +28,9 @@ function AdedPlanCard({
   const handleClose = () => {
     setOpen(false);
   };
+
+  // console.log('idid', dayid);
+  // console.log(`planid`, planId);
 
   return (
     <>
@@ -102,7 +105,7 @@ function AdedPlanCard({
         open={open}
         planId={planId}
         setOpen={handleClose}
-        id={id}
+        dayid={dayid}
         description={description}
         cardNumber={cardNumber}
         title={title}
