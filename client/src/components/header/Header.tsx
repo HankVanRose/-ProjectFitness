@@ -8,10 +8,10 @@ import { setError } from '@/store/appSlice';
 import { ColorModeButton, useColorModeValue } from '../ui/color-mode';
 import AuthenticatedNav from './AuthenticatedNav';
 import UnauthenticatedNav from './UnauthenticatedNav';
+import { GrUserAdmin } from "react-icons/gr";
 
 export default function Header() {
   const { user } = useAppSelector((state) => state.appSlice);
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const textColor = useColorModeValue('black', 'white');
 
@@ -31,11 +31,6 @@ export default function Header() {
     [dispatch]
   );
 
-  // useEffect(() => {
-  //   dispatch(userActivePlan(user?.id))
-  // }, [user?.id])
-
-  // const {userplan} = useAppSelector((store)=> store.appSlice)
 
   return (
     <>
@@ -57,6 +52,7 @@ export default function Header() {
               ) : (
                 <UnauthenticatedNav toggleModal={toggleModal} />
               )}
+            
 
               <ColorModeButton borderRadius="50%" />
             </Flex>
