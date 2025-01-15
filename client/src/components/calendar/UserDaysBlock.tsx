@@ -120,97 +120,99 @@ export default function UserDaysBlock({ userId }: { userId: number }) {
       <Text fontWeight="700" fontSize="1.2rem">
         Все ваши тренировки:
       </Text>
-      <HStack>
-        <Collapsible.Root width="100%">
-          <Collapsible.Trigger
-            width="100%"
-            textAlign="center"
-            p={2}
+      {userDays.length > 0 ? (
+        <HStack>
+          <Collapsible.Root width="100%">
+            <Collapsible.Trigger
+              width="100%"
+              textAlign="center"
+              p={2}
               _hover={{
-              color: 'yellow.300',
-              cursor: 'pointer',
-            }}
-          >
-            <Button
-              fontWeight="600"
-              color={clr}
-              bg={bg}
-              p={3}
-              w={'auto'}
-              transition="all 0.5s"
-              borderRadius={'3xl'}
-              _hover={{
-                bg: 'yellow.300',
-                color: 'black',
+                color: 'yellow.500',
+                cursor: 'pointer',
               }}
             >
-              <BsSortAlphaUp /> отсортировать <BsSortDownAlt />
-            </Button>
-          </Collapsible.Trigger>
-          <Collapsible.Content
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Flex gap={2} justify="center" width="100%">
-              <NativeSelectRoot size="xs">
-                <NativeSelectField
-                  placeholder="по времени"
-                  bg={bg}
-                  p={1}
-                  onChange={(e) =>
-                    setFilters((prev) => ({
-                      ...prev,
-                      sortOrder: e.target.value as SortOrder,
-                    }))
-                  }
-                >
-                  <option value="newest">сначала старые</option>
-                  <option value="oldest">сначала новые</option>
-                </NativeSelectField>
-              </NativeSelectRoot>
+              <Button
+                fontWeight="600"
+                color={clr}
+                bg={bg}
+                p={3}
+                w={'auto'}
+                transition="all 0.5s"
+                borderRadius={'3xl'}
+                _hover={{
+                  bg: 'yellow.500',
+                  color: 'black',
+                }}
+              >
+                <BsSortAlphaUp /> отсортировать <BsSortDownAlt />
+              </Button>
+            </Collapsible.Trigger>
+            <Collapsible.Content
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Flex gap={2} justify="center" width="100%">
+                <NativeSelectRoot size="xs">
+                  <NativeSelectField
+                    placeholder="по времени"
+                    bg={bg}
+                    p={1}
+                    onChange={(e) =>
+                      setFilters((prev) => ({
+                        ...prev,
+                        sortOrder: e.target.value as SortOrder,
+                      }))
+                    }
+                  >
+                    <option value="newest">сначала старые</option>
+                    <option value="oldest">сначала новые</option>
+                  </NativeSelectField>
+                </NativeSelectRoot>
 
-              <NativeSelectRoot size="xs">
-                <NativeSelectField
-                  bg={bg}
-                  p={1}
-                  fontWeight="500"
-                  fontSize="0.7rem"
-                  onChange={(e) =>
-                    setFilters((prev) => ({
-                      ...prev,
-                      planFilter: e.target.value as PlanFilter,
-                    }))
-                  }
-                >
-                  <option value="all">все</option>
-                  <option value="planned">запланированные</option>
-                  <option value="notPlanned">не запланированные</option>
-                </NativeSelectField>
-              </NativeSelectRoot>
+                <NativeSelectRoot size="xs">
+                  <NativeSelectField
+                    bg={bg}
+                    p={1}
+                    fontWeight="500"
+                    fontSize="0.7rem"
+                    onChange={(e) =>
+                      setFilters((prev) => ({
+                        ...prev,
+                        planFilter: e.target.value as PlanFilter,
+                      }))
+                    }
+                  >
+                    <option value="all">все</option>
+                    <option value="planned">запланированные</option>
+                    <option value="notPlanned">не запланированные</option>
+                  </NativeSelectField>
+                </NativeSelectRoot>
 
-              <NativeSelectRoot size="xs">
-                <NativeSelectField
-                  onChange={(e) =>
-                    setFilters((prev) => ({
-                      ...prev,
-                      completionFilter: e.target.value as CompletionFilter,
-                    }))
-                  }
-                  bg={bg}
-                  fontSize="0.7rem"
-                  p={1}
-                  fontWeight="500"
-                >
-                  <option value="all">все</option>
-                  <option value="completed">завершенные</option>
-                  <option value="notCompleted">не завершенные</option>
-                </NativeSelectField>
-              </NativeSelectRoot>
-            </Flex>
-          </Collapsible.Content>
-        </Collapsible.Root>
-      </HStack>
+                <NativeSelectRoot size="xs">
+                  <NativeSelectField
+                    onChange={(e) =>
+                      setFilters((prev) => ({
+                        ...prev,
+                        completionFilter: e.target.value as CompletionFilter,
+                      }))
+                    }
+                    bg={bg}
+                    fontSize="0.7rem"
+                    p={1}
+                    fontWeight="500"
+                  >
+                    <option value="all">все</option>
+                    <option value="completed">завершенные</option>
+                    <option value="notCompleted">не завершенные</option>
+                  </NativeSelectField>
+                </NativeSelectRoot>
+              </Flex>
+            </Collapsible.Content>
+          </Collapsible.Root>
+        </HStack>
+      ) : null}
 
       {/* User Days List */}
 
@@ -243,7 +245,7 @@ export default function UserDaysBlock({ userId }: { userId: number }) {
                 overflow="hidden"
                 justifyContent="space-around"
                 _hover={{
-                  borderColor: 'yellow.300',
+                  borderColor: 'yellow.500',
                 }}
               >
                 <HStack justify="space-between" width="100%">
@@ -252,7 +254,7 @@ export default function UserDaysBlock({ userId }: { userId: number }) {
                       fontWeight="600"
                       transition="all 0.2s"
                       _hover={{
-                        color: 'yellow.300',
+                        color: 'yellow.500',
                         cursor: 'pointer',
                       }}
                     >
@@ -307,7 +309,7 @@ export default function UserDaysBlock({ userId }: { userId: number }) {
               </Box>
             ))
           ) : (
-            <Text color='gray.800'>Нет таких тренировок</Text>
+            <Text color="gray.800">Нет тренировок</Text>
           )}
         </VStack>
       </Box>

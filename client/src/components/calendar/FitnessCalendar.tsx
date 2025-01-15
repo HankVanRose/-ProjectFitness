@@ -226,10 +226,8 @@ export default function FitnessCalendar() {
                 .toISOString()
                 .split('T')[0];
 
-              console.log(currentDateString);// 2025-01-15
 
-              const dayTrainings = calendarData[currentDateString] || []; // has array
-              console.log('dayTrainings', dayTrainings);
+              const dayTrainings = calendarData[currentDateString] || []; 
 
               const hasTrainingDot = dayTrainings.length > 0;
 

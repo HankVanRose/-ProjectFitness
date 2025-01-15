@@ -120,20 +120,12 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
 
     const findUser = await User.findOne({ where: { id: userId } });
 
-    if ((points && calories)) {
+    if (points && calories) {
       findUser.points += points;
       findUser.calories += calories;
 
       await findUser.save();
     }
-
-    // console.log(
-    //   `\n\n\n\n\n\n`,
-    //   findUser.calories,
-    //   findUser.points,
-    //   `\n\n\n\n\n\n`
-    // );
-    // console.log(`\n\n\n\n\n\n`, findUser, `\n\n\n\n\n\n`);
 
     const { accessToken, refreshToken } = generateToken({ user: findUser });
 
@@ -141,14 +133,17 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
       return res.status(404).json({ error: 'Запись не найдена.' });
     }
     userDay.isCompleted = isCompleted;
-    const today = new Date();
-    const date = new Date(today.setDate(today.getDate() - 1)).toLocaleDateString().split('T')[0];
-    console.log(`\n\n\n\n\n\n`,date);
-    
-    
-    
-    userDay.plannedOn = date;
-    
+    if (!userDay.plannedOn) {
+      const today = new Date();
+      const date = new Date(today.setDate(today.getDate() - 1))
+        .toISOString()
+        .split('T')[0];
+
+      userDay.plannedOn = date;
+    }
+
+    console.log(userDay.get({ plain: true }));
+
     await userDay.save();
     res
       .status(200)

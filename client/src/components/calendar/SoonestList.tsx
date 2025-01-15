@@ -121,7 +121,7 @@ export default function SoonestList({ userId }: { userId: number }) {
             </VStack>
           </HStack>
         </Box>
-      )) : <Text color='gray.700'>Нет запланированных тренировок</Text>}
+      )) : <Text color='gray.700' textAlign='center'>Нет запланированных тренировок</Text>}
     </VStack>
   );
 }

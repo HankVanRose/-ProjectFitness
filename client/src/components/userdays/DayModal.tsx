@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import { ExercisesType } from '@/types';
 import ExecriseHelpToModal from './ExecriseHelpToModal';
 import { useColorModeValue } from '../ui/color-mode';
+import { FaCheck, FaFlagCheckered } from 'react-icons/fa';
 
 type DayModalProps = {
   open: boolean;
@@ -43,12 +44,12 @@ export default function DayModal({
   rounds,
   type,
   target,
-  updatePlanCompletion,
+    updatePlanCompletion,
   planId,
   points,
   isCompleted,
   exercises,
-  calories
+  calories,
 }: DayModalProps) {
   const descriptionLines = description
     .split(';')
@@ -58,7 +59,7 @@ export default function DayModal({
   const { user } = useAppSelector((store) => store.appSlice);
   const dispatch = useAppDispatch();
 
-  const finishDayHandler = async (id) => {
+  const finishDayHandler = async (id: number) => {
     try {
       await axiosInstance.patch(`api/session/${id}`, {
         isCompleted: true,
@@ -77,8 +78,11 @@ export default function DayModal({
     }
   };
 
-  const bgColor = useColorModeValue('white', 'black');
-  const textColor = useColorModeValue('black', 'white');
+  const bgColor = useColorModeValue('gray.100', 'rgb(20, 20, 20)');
+  const bgImg = useColorModeValue(
+    'gray.100',
+    `linear-gradient(to bottom right, rgba(20, 40, 20, 0.95), rgba(40, 10, 10, 0.95))`
+  );
 
   return (
     <>
@@ -90,30 +94,25 @@ export default function DayModal({
         motionPreset="slide-in-bottom"
       >
         <DialogContent
-          p={7}
+          bg={bgColor}
           maxH={800}
-          shadow="xl"
           m={2}
+          p={10}
           overflow={'hidden'}
           borderRadius="md"
-          boxShadow="lg"
           border="1px"
           borderColor="teal.200"
-          bg={bgColor}
-          color={textColor}
         >
-          <DialogHeader>
+          <DialogHeader mb={2}>
             <DialogTitle
               fontSize={['1.25rem', '1.5rem']}
               fontWeight="800"
               letterSpacing="0.02em"
               textTransform="uppercase"
               position="relative"
-               
-              bg={bgColor}
             >
               ДОБРО ПОЖАЛОВАТЬ НА {cardNumber}-Й ТРЕНИРОВОЧНЫЙ ДЕНЬ
-              <Text fontWeight="700" fontSize="1rem" mb={4} color="gray.700">
+              <Text fontWeight="700" fontSize="1rem" color="gray.700">
                 <Link to={`/plans/${planId}`}> {title}</Link>
               </Text>
             </DialogTitle>
@@ -121,12 +120,10 @@ export default function DayModal({
           </DialogHeader>
           <DialogBody>
             <Box
-              boxShadow="0px 8px 20px rgba(0, 0, 0, 0.12), 0px 2px 8px rgba(0, 0, 0, 0.07)"
               borderRadius="xl"
               overflow={'hidden'}
-              p={3}
               overflowY="auto"
-              maxH={600}
+              maxH={500}
               css={{
                 '&::-webkit-scrollbar': {
                   width: '8px',
@@ -166,30 +163,36 @@ export default function DayModal({
                 {descriptionLines.map((line) => (
                   <List.Item key={line} p={1}>
                     <List.Indicator asChild mr={2} color="green">
-                      <LuCircleCheck />
+                      <FaCheck />
                     </List.Indicator>
                     {line}
                   </List.Item>
                 ))}
               </List.Root>
 
-              <ExecriseHelpToModal exercises={exercises} />
+              <ExecriseHelpToModal
+                bgImg={bgImg}
+                bgColor={bgColor}
+                exercises={exercises}
+              />
             </Box>
 
-            <Box mt={4} display="flex" justifyContent="space-around">
+            <Box mt={5} display="flex" justifyContent="space-around">
               <Button
                 onClick={() => finishDayHandler(dayId)}
                 p={3}
                 borderRadius="md"
                 variant="outline"
+                //!
+                // bg={isCompleted ? 'red' : 'green.200'}
                 colorPalette={isCompleted ? 'red' : 'green'}
                 disabled={isCompleted}
               >
                 {isCompleted ? (
-                  'День уже завершен'
+                  <>День уже завершен</>
                 ) : (
                   <>
-                    Завершить день <LuCircleCheck color="green" />
+                    Завершить день <FaFlagCheckered />
                   </>
                 )}
               </Button>

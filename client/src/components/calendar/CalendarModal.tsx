@@ -22,6 +22,8 @@ import { userDaysService } from '@/services/userDays.service';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Link, useNavigate } from 'react-router-dom';
 import { IoIosAddCircleOutline } from 'react-icons/io';
+import axiosInstance from '@/axiosInstance';
+import { useAppSelector } from '@/store/hooks/hooks';
 
 interface UserDay {
   id: number;
@@ -33,6 +35,8 @@ interface UserDay {
     id: number;
     name: string;
     planId: number;
+    points: number;
+    calories: number;
     Exercises: Array<{
       id: number;
       name: string;
@@ -67,7 +71,7 @@ export function CalendarModal({
   const [isLoadingPlanned, setIsLoadingPlanned] = useState(false);
   const textColor = useColorModeValue('black', 'white');
   const navigate = useNavigate();
-
+  const { user } = useAppSelector((state) => state.appSlice);
   const fetchUnplannedDays = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -144,11 +148,20 @@ export function CalendarModal({
   };
 
   const handleToggleCompletion = async (
-    userDayId: number,
-    currentStatus: boolean
+    dayId: number,
+    currentStatus: boolean,
+    points: number,
+    calories: number,
+    userDayId: number
   ) => {
     try {
-      await userDaysService.updateCompletion(userDayId, !currentStatus);
+      await axiosInstance.patch(`/api/session/${dayId}`, {
+        isCompleted: !currentStatus,
+        userId: user!.id,
+        points: points,
+        calories: calories,
+      });
+
       setPlannedDays((prevDays) =>
         prevDays.map((day) =>
           day.id === userDayId ? { ...day, isCompleted: !currentStatus } : day
@@ -237,7 +250,13 @@ export function CalendarModal({
                         _hover={{ cursor: 'pointer' }}
                         checked={day.isCompleted}
                         onChange={() =>
-                          handleToggleCompletion(day.id, day.isCompleted)
+                          handleToggleCompletion(
+                            day.Day.id,
+                            day.isCompleted,
+                            day.Day.points,
+                            day.Day.calories,
+                            day.id
+                          )
                         }
                       ></Checkbox>
                     </HStack>

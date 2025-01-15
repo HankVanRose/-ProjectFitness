@@ -10,6 +10,8 @@ interface UserDay {
     id: number;
     name: string;
     planId: number;
+    points: number;
+    calories: number;
     Exercises: Array<{
       id: number;
       name: string;
@@ -22,7 +24,11 @@ interface UserDay {
 }
 
 export const userDaysService = {
-  getCalendarDays: async (userId: number, startDate: string, endDate: string) => {
+  getCalendarDays: async (
+    userId: number,
+    startDate: string,
+    endDate: string
+  ) => {
     const { data } = await axiosInstance.get<{ [key: string]: UserDay[] }>(
       `/api/userdays/user/${userId}/calendar?startDate=${startDate}&endDate=${endDate}`
     );
@@ -33,7 +39,7 @@ export const userDaysService = {
     const { data } = await axiosInstance.get<UserDay[]>(
       `/api/userdays/user/${userId}/date/${date}`
     );
-    
+
     return data;
   },
 
@@ -53,10 +59,9 @@ export const userDaysService = {
   },
 
   updateCompletion: async (userDayId: number, isCompleted: boolean) => {
-    const { data } = await axiosInstance.patch<UserDay>(
-      `/api/userdays/${userDayId}`,
-      { isCompleted }
-    );
-    return data;
+    const { data } = await axiosInstance.patch(`/api/userdays/${userDayId}`, {
+      isCompleted,
+    });
+    return data.userDay;
   },
 };
