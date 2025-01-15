@@ -127,13 +127,13 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
       await findUser.save();
     }
 
-    console.log(
-      `\n\n\n\n\n\n`,
-      findUser.calories,
-      findUser.points,
-      `\n\n\n\n\n\n`
-    );
-    console.log(`\n\n\n\n\n\n`, findUser, `\n\n\n\n\n\n`);
+    // console.log(
+    //   `\n\n\n\n\n\n`,
+    //   findUser.calories,
+    //   findUser.points,
+    //   `\n\n\n\n\n\n`
+    // );
+    // console.log(`\n\n\n\n\n\n`, findUser, `\n\n\n\n\n\n`);
 
     const { accessToken, refreshToken } = generateToken({ user: findUser });
 

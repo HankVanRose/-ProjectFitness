@@ -17,6 +17,7 @@ import { useRef, useState } from 'react';
 import axiosInstance from '@/axiosInstance';
 import { fetchUserCheck } from '@/store/thunkActions';
 import { Avatar } from '@/components/ui/avatar';
+import DownloadButton from '../DonwLoadButton/DownLoad';
 
 export default function ProgressBarComp() {
   const now = 60;
@@ -74,6 +75,7 @@ export default function ProgressBarComp() {
   // Значок каллорий
 
   return (
+    <>
     <Container maxW="container.xl" py={6}>
       <HStack align="center">
         <Box
@@ -156,6 +158,13 @@ export default function ProgressBarComp() {
           {/* Calories */}
         </VStack>
       </HStack>
+  
     </Container>
+          {/* кнопка сохранения*/}
+          <DownloadButton />
+        {/* кнопка сохранения*/}
+
+  
+    </>
   );
 }
