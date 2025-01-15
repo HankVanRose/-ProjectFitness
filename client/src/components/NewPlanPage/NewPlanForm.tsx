@@ -18,6 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { Field } from '@/components/ui/field';
+import { Avatar } from '@/components/ui/avatar';
 import axiosInstance from '@/axiosInstance';
 import { setError, setLoading } from '@/store/appSlice';
 import { DayExercise, ExerciseType, PlanType } from '@/types';
@@ -26,7 +27,6 @@ import { MdOutlineCreateNewFolder } from 'react-icons/md';
 import { useColorModeValue } from '../ui/color-mode';
 import { GrPlan } from 'react-icons/gr';
 import { CiCalendar } from 'react-icons/ci';
-import { useNavigate } from 'react-router-dom';
 
 export default function NewPlanForm() {
   const { VITE_API } = import.meta.env;
@@ -45,6 +45,8 @@ export default function NewPlanForm() {
 
   const [days, setDays] = useState<Omit<DayExercise[], 'planId'>>([]);
   const [allExercises, setAllExercises] = useState<ExerciseType[]>([]);
+  const [selectDifficulty, setSelectDifficulty] = useState<string[]>([]);
+
   useEffect(() => {
     const fetchExercises = async () => {
       try {
@@ -104,26 +106,25 @@ export default function NewPlanForm() {
 
   const handleSubmit = async () => {
     try {
-      setPlan((prevPlan) => ({
+      await axiosInstance.post(`${VITE_API}/days/newPlan/day/exercises`, {
+        ...plan,
+        days,
+      });
+      setPlan({
         name: '',
         shortDescription: '',
+        longDescription: '',
         equipment: '',
         difficulty: '',
         image: '',
         slogan: '',
         numOfTrainings: 0,
-        longDescription: '',
         weeksDescription: '',
         UserDays: [],
-      }));
-      setDays((prevDays) => []);
-
-      await axiosInstance.post(`${VITE_API}/days/newPlan/day/exercises`, {
-        ...plan,
-        days,
       });
+
+      setSelectDifficulty([]);
       setDays([]);
-      // navigate(`/plans/${response.data}`);
     } catch (error) {
       setError('Ошибка при добавлении дня');
       console.error(error);
@@ -144,6 +145,7 @@ export default function NewPlanForm() {
       points: exercise.points,
       label: exercise.name,
       calories: exercise.calories,
+      image: exercise.image,
     })),
   });
 
@@ -158,19 +160,19 @@ export default function NewPlanForm() {
   const targetOptions = createListCollection({
     items: [
       {
-        value: 'MinTime',
+        value: 'Закончить задание за минимальное время',
         label: 'Закончить задание за минимальное время',
       },
       {
-        value: 'AMRAP 20 min',
+        value: 'Завершить как можно больше раундов за 20 минут',
         label: 'Завершить как можно больше раундов за 20 минут',
       },
       {
-        value: 'AMRAP 25 min',
+        value: 'Закончить как можно больше раундов за 25 минут',
         label: 'Закончить как можно больше раундов за 25 минут',
       },
-      { value: 'TargetMuscles1', label: 'грудь + трицепс + дельты' },
-      { value: 'TargetMuscles2', label: 'спина + грудь + дельты' },
+      { value: 'грудь + трицепс + дельты', label: 'грудь + трицепс + дельты' },
+      { value: 'спина + грудь + дельты', label: 'спина + грудь + дельты' },
     ],
   });
 
@@ -186,15 +188,6 @@ export default function NewPlanForm() {
       return updatedDays;
     });
   };
-
-  // const updateCalories = (dayIndex: number, field: string, value: number) => {
-  //   const updatedDays = [...days];
-  //   updatedDays[dayIndex] = {
-  //     ...updatedDays[dayIndex],
-  //     [field]: value,
-  //   };
-  //   setDays(updatedDays);
-  // };
 
   const updateExercises = (dayIndex: number, exercises: ExerciseType[]) => {
     const updatedDays = [...days];
@@ -265,9 +258,25 @@ export default function NewPlanForm() {
                 </Field>
 
                 <Field label='Сложность'>
-                  <SelectRoot collection={difficultyOptions}>
+                  <SelectRoot
+                    collection={difficultyOptions}
+                    value={selectDifficulty}
+                    onValueChange={(ValueChangeDetails) => {
+                      const value = Array.isArray(ValueChangeDetails.value)
+                        ? ValueChangeDetails.value
+                        : [ValueChangeDetails.value];
+                      setSelectDifficulty(value);
+                      handleChange('difficulty', value[0]);
+                    }}
+                  >
                     <SelectTrigger p={2} borderRadius={4}>
-                      <SelectValueText placeholder='Выберите сложность'></SelectValueText>
+                      <SelectValueText placeholder='Выберите сложность'>
+                        {selectDifficulty.length > 0
+                          ? difficultyOptions.items.find(
+                              (item) => item.value === plan.difficulty
+                            )?.label
+                          : ''}
+                      </SelectValueText>
                     </SelectTrigger>
                     <SelectContent p={4}>
                       {difficultyOptions.items.map((option) => (
@@ -283,7 +292,7 @@ export default function NewPlanForm() {
                   <Input
                     p={2}
                     type='number'
-                    placeholder='Количество недель'
+                    placeholder='Количество дней'
                     value={plan.numOfTrainings.toString()}
                     onChange={(e) =>
                       handleChange('numOfTrainings', e.target.value)
@@ -341,6 +350,9 @@ export default function NewPlanForm() {
               borderRadius={10}
               mt={4}
               onClick={handleSubmit}
+              minW='10ch'
+              variant='surface'
+              colorPalette='green'
             >
               Создать план <MdOutlineCreateNewFolder />
             </Button>
@@ -389,9 +401,23 @@ export default function NewPlanForm() {
                 </Field>
 
                 <Field label='Тип'>
-                  <SelectRoot collection={typeOptions}>
+                  <SelectRoot
+                    collection={typeOptions}
+                    onValueChange={(ValueChangeDetails) => {
+                      const value = Array.isArray(ValueChangeDetails.value)
+                        ? ValueChangeDetails.value[0]
+                        : ValueChangeDetails.value;
+                      handleChangeDay('type', dayIndex, value);
+                    }}
+                  >
                     <SelectTrigger p={2} borderRadius={4}>
-                      <SelectValueText placeholder='Выберите тип дня'></SelectValueText>
+                      <SelectValueText placeholder='Выберите тип дня'>
+                        {
+                          typeOptions.items.find(
+                            (item) => item.value === day.type
+                          )?.label
+                        }
+                      </SelectValueText>
                     </SelectTrigger>
                     <SelectContent p={4}>
                       {typeOptions.items.map((type) => (
@@ -404,9 +430,23 @@ export default function NewPlanForm() {
                 </Field>
 
                 <Field label='Задача на день'>
-                  <SelectRoot collection={targetOptions}>
+                  <SelectRoot
+                    collection={targetOptions}
+                    onValueChange={(ValueChangeDetails) => {
+                      const value = Array.isArray(ValueChangeDetails.value)
+                        ? ValueChangeDetails.value[0]
+                        : ValueChangeDetails.value;
+                      handleChangeDay('target', dayIndex, value);
+                    }}
+                  >
                     <SelectTrigger p={2} borderRadius={4}>
-                      <SelectValueText placeholder='Выберите задачу на день'></SelectValueText>
+                      <SelectValueText placeholder='Выберите задачу на день'>
+                        {
+                          targetOptions.items.find(
+                            (item) => item.value === day.target
+                          )?.label
+                        }
+                      </SelectValueText>
                     </SelectTrigger>
                     <SelectContent p={4}>
                       {targetOptions.items.map((target) => (
@@ -551,7 +591,8 @@ export default function NewPlanForm() {
                           </SelectTrigger>
                           <SelectContent p={4} color={textColor}>
                             {exercisesOptions.items.map((option) => (
-                              <SelectItem item={option} key={option.value}>
+                              <SelectItem item={option} key={option.value} justifyContent='flex-start' my={1}>
+                                <Avatar name={option.label} src={option.image} size='lg' />
                                 {option.label}
                               </SelectItem>
                             ))}
@@ -575,7 +616,17 @@ export default function NewPlanForm() {
             </Box>
           ))}
 
-          <Button p={3} borderRadius='md' onClick={addDay}>
+          <Button
+            p={3}
+            onClick={addDay}
+            width={200}
+            alignSelf='flex-center'
+            borderRadius={10}
+            mt={4}
+            minW='10ch'
+            variant='surface'
+            colorPalette='green'
+          >
             Добавить день <IoAddCircleOutline />
           </Button>
         </Box>
