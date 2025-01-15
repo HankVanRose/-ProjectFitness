@@ -192,7 +192,9 @@ export default function DayModal({
                   <>День уже завершен</>
                 ) : (
                   <>
+ 
                     Завершить день <FaFlagCheckered />
+ 
                   </>
                 )}
               </Button>

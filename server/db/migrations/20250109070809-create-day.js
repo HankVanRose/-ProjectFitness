@@ -21,6 +21,7 @@ module.exports = {
       },
       calories: {
         type: Sequelize.INTEGER,
+        defaultValue: 0,
       },
       description: {
         type: Sequelize.TEXT,
@@ -41,10 +42,6 @@ module.exports = {
       },
       rounds: {
         type: Sequelize.INTEGER,
-      },
-      calories: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
       },
       createdAt: {
         allowNull: false,
