@@ -15,7 +15,8 @@ type UserdayCardProps = {
   type: string;
   target: string;
   updatePlanCompletion: (userDayId: number, dayId: number) => void;
-  exercises: ExercisesType
+  exercises: ExercisesType,
+  calories: number;
 };
 
 function UserdayCard({
@@ -30,7 +31,8 @@ function UserdayCard({
   type,
   target,
   updatePlanCompletion,
-  exercises
+  exercises,
+  calories
 }: UserdayCardProps) {
   const [open, setOpen] = useState(false);
   return (
@@ -41,6 +43,7 @@ function UserdayCard({
             ТРЕНИРОВОЧНЫЙ ДЕНЬ №{cardNumber}
           </Text>
           <Card.Description
+          onClick={() => setOpen(true)}
             textAlign={'center'}
             fontSize="1rem"
             fontWeight="600"
@@ -59,6 +62,7 @@ function UserdayCard({
 
         >
           <Badge
+          onClick={() => setOpen(true)}
             colorPalette={isAnyDayCompleted ? 'green' : 'red'}
             p={3}
             mb={2}
@@ -85,6 +89,7 @@ function UserdayCard({
         updatePlanCompletion={updatePlanCompletion}
         isCompleted={isAnyDayCompleted}
         exercises={exercises}
+        calories={calories}
       />
     </>
   );

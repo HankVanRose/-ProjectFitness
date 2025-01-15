@@ -103,14 +103,14 @@ router.route('/').post(async (req, res) => {
 router.patch('/:dayId', verifyAccessToken, async (req, res) => {
   try {
     const { dayId } = req.params;
-    const { isCompleted, userId, points } = req.body;
+    const { isCompleted, userId, points, calories } = req.body;
 
     if (typeof isCompleted !== 'boolean') {
       return res
         .status(400)
         .json({ error: 'isCompleted должно быть булевым значением.' });
     }
-    console.log('points', points);
+    // console.log('points', points);
     const userDay = await UserDay.findOne({
       where: {
         userId,
@@ -120,10 +120,21 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
 
     const findUser = await User.findOne({ where: { id: userId } });
 
-    if (points) {
+    if ((points && calories)) {
       findUser.points += points;
+      findUser.calories += calories;
+
       await findUser.save();
     }
+
+    // console.log(
+    //   `\n\n\n\n\n\n`,
+    //   findUser.calories,
+    //   findUser.points,
+    //   `\n\n\n\n\n\n`
+    // );
+    // console.log(`\n\n\n\n\n\n`, findUser, `\n\n\n\n\n\n`);
+
     const { accessToken, refreshToken } = generateToken({ user: findUser });
 
     if (!userDay) {

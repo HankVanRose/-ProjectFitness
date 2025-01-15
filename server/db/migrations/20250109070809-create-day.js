@@ -19,6 +19,9 @@ module.exports = {
       points: {
         type: Sequelize.INTEGER,
       },
+      calories: {
+        type: Sequelize.INTEGER,
+      },
       description: {
         type: Sequelize.TEXT,
         allowNull: true,

@@ -9,6 +9,7 @@ module.exports = {
         {
           planId: 1,
           points: 100,
+          calories: 400,
           title: 'BUZZZZER',
           rounds: 3,
           type: 'ASAP',
@@ -19,6 +20,7 @@ module.exports = {
         {
           planId: 1,
           points: 120,
+          calories: 500,
           title: 'FAT BURNER',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -29,6 +31,7 @@ module.exports = {
         {
           planId: 1,
           points: 130,
+          calories: 550,
           title: 'LUCKY SEVEN',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -39,6 +42,7 @@ module.exports = {
         {
           planId: 1,
           points: 150,
+          calories: 600,
           title: 'Cross 16.3',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -49,6 +53,7 @@ module.exports = {
         {
           planId: 1,
           points: 200,
+          calories: 620,
           title: 'FuncBodyTrain',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -59,6 +64,7 @@ module.exports = {
         {
           planId: 1,
           points: 210,
+          calories: 610,
           title: 'FuncBodyTrain',
           type: 'AMRAP',
           target:
@@ -70,6 +76,7 @@ module.exports = {
         {
           planId: 1,
           points: 280,
+          calories: 570,
           title: 'HEART PUMP',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -80,6 +87,7 @@ module.exports = {
         {
           planId: 1,
           points: 170,
+          calories: 670,
           title: 'IRON MIKE TYSON',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -90,6 +98,7 @@ module.exports = {
         {
           planId: 1,
           points: 250,
+          calories: 650,
           title: 'GAEL',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -100,6 +109,7 @@ module.exports = {
         {
           planId: 1,
           points: 210,
+          calories: 620,
           title: 'GAEL',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -110,6 +120,7 @@ module.exports = {
         {
           planId: 1,
           points: 300,
+          calories: 680,
           title: 'D Z O',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -120,6 +131,7 @@ module.exports = {
         {
           planId: 1,
           points: 310,
+          calories: 610,
           title: 'Franco',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -131,6 +143,7 @@ module.exports = {
         {
           planId: 2,
           points: 250,
+          calories: 620,
           title: 'Nuke',
           type: 'No Time',
           target: 'грудь + трицепс + дельты',
@@ -141,6 +154,7 @@ module.exports = {
         {
           planId: 2,
           points: 350,
+          calories: 470,
           title: 'BINGO',
           type: 'No Time',
           target: 'спина + грудь + дельты',
@@ -151,6 +165,7 @@ module.exports = {
         {
           planId: 2,
           points: 350,
+          calories: 570,
           title: 'ANDERSON',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -161,6 +176,7 @@ module.exports = {
         {
           planId: 2,
           points: 250,
+          calories: 570,
           title: 'Gretta',
           type: 'AMRAP',
           target: 'Закончить как можно больше раундов за 20 минут',
@@ -171,6 +187,7 @@ module.exports = {
         {
           planId: 2,
           points: 170,
+          calories: 680,
           title: 'NIOH',
           type: 'AMRAP',
           target: 'Закончить как можно больше раундов за 25 минут',
@@ -181,6 +198,7 @@ module.exports = {
         {
           planId: 2,
           points: 170,
+          calories: 690,
           title: 'TSUSIMA',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -191,6 +209,7 @@ module.exports = {
         {
           planId: 2,
           points: 170,
+          calories: 630,
           title: 'SHIBURA',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -201,6 +220,7 @@ module.exports = {
         {
           planId: 2,
           points: 170,
+          calories: 690,
           title: 'Катастрофа',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -211,6 +231,7 @@ module.exports = {
         {
           planId: 3,
           points: 100,
+          calories: 620,
           title: 'BIG',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -221,6 +242,7 @@ module.exports = {
         {
           planId: 3,
           points: 150,
+          calories: 520,
           title: 'DADDY',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -231,6 +253,7 @@ module.exports = {
         {
           planId: 3,
           points: 250,
+          calories: 420,
           title: 'FRANCHESKA',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -241,6 +264,7 @@ module.exports = {
         {
           planId: 3,
           points: 300,
+          calories: 520,
           title: 'REDHOOD',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -251,6 +275,7 @@ module.exports = {
         {
           planId: 3,
           points: 350,
+          calories: 620,
           title: 'REDHOOD',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',
@@ -260,6 +285,7 @@ module.exports = {
         {
           planId: 3,
           points: 500,
+          calories: 420,
           title: 'PUSHMASTER',
           type: 'ASAP',
           target: 'Закончить задание за минимальное время',

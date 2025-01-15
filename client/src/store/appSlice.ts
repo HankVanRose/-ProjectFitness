@@ -45,10 +45,18 @@ const appSlice = createSlice({
     },
     setPoints: (state, action: PayloadAction<number>) => {
       if (state.user) {
-        state.user.points += action.payload;
+        state.user.points += action.payload ;
         console.log('Updated points:', state.user.points);
       } else {
         console.warn('User not found! Points not updated.');
+      }
+    },
+    setCalories: (state, action: PayloadAction<number>) => {
+      if (state.user) {
+        state.user.calories += action.payload ;
+        console.log('Updated calories:', state.user.calories);
+      } else {
+        console.warn('User not found! Calories not updated.');
       }
     },
     setUserplan: (state, action) => {
@@ -146,4 +154,4 @@ const appSlice = createSlice({
 });
 
 export default appSlice.reducer;
-export const { setError, setLoading, setPoints, setUserplan } = appSlice.actions;
+export const { setError, setLoading, setPoints, setUserplan, setCalories } = appSlice.actions;

@@ -1,13 +1,10 @@
-import { useAppSelector } from '@/store/hooks/hooks';
 import { PlanType } from '@/types';
 import { Box, Button, Skeleton, Text } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function UserPlanCard({ id, name, image }: PlanType) {
   const [isLoading, setIsLoading] = useState(true);
-  
- 
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -19,7 +16,7 @@ export default function UserPlanCard({ id, name, image }: PlanType) {
   const navigate = useNavigate();
 
   const redirectToSession = () => {
-    navigate(`/plans/${id}/days`)
+    navigate(`/plans/${id}/days`);
   };
 
   return (
@@ -45,6 +42,7 @@ export default function UserPlanCard({ id, name, image }: PlanType) {
         </Box>
       ) : (
         <Box
+          onClick={redirectToSession}
           style={{
             backgroundImage: `url(${image})`,
             backgroundSize: 'cover',
@@ -61,7 +59,7 @@ export default function UserPlanCard({ id, name, image }: PlanType) {
             justifyContent="flex-end"
             color="white"
           >
-            <Text fontSize="40px">
+            <Text fontSize="40px" onClick={redirectToSession}>
               <b>{name}</b>
             </Text>
             <Box display="flex" flexDirection="column" marginTop="auto">

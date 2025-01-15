@@ -10,6 +10,7 @@ export type UserType = {
   points: number;
   age?: number;
   goal?: string;
+  calories?: number;
 };
 
 export type ExerciseType = {
@@ -41,6 +42,7 @@ export type PlanType = {
   numOfTrainings: number;
   weeksDescription?: string;
   UserDays: any[];
+ 
 };
 
 export type SessionType = {
@@ -64,6 +66,7 @@ export type PlansType = PlanType[];
 export type DayExercise = {
   planId: number;
   points: number;
+  calories?: number
   description?: string;
   title?: string;
   type?: string;
