@@ -126,7 +126,7 @@ export default function UserDaysBlock({ userId }: { userId: number }) {
             width="100%"
             textAlign="center"
             p={2}
-            _hover={{
+              _hover={{
               color: 'yellow.300',
               cursor: 'pointer',
             }}
@@ -307,7 +307,7 @@ export default function UserDaysBlock({ userId }: { userId: number }) {
               </Box>
             ))
           ) : (
-            <Text>Нет таких тренировок</Text>
+            <Text color='gray.800'>Нет таких тренировок</Text>
           )}
         </VStack>
       </Box>

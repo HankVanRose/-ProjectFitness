@@ -44,7 +44,7 @@ export default function SoonestList({ userId }: { userId: number }) {
 
       <Text fontWeight='700' fontSize='1.2rem'> Ближайшие тренировки: </Text>
 
-      {userDays.map((day) => (
+      { userDays.length > 0 ? userDays.map((day) => (
         <Box
           key={day.id}
           p={4}
@@ -121,7 +121,7 @@ export default function SoonestList({ userId }: { userId: number }) {
             </VStack>
           </HStack>
         </Box>
-      ))}
+      )) : <Text color='gray.700'>Нет запланированных тренировок</Text>}
     </VStack>
   );
 }
