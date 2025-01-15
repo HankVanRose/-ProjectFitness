@@ -25,6 +25,7 @@ type DayType = {
   rounds: number;
   Exercises: ExerciseType[];
   UserDays: UserDayType[];
+  calories: number;
 };
 
 export default function UserDaysList() {
@@ -65,7 +66,8 @@ export default function UserDaysList() {
       </div>
     );
   }
-console.log(days.map(el=> el.Exercises));
+  console.log(`points`, days.map(el=> el.points));
+console.log(`calories`,days.map(el=> el.calories));
 
   const updatePlanCompletion = (userDayId: number, dayId: number) => {
     setDays((prevDays) => {
@@ -190,6 +192,7 @@ console.log(days.map(el=> el.Exercises));
                     dayId={day.id}
                     planId={day.planId}
                     points={day.points}
+                    calories={day.calories}
                     description={day.description}
                     title={day.title}
                     rounds={day.rounds}
@@ -199,6 +202,7 @@ console.log(days.map(el=> el.Exercises));
                     isAnyDayCompleted={isAnyDayCompleted}
                     updatePlanCompletion={updatePlanCompletion}
                     exercises={day.Exercises}
+                    
                   />
                 </Box>
               </Box>

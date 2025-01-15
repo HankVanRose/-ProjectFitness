@@ -9,6 +9,7 @@ export default function UserPlansPage() {
   const [userPlans, setUserPlans] = useState([]);
   const { VITE_API } = import.meta.env;
   const [isLoading, setIsLoading] = useState(true);
+  const { userplan } = useAppSelector((state) => state.appSlice);
 
   //id
   useEffect(() => {
@@ -19,7 +20,7 @@ export default function UserPlansPage() {
           const res = await axiosInstance.get(
             `${VITE_API}/session/plans/${user?.id}`
           );
-          console.log(res);
+          // console.log(res);
           setUserPlans(res.data);
         } catch (error) {
           console.error(error, 'Ошибка');
@@ -31,10 +32,7 @@ export default function UserPlansPage() {
     if (user?.id) allPlans();
   }, [user]);
 
-  useEffect(()=>{
-    console.log(userPlans);
-  }, [userPlans])
- 
+  // onClick={() => navigate(`/plans/${plan.planId}/days`)}
 
   return (
     <Container maxW="full" px={4}>
@@ -43,7 +41,7 @@ export default function UserPlansPage() {
           <Box key={plan.id} p={4} borderRadius="md">
             <UserPlanCard
               image={plan.Plan?.image}
-              id={plan?.id}
+              id={plan.planId}
               name={plan.Plan?.name}
             />
           </Box>

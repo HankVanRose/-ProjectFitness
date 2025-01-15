@@ -27,6 +27,8 @@ import FitnessCalendar from './components/calendar/FitnessCalendar';
 import UserPlansPage from './components/UserPlansPage/UserPlansPage';
 import UserDaysList from './components/userdays/UserdayList';
 import PlanPage from './components/planPage/PlanPage';
+import Test from './components/test/test';
+ 
  
 
 
@@ -56,6 +58,7 @@ function App() {
           <Route path='/admin' element={<AdminPage />} />
           <Route path='/calendar' element={<FitnessCalendar />} />
           <Route path='/:userId/userplans' element={< UserPlansPage/>} />
+   
 
         </Route>
       </Routes>

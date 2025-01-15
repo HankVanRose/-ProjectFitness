@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import axiosInstance from '../../axiosInstance';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/hooks';
-import { setPoints } from '@/store/appSlice';
+import { setCalories, setPoints } from '@/store/appSlice';
 import { LuCircleCheck } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 import { ExercisesType } from '@/types';
@@ -31,6 +31,7 @@ type DayModalProps = {
   points: number;
   isCompleted: boolean;
   exercises: ExercisesType;
+  calories: number;
 };
 export default function DayModal({
   open,
@@ -47,6 +48,7 @@ export default function DayModal({
   points,
   isCompleted,
   exercises,
+  calories
 }: DayModalProps) {
   const descriptionLines = description
     .split(';')
@@ -62,10 +64,12 @@ export default function DayModal({
         isCompleted: true,
         userId: user?.id,
         points: points,
+        calories: calories,
       });
       updatePlanCompletion(planId, id);
 
       dispatch(setPoints(points));
+      dispatch(setCalories(calories));
 
       setOpen(false);
     } catch (error) {
