@@ -134,6 +134,7 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
     }
     userDay.isCompleted = isCompleted;
  
+ 
     if (!userDay.plannedOn) {
       const today = new Date();
       const date = new Date(today.setDate(today.getDate() - 1))
@@ -145,6 +146,7 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
 
     console.log(userDay.get({ plain: true }));
 
+ 
  
     await userDay.save();
     res

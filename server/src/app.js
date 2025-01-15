@@ -5,11 +5,10 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 const app = express();
 const cors = require('cors');
- 
+
 const path = require('path');
- 
+const bodyParser = require('body-parser');
 //  require('./hooks.js')
- 
 
 const { PORT } = process.env;
 
@@ -23,14 +22,19 @@ const corsConfig = {
   ],
   credentials: true,
 };
-app.use(cors(corsConfig));
 
+app.use(cors(corsConfig));
+app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/api', apiRouter);
-app.use('/uploads/avatars', express.static(path.join(__dirname, 'uploads/avatars')));
+app.use(
+  '/uploads/avatars',
+  express.static(path.join(__dirname, 'uploads/avatars'))
+);
 
-app.listen(PORT, () => {  console.log(`Server started at ${PORT} port`);
+app.listen(PORT, () => {
+  console.log(`Server started at ${PORT} port`);
 });

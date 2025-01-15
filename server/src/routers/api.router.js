@@ -9,6 +9,7 @@ const daysRouter = require('./days.router');
 const userRouter = require('./users.router');
 const userdaysRouter = require('./userdays.router');
 const downloadRouter = require('./download.router');
+const passwordRouter = require('./password.router');
 
 router.use('/tokens', tokenRouter);
 router.use('/auth', authRouter);
@@ -19,6 +20,7 @@ router.use('/days', daysRouter);
 router.use('/users', userRouter);
 router.use('/userdays', userdaysRouter);
 router.use('/download', downloadRouter);
+router.use('/password', passwordRouter)
 
 
 module.exports = router;

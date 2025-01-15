@@ -7,6 +7,8 @@ const {
   validateSignupData,
   validateSigninData,
 } = require('../middlewares/validateData');
+const nodemailer = require('nodemailer');
+ 
 
 router.post('/signup', validateSignupData, async (req, res) => {
   const { username, email, password } = req.body;
@@ -22,7 +24,9 @@ router.post('/signup', validateSignupData, async (req, res) => {
     });
 
     if (!created) {
-      return res.status(409).json({ message: 'Такой пользователь уже существует' });
+      return res
+        .status(409)
+        .json({ message: 'Такой пользователь уже существует' });
     }
 
     const plainUser = user.get();
@@ -31,6 +35,23 @@ router.post('/signup', validateSignupData, async (req, res) => {
     delete plainUser.updatedAt;
 
     const { accessToken, refreshToken } = generateToken({ user: plainUser });
+
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail', 
+      auth: {
+        user: 'vanroseaxl1@gmail.com',  
+        pass: 'njja kzsp nsya xbuv',  
+      },
+    });
+
+    const mailOptions = {
+      from: '👻 BEFIT 👻 vanroseaxl1@gmail.com',  
+      to: email,  
+      subject: 'Добро пожаловать!',
+      html: '<h1>Привет, ' + username + '❤️!</h1><p>Спасибо за регистрацию на нашем сайте. Успехов в преображении🔥.</p>',
+    };
+
+    await transporter.sendMail(mailOptions);
 
     return res
       .status(201)
@@ -56,7 +77,9 @@ router.post('/signin', validateSigninData, async (req, res) => {
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      return res.status(401).json({ message: 'Нет пользователей с такой почтой' });
+      return res
+        .status(401)
+        .json({ message: 'Нет пользователей с такой почтой' });
     }
 
     const isValidPassword = await bcrypt.compare(password, user.password);
@@ -103,26 +126,24 @@ router.get('/signout', (req, res) => {
 });
 
 router.patch('/profile', async (req, res) => {
-  const {
-    id, email, password, ...otherData
-  } = req.body;
+  const { id, email, password, ...otherData } = req.body;
   try {
     const user = await User.findByPk(id);
     if (!user) {
-      return res.status(404).json({ message: "Пользователь не найден" });
+      return res.status(404).json({ message: 'Пользователь не найден' });
     }
 
-    if(email) {
-      const existingUser = await User.findOne({where: { email }});
+    if (email) {
+      const existingUser = await User.findOne({ where: { email } });
       if (existingUser && existingUser.id !== id) {
-        return res.status(400).json({ message: 'Пользователь с таким email уже зарегистрирован'});
+        return res
+          .status(400)
+          .json({ message: 'Пользователь с таким email уже зарегистрирован' });
       }
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
-        return res
-          .status(400)
-          .json({ message: 'Некорректный формат email' });
+        return res.status(400).json({ message: 'Некорректный формат email' });
       }
     }
 
@@ -131,9 +152,10 @@ router.patch('/profile', async (req, res) => {
       otherData.password = hashedPassword;
     }
 
-    await user.update({...otherData, 
+    await user.update({
+      ...otherData,
       ...(email && { email }),
-      ...(password && { password: otherData.password })
+      ...(password && { password: otherData.password }),
     });
     const updatedUser = user.toJSON();
     delete updatedUser.password;
@@ -155,18 +177,18 @@ router.patch('/profile', async (req, res) => {
 });
 
 router.post('/check-password', async (req, res) => {
-const {userId, password } = req.body;
-try {
-  const user = await User.findByPk(userId);
-  if(!user) {
-    return res.status(404).json({ message: 'Пользователь не найден' });
+  const { userId, password } = req.body;
+  try {
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'Пользователь не найден' });
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    res.json({ isMatch });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Ошибка проверки пароля на сервере' });
   }
-  const isMatch = await bcrypt.compare(password, user.password);
-  res.json({ isMatch });
-} catch (error) {
-  console.error(error);
-  res.status(500).json({ message: "Ошибка проверки пароля на сервере" });
-};
 });
 
 module.exports = router;

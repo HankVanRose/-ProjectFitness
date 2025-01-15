@@ -17,18 +17,21 @@ import SingleExercisePage from './components/ExercisePage/SingleExercisePage';
 import HomePage from './components/HomePage/HomePage';
 
 import { useColorModeValue } from './components/ui/color-mode';
-import { Box } from '@chakra-ui/react';
+import { Box, Switch } from '@chakra-ui/react';
 
 import NewPlanForm from './components/NewPlanPage/NewPlanForm';
 import AdminPage from './components/admin/AdminPage';
  
  
-import FitnessCalendar from './components/calendar/FitnessCalendar';
+ 
 import UserPlansPage from './components/UserPlansPage/UserPlansPage';
 import UserDaysList from './components/userdays/UserdayList';
 import PlanPage from './components/planPage/PlanPage';
  
 import CalendarPage from './components/calendar/CalendarPage';
+import ResetPassword from './components/password/ResetPassword';
+import RequestPasswordReset from './components/password/RequestPasswordReset';
+import VerifyOTP from './components/password/VerifyOtp';
  
  
 
@@ -59,6 +62,13 @@ function App() {
           <Route path='/admin' element={<AdminPage />} />
           <Route path='/calendar' element={<CalendarPage />} />
           <Route path='/:userId/userplans' element={< UserPlansPage/>} />
+          
+                <Route path="/request-reset" element={<RequestPasswordReset/>} />
+                <Route path="/verify-otp" element={<VerifyOTP/>} />
+                <Route path="/reset-password" element={<ResetPassword/>} />
+            
+    
+           
    
 
         </Route>
