@@ -170,11 +170,13 @@ export default function FitnessCalendar() {
       </Box>
     );
   }
+  
+  
   return (
     <>
       <Box
         p={6}
-        maxW="800px"
+        maxW="1000px"
         mx="auto"
         bg={bgColor}
         borderRadius="xl"
@@ -224,7 +226,11 @@ export default function FitnessCalendar() {
                 .toISOString()
                 .split('T')[0];
 
-              const dayTrainings = calendarData[currentDateString] || [];
+              console.log(currentDateString);// 2025-01-15
+
+              const dayTrainings = calendarData[currentDateString] || []; // has array
+              console.log('dayTrainings', dayTrainings);
+
               const hasTrainingDot = dayTrainings.length > 0;
 
               return (
@@ -271,7 +277,6 @@ export default function FitnessCalendar() {
           </Grid>
         </VStack>
       </Box>
-      <UserDaysBlock userId={user.id}></UserDaysBlock>
     </>
   );
 }

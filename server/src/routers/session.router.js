@@ -40,10 +40,12 @@ router.get('/plans/:userId', async (req, res) => {
     const plans = await Session.findAll({
       where: { userId },
       attributes: { exclude: ['createdAt', 'updatedAt'] },
-      include: [{
-        model: Plan,
-        attributes: ['name', 'image'],
-      }],
+      include: [
+        {
+          model: Plan,
+          attributes: ['name', 'image'],
+        },
+      ],
     });
     // const planNames = plans.map((plan) => plan.Plan.name);
     // const planNamesWithSpaces = planNames.join(' ');
@@ -128,6 +130,12 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
       return res.status(404).json({ error: 'Запись не найдена.' });
     }
     userDay.isCompleted = isCompleted;
+    const today = new Date();
+    const date = new Date(today.setDate(today.getDate() - 1)).toLocaleDateString().split('T')[0];
+    
+    
+    userDay.plannedOn = date;
+    
     await userDay.save();
     res
       .status(200)

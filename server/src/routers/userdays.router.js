@@ -101,6 +101,8 @@ router.patch('/plan/:userDayId', async (req, res) => {
     }
 
     userDay.plannedOn = plannedOn;
+    console.log('datedatedatedatedate', plannedOn);
+
     await userDay.save();
 
     // Fetch updated UserDay with related data
@@ -135,18 +137,16 @@ router.patch('/:userDayId', async (req, res) => {
     const { userDayId } = req.params;
     const { isCompleted } = req.body;
 
-    if (typeof isCompleted !== 'boolean') {
-      return res
-        .status(400)
-        .json({ error: 'isCompleted must be a boolean value.' });
-    }
-
     const userDay = await UserDay.findByPk(userDayId);
     if (!userDay) {
       return res.status(404).json({ message: 'Training day not found' });
     }
 
     userDay.isCompleted = isCompleted;
+    const date = new Date().toISOString().split('T')[0];
+    userDay.plannedOn = date;
+    console.log('datedatedatedatedate', date);
+
     await userDay.save();
 
     // Fetch updated UserDay with related data
@@ -222,6 +222,48 @@ router.get('/all/:userId', async (req, res) => {
       where: {
         userId,
       },
+      include: [
+        {
+          model: Day,
+          include: [
+            {
+              model: Exercise,
+              through: DayExercise,
+              attributes: ['id', 'name', 'shortDescription'],
+            },
+            {
+              model: Plan,
+              attributes: ['name'],
+            },
+          ],
+        },
+      ],
+    });
+
+    res.status(200).json(unplannedDays);
+  } catch (error) {
+    console.log(error);
+
+    res
+      .status(500)
+      .json({ message: 'Error fetching unplanned days', error: error.message });
+  }
+});
+router.get('/soonest/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to start of day
+
+    const unplannedDays = await UserDay.findAll({
+      where: {
+        userId,
+        plannedOn: {
+          [Op.gte]: today, // Greater than or equal to today
+        },
+      },
+      limit: 4,
+      order: [['plannedOn', 'ASC']], // This will get the closest dates first
       include: [
         {
           model: Day,
