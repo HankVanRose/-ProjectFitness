@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance, { setAccessToken } from '../axiosInstance';
 import { AxiosError } from 'axios';
-import { UserType, UserResponseType, SessionType } from '../types';
+import { UserType, UserResponseType, SessionType, UserDayType } from '../types';
 
 const fetchUserSignup = createAsyncThunk(
   'user/signup',
@@ -121,6 +121,27 @@ const userActivePlan = createAsyncThunk<
   }
 });
 
+const fetchUserProgress = createAsyncThunk('user/progress',
+  async (userId: number,  { rejectWithValue }) => {
+    try {
+      const responseUserPlans = await axiosInstance.get<SessionType[]>(
+        `${import.meta.env.VITE_API}/session/plans/${userId}`
+      );
+      const sessions = responseUserPlans.data;
+
+      const responseUserDays = await axiosInstance.get<UserDayType[]>(
+        `${import.meta.env.VITE_API}/userdays/all/${userId}`
+      );
+      const userDays = responseUserDays.data;
+      return { sessions, userDays }
+    } catch (error) {
+      if (error instanceof AxiosError && error.response?.data.message) {
+        return rejectWithValue(error.response.data.message);
+      }
+      return rejectWithValue('An unexpected error occurred');
+    }
+  }
+)
 // const fetchExercises = createAsyncThunk('exercises', async () => {
 //   try {
 //     const response = await axiosInstance.get<PlanType>(
@@ -138,4 +159,5 @@ export {
   fetchUserCheck,
   fetchUpdateProfile,
   userActivePlan,
+  fetchUserProgress
 };

@@ -43,7 +43,7 @@ router.get('/plans/:userId', async (req, res) => {
       include: [
         {
           model: Plan,
-          attributes: ['name', 'image'],
+          attributes: ['name', 'image', 'numOfTrainings'],
         },
       ],
     });
