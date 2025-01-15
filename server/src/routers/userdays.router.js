@@ -145,7 +145,6 @@ router.patch('/:userDayId', async (req, res) => {
     userDay.isCompleted = isCompleted;
     const date = new Date().toISOString().split('T')[0];
     userDay.plannedOn = date;
-    console.log('datedatedatedatedate', date);
 
     await userDay.save();
 

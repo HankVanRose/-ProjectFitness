@@ -12,6 +12,8 @@ import {
   Stack,
   Button,
   Spinner,
+  Grid,
+  Separator,
 } from '@chakra-ui/react';
 import { Toaster, toaster } from '@/components/ui/toaster';
 import { useAppSelector } from '@/store/hooks/hooks';
@@ -86,13 +88,8 @@ export default function PlanPage() {
 
   if (loading) {
     return (
-      <Box
-        display='flex'
-        alignItems='center'
-        justifyContent='center'
-        minHeight='100vh'
-      >
-        <Spinner size='xl' />
+      <Box display="flex" alignItems="center" justifyContent="center" h="100vh">
+        <Spinner size="xl" />
       </Box>
     );
   }
@@ -100,80 +97,94 @@ export default function PlanPage() {
   if (!plan) {
     return <div>Plan not found</div>;
   }
+  console.log(plan.shortDescription);
 
   return (
-    <>
-      <Box
-        color={{ base: 'black', _dark: 'white' }}
-        padding='20px'
-        display='flex'
-        alignItems='center'
-        justifyContent='center'
-        minHeight='100vh'
-      >
-        <Toaster />
-        <Container maxW="container.lg" className="py-5">
-          <VStack  align="stretch">
-            <Heading textAlign="center" fontSize="2.5rem" fontWeight="bold">
-              ПЛАН ТРЕНИРОВОК: {plan.name?.toUpperCase()}
-            </Heading>
-            <Image
-              src={plan.image}
-              alt={plan.name?.toUpperCase()}
-              borderRadius='md'
-              maxHeight='768px'
-              objectFit='cover'
-              alignSelf='center'
-            />
-
-            <Stack
-              textAlign="justify"
-              marginX="100px"
-              marginY="15px"
+    <Box color={{ base: 'white', _dark: 'white' }}>
+      <Toaster />
+      <Box position="relative" width="100%">
+        <Box
+          position="relative"
+          bgImage={`url(${plan.image})`}
+          bgSize="cover"
+          bgAttachment="fixed"
+        >
+          <Box backdropFilter="blur(3px) brightness(40%) contrast(101%)" p={6}>
+            {/* Main Grid Container */}
+            <Grid
+              templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
+              gap={8}
+              mt={{ base: 4, md: 6 }}
             >
-              <Heading fontSize='2rem'>Уровень сложности:</Heading>
-              <Text fontSize='1.3rem' lineHeight='1.6' textAlign='justify'>
-                {plan.difficulty?.toUpperCase()}
-              </Text>
-              <Heading fontSize='2rem'>Необходимое оборудование:</Heading>
-              <Text fontSize='1.3rem' lineHeight='1.6' textAlign='justify'>
-                {plan.equipment?.toUpperCase()}
-              </Text>
-              <Heading fontSize='2rem'>Описание:</Heading>
-              <Text fontSize='1.3rem' lineHeight='1.6' textAlign='justify'>
-                {plan.shortDescription}
-              </Text>
+              {/* Left Column - Image and Details */}
+              <VStack align="stretch">
+                <Heading fontSize="3rem" fontWeight="bold" color="white" mb={4}>
+                  {plan.name?.toUpperCase()}
+                </Heading>
 
-              <Heading fontSize='2rem'>
-                Общее количество тренировочных дней: {plan.numOfTrainings}
-              </Heading>
-              <Heading fontSize='2rem'>Подробнее о: {plan.name}</Heading>
-              <Text fontSize='1.3rem' lineHeight='1.6' textAlign='justify'>
-                {plan.longDescription}
-              </Text>
-              <Heading fontSize='1.5rem' textAlign='center'>
-                {plan.slogan?.toUpperCase()}
-              </Heading>
-            </Stack>
+                <Image
+                  src={plan.image}
+                  alt={plan.name}
+                  borderRadius="20px 20px 0px 0px"
+                  maxW="100%"
+                  h="auto"
+                  filter="brightness(80%) contrast(95%)"
+                  mb={4}
+                />
 
-            <Button
-              variant='outline'
-              backgroundColor='red.700'
-              borderColor='red.700'
-              borderRadius={10}
-              height={50}
-              w='100%'
-              onClick={
-                planExists
-                  ? () => navigate(`/plans/${id}/days`)
-                  : addPlanHandler
-              }
-            >
-              {planExists ? 'ПЕРЕЙТИ НА МОЙ ПЛАН' : '+ ДОБАВИТЬ В МОЙ ПЛАН'}
-            </Button>
-          </VStack>
-        </Container>
+                <Button
+                  variant="outline"
+                  bg="rgba(229, 62, 62, 0.8)"
+                  color="white"
+                  borderColor="red.700"
+                  borderRadius="0px 0px 20px 20px"
+                  height={50}
+                  w="100%"
+                  mt={6}
+                  _hover={{
+                    bg: 'red.600',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 0 20px rgba(229, 62, 62, 0.6)',
+                  }}
+                  transition="all 0.3s ease"
+                  onClick={
+                    planExists
+                      ? () => navigate(`/plans/${id}/days`)
+                      : addPlanHandler
+                  }
+                >
+                  {planExists ? 'ПЕРЕЙТИ НА МОЙ ПЛАН' : '+ ДОБАВИТЬ В МОЙ ПЛАН'}
+                </Button>
+              </VStack>
+
+              {/* Right Column - Descriptions */}
+              <VStack mt={10} align="stretch" pl={{ base: 0, md: 4 }}>
+                <Text fontWeight="700">
+                  Уровень сложности: {plan.difficulty?.toUpperCase()}
+                </Text>
+
+                <Text fontWeight="700">
+                  Необходимое оборудование: {plan.equipment?.toUpperCase()}
+                </Text>
+
+                <Text fontWeight="700">
+                  Общее количество тренировочных дней: {plan.numOfTrainings}
+                </Text>
+
+                <Text fontWeight="600">{plan.shortDescription}</Text>
+
+                <Text fontSize="0.8rem" fontWeight="500" lineHeight="1.6">
+                  {plan.longDescription}
+                </Text>
+
+                <Text textAlign="center" fontWeight="600" fontStyle="italic">
+                  {plan.slogan?.toUpperCase()}
+                </Text>
+              </VStack>
+            </Grid>
+          </Box>
+        </Box>
       </Box>
-    </>
+    </Box>
   );
 }

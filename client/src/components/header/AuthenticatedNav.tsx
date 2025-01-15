@@ -1,10 +1,12 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks/hooks';
 import { fetchUserLogout } from '@/store/thunkActions';
-import { Button, Flex, HStack, Link } from '@chakra-ui/react';
+import { Flex, HStack, Link } from '@chakra-ui/react';
 import { Avatar } from '@/components/ui/avatar';
 import { useNavigate } from 'react-router-dom';
 import { useColorModeValue } from '../ui/color-mode';
 import { IoCalendarOutline } from 'react-icons/io5';
+import { GrUserAdmin } from 'react-icons/gr';
+import { Tooltip } from '@/components/ui/tooltip';
 
 export default function AuthenticatedNav() {
   const { user } = useAppSelector((state) => state.appSlice);
@@ -58,17 +60,37 @@ export default function AuthenticatedNav() {
       >
         ПЛАНЫ ТРЕНИРОВОК
       </Link>
-      <Link
-        _hover={{
-          textDecoration: 'none',
-          color: 'gray.300',
-          cursor: 'pointer',
-        }}
-        _focus={{ outline: 'none', boxShadow: 'none' }}
-        onClick={() => navigate('/calendar')}
-      >
-        <IoCalendarOutline size={30} />
-      </Link>
+      <Tooltip showArrow content="Календарь" openDelay={400} closeDelay={100}>
+        <Link
+          _hover={{
+            textDecoration: 'none',
+            color: 'gray.300',
+            cursor: 'pointer',
+          }}
+          _focus={{ outline: 'none', boxShadow: 'none' }}
+          onClick={() => navigate('/calendar')}
+        >
+          <IoCalendarOutline size={30} />
+        </Link>
+      </Tooltip>
+
+      {user && ( //! Пока не реализовано
+        <Tooltip showArrow content="Админка" openDelay={400} closeDelay={100}>
+          <Link
+            color={textColor}
+            textDecoration="none"
+            _hover={{
+              textDecoration: 'none',
+              color: 'gray.300',
+              cursor: 'pointer',
+            }}
+            _focus={{ outline: 'none', boxShadow: 'none' }}
+            onClick={() => navigate(`/admin`)}
+          >
+            <GrUserAdmin size={25} />
+          </Link>
+        </Tooltip>
+      )}
       <Link
         color={textColor}
         textDecoration="none"
@@ -87,6 +109,10 @@ export default function AuthenticatedNav() {
           name={user?.username}
           src={`${VITE_TARGET}${user?.avatar}`}
           colorPalette="green"
+          _hover={{
+            cursor: 'pointer',
+          }}
+          onClick={() => navigate('/account')}
         />
       </HStack>
       <Link

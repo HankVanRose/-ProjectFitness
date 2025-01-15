@@ -7,33 +7,45 @@ type ModalExerciseProps = {
   image: string;
   id: number;
   name: string;
+  bg: string;
 };
 
-export default function ModalExercise({ image, id, name }: ModalExerciseProps) {
+export default function ModalExercise({
+  image,
+  id,
+  name,
+  bg,
+}: ModalExerciseProps) {
   const navigate = useNavigate();
   const redirectToExercise = (id: number) => {
     navigate(`/exercises/${id}`);
     console.log(id);
   };
 
-  //   const bgColor = useColorModeValue('white', 'black');
-  const textColor = useColorModeValue('black', 'white');
   return (
-    <Box
-      overflow="hidden"
-      style={{ scrollbarColor: ' #e5ff00', scrollbarWidth: 'thin' }}
-    >
+    <Box overflow="hidden" borderRadius="20px" maxW="400px">
       <Image
-        width={400}
-        height={400}
+        bg={bg}
+        height="300px" // Fixed height
+        w="400px" // Maximum width
         src={image}
         alt={name}
+        filter="brightness(0.8) contrast(0.9)"
+        transition='all 0.4s'
+        _hover={{
+          cursor: 'pointer',
+          filter: 'brightness(0.6)',
+        }}
+        borderRadius="20px"
         onClick={() => redirectToExercise(id)}
+        objectFit="cover"
+        objectPosition="center"
+        margin="0 auto"
       />
       <Text
+        textAlign="center"
         p={2}
         fontWeight="bold"
-        color={textColor}
         onClick={() => redirectToExercise(id)}
       >
         {name}
