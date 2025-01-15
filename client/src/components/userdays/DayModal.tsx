@@ -189,7 +189,7 @@ export default function DayModal({
                   'День уже завершен'
                 ) : (
                   <>
-                    Завершить день <LuCircleCheck color="green" />
+                    Завершить день <LuCircleCheck />
                   </>
                 )}
               </Button>
