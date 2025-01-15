@@ -10,11 +10,11 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useEffect, useMemo, useState } from 'react';
-import {  Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useColorModeValue } from '../ui/color-mode';
 
 // types.ts
-type SortOrder = 'oldest' | 'newest';   
+type SortOrder = 'oldest' | 'newest';
 type PlanFilter = 'all' | 'planned' | 'notPlanned';
 type CompletionFilter = 'all' | 'completed' | 'notCompleted';
 
@@ -84,7 +84,6 @@ interface UserDay {
     };
   };
 }
-// Component implementation
 export default function UserDaysBlock({ userId }: { userId: number }) {
   const [userDays, setUserDays] = useState<UserDay[]>([]);
   const [filters, setFilters] = useState<FilterOptions>({
@@ -107,36 +106,50 @@ export default function UserDaysBlock({ userId }: { userId: number }) {
     fetchUserDays();
   }, []);
   const filteredDays = useFilteredUserDays(userDays, filters);
-  const bg = useColorModeValue('white', 'gray.800');
+  const bg = useColorModeValue('white', 'black');
   return (
     <VStack>
-      {/* Filter Controls */}
-      <HStack>
-        <NativeSelectRoot
-          value={filters.sortOrder}
-          onChange={(e) =>
-            setFilters((prev) => ({
-              ...prev,
-              sortOrder: e.target.value as SortOrder,
-            }))
-          }
-        >
-          <NativeSelectField placeholder="новые/старые" bg={bg} p={2}>
+      {/* Фильтры */}
+      <HStack
+        p={3}
+        position="sticky"
+        top={0}
+        bg={bg} // Using your existing bg color variable
+        w="100%"
+        shadow="sm"
+        maxW='600px'
+      >
+        <NativeSelectRoot>
+          <NativeSelectField
+            placeholder="новые/старые"
+            bg={bg}
+            p={2}
+            fontWeight="500"
+            onChange={(e) =>
+              setFilters((prev) => ({
+                ...prev,
+                sortOrder: e.target.value as SortOrder,
+              }))
+            }
+          >
             <option value="newest">Сначала старые</option>
             <option value="oldest">Сначала новые</option>
           </NativeSelectField>
         </NativeSelectRoot>
 
-        <NativeSelectRoot
-          value={filters.planFilter}
-          onChange={(e) =>
-            setFilters((prev) => ({
-              ...prev,
-              planFilter: e.target.value as PlanFilter,
-            }))
-          }
-        >
-          <NativeSelectField placeholder="По плану" bg={bg} p={3}>
+        <NativeSelectRoot>
+          <NativeSelectField
+            placeholder="По плану"
+            bg={bg}
+            p={2}
+            fontWeight="500"
+            onChange={(e) =>
+              setFilters((prev) => ({
+                ...prev,
+                planFilter: e.target.value as PlanFilter,
+              }))
+            }
+          >
             <option value="all">Все</option>
             <option value="planned">Запланированные</option>
             <option value="notPlanned">Не запланированные</option>
@@ -144,7 +157,6 @@ export default function UserDaysBlock({ userId }: { userId: number }) {
         </NativeSelectRoot>
 
         <NativeSelectRoot
-          value={filters.completionFilter}
           onChange={(e) =>
             setFilters((prev) => ({
               ...prev,
@@ -152,7 +164,12 @@ export default function UserDaysBlock({ userId }: { userId: number }) {
             }))
           }
         >
-          <NativeSelectField placeholder="Статус" bg={bg} p={2}>
+          <NativeSelectField
+            placeholder="Статус"
+            bg={bg}
+            p={2}
+            fontWeight="500"
+          >
             <option value="all">Все</option>
             <option value="completed">Завершенные</option>
             <option value="notCompleted">Не завершенные</option>
@@ -161,68 +178,94 @@ export default function UserDaysBlock({ userId }: { userId: number }) {
       </HStack>
 
       {/* User Days List */}
-      {filteredDays.map((day) => (
-        <Box
-          draggable
-          key={day.id}
-          p={4}
-          borderWidth={1}
-          borderRadius="md"
-          borderColor={day.isCompleted ? 'green' : 'red'}
-          transition="all 0.2s"
-          my={2}
-          _hover={{
-            borderColor: 'yellow.300',
-          }}
-        >
-          <HStack justify="space-between">
-            <VStack>
-              <Text
-                fontWeight="600"
-                transition="all 0.2s"
-                _hover={{
-                  color: 'yellow.300',
-                  cursor: 'pointer',
-                }}
-              >
-                <Link to={`/plans/${day.Day?.planId}`}>
-                  {day.Day?.Plan.name}{' '}
-                </Link>{' '}
-                <Text fontSize="sm" color="gray.600">
-                  Количество упражнений: {day.Day?.Exercises.length}
-                </Text>
-                <List.Root
-                  variant="plain"
-                  fontSize="0.7rem"
-                  color="gray.700"
-                  lineHeight="0.9rem"
-                >
-                  {day.Day?.Exercises.map((exercise) => (
-                    <List.Item
-                      transition="all 0.2s"
-                      key={exercise.id}
-                      _hover={{
-                        color: 'yellow.300',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      <Link to={`/exercises/${exercise.id}`}>
-                        {exercise.name}
-                      </Link>
-                    </List.Item>
-                  ))}
-                </List.Root>
-                {day.plannedOn && (
-                  <Text fontSize="sm" color="gray.600">
-                    Запланировано на:{' '}
-                    {day.plannedOn.split('-').reverse().join(', ')}
+
+      <Box
+        maxH="700px"
+        overflowY="auto"
+        w="100%"
+        css={{
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
+          msOverflowStyle: 'none',
+          scrollbarWidth: 'none',
+        }}
+      >
+        <VStack  w="100%" p={2}>
+          {filteredDays.map((day) => (
+            <Box
+              key={day.id}
+              p={4}
+              borderWidth={1}
+              borderRadius="md"
+              borderColor={day.isCompleted ? 'green' : 'red'}
+              transition="all 0.2s"
+              h="200px"
+              w="300px"
+              display="flex"
+              flexDirection="column"
+              overflow="hidden"
+              justifyContent="space-around"
+              _hover={{
+                borderColor: 'yellow.300',
+              }}
+            >
+              <HStack justify="space-between" width="100%">
+                <VStack align="stretch" width="100%">
+                  <Text
+                    fontWeight="600"
+                    transition="all 0.2s"
+                    _hover={{
+                      color: 'yellow.300',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <Link to={`/plans/${day.Day?.planId}`}>
+                      {day.Day?.Plan.name}{' '}
+                    </Link>
                   </Text>
-                )}
-              </Text>
-            </VStack>
-          </HStack>
-        </Box>
-      ))}
+                  <Text fontSize="0.7rem" fontWeight="600" color="gray.600">
+                    {day.plannedOn
+                      ? `Запланировано на: ${day.plannedOn
+                          .split('-')
+                          .reverse()
+                          .join(', ')}`
+                      : 'Не запланировано'}
+                  </Text>
+                  <List.Root
+                    variant="plain"
+                    fontSize="0.7rem"
+                    color="gray.700"
+                    lineHeight="0.9rem"
+                    maxH="90px"
+                    overflowY="auto"
+                    p={1}
+                    css={{
+                      scrollbarWidth: 'none',
+                      scrollbarColor: 'gray.200 transparent',
+                    }}
+                  >
+                    {day.Day?.Exercises.map((exercise) => (
+                      <List.Item
+                        transition="all 0.2s"
+                        key={exercise.id}
+                        _hover={{
+                          color: 'yellow.300',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        <Link to={`/exercises/${exercise.id}`}>
+                          {exercise.name}
+                        </Link>
+                      </List.Item>
+                    ))}
+                  </List.Root>
+                </VStack>
+              </HStack>
+            </Box>
+          ))}
+        </VStack>
+      </Box>
     </VStack>
   );
 }
