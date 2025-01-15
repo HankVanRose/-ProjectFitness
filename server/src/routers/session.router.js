@@ -142,10 +142,9 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
     }
     userDay.isCompleted = isCompleted;
     const today = new Date();
-    const date = new Date(today.setDate(today.getDate() - 1)).toLocaleDateString().split('T')[0];
-    console.log(`\n\n\n\n\n\n`,date);
-    
-    
+    const date = new Date(today.setDate(today.getDate() - 1)).toISOString().split('T')[0];
+    //  const date = new Date().toISOString().split('T')[0];
+    // console.log(`\n\n\n\n\n\n`,date);
     
     userDay.plannedOn = date;
     
