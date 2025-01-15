@@ -110,13 +110,22 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
         .status(400)
         .json({ error: 'isCompleted должно быть булевым значением.' });
     }
-    // console.log('points', points);
     const userDay = await UserDay.findOne({
       where: {
         userId,
         dayId,
       },
+      include: [
+        {
+          model: Day,
+        },
+      ],
     });
+
+    if (!userDay) {
+      return res.status(404).json({ error: 'Запись не найдена.' });
+    }
+    1;
 
     const findUser = await User.findOne({ where: { id: userId } });
 
@@ -129,11 +138,8 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
 
     const { accessToken, refreshToken } = generateToken({ user: findUser });
 
-    if (!userDay) {
-      return res.status(404).json({ error: 'Запись не найдена.' });
-    }
     userDay.isCompleted = isCompleted;
- 
+
     if (!userDay.plannedOn) {
       const today = new Date();
       const date = new Date(today.setDate(today.getDate() - 1))
@@ -143,9 +149,34 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
       userDay.plannedOn = date;
     }
 
-    console.log(userDay.get({ plain: true }));
+    const session = await Session.findOne({
+      where: {
+        userId,
+        planId: userDay.Day.planId,
+      },
+    });
 
- 
+    const allUserDays = await UserDay.findAll({
+      where: {
+        userId,
+      },
+      include: [
+        {
+          model: Day,
+          where: { planId: session.planId },
+        },
+      ],
+    });
+
+    const allUserDaysCompleted = allUserDays.every(
+      (day) => day.isCompleted === true
+    );
+
+    if (allUserDaysCompleted) {
+      session.isCompleted = true;
+      await session.save();
+    }
+
     await userDay.save();
     res
       .status(200)
