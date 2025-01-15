@@ -18,6 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { Field } from '@/components/ui/field';
+import { Avatar } from '@/components/ui/avatar';
 import axiosInstance from '@/axiosInstance';
 import { setError, setLoading } from '@/store/appSlice';
 import { DayExercise, ExerciseType, PlanType } from '@/types';
@@ -144,6 +145,7 @@ export default function NewPlanForm() {
       points: exercise.points,
       label: exercise.name,
       calories: exercise.calories,
+      image: exercise.image,
     })),
   });
 
@@ -589,7 +591,8 @@ export default function NewPlanForm() {
                           </SelectTrigger>
                           <SelectContent p={4} color={textColor}>
                             {exercisesOptions.items.map((option) => (
-                              <SelectItem item={option} key={option.value}>
+                              <SelectItem item={option} key={option.value} justifyContent='flex-start' my={1}>
+                                <Avatar name={option.label} src={option.image} size='lg' />
                                 {option.label}
                               </SelectItem>
                             ))}
