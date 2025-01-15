@@ -42,8 +42,9 @@ module.exports = {
         allowNull: true,
       },
       calories: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: true,
+        defaultValue: 2,
       },
       muscleImage: {
         type: Sequelize.STRING,

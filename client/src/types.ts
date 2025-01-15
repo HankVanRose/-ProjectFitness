@@ -19,9 +19,9 @@ export type ExerciseType = {
   longDescription: string;
   shortMuscleGroup: string;
   longMuscleGroup: string;
-  calories: string;
+  calories: number;
   type: string;
-  points: string;
+  points: number;
   equipment: string;
   image: string;
   muscleImage: string;
@@ -39,8 +39,8 @@ export type PlanType = {
   image: string;
   slogan: string;
   numOfTrainings: number;
-  weeksDescription: string;
-  UserDays: any[]
+  weeksDescription?: string;
+  UserDays: any[];
 };
 
 export type SessionType = {
@@ -69,5 +69,6 @@ export type DayExercise = {
   type?: string;
   target?: string;
   rounds?: number;
+  calories?: number;
   Exercises: ExercisesType;
 };

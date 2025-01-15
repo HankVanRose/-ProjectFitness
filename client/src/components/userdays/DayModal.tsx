@@ -150,7 +150,7 @@ export default function DayModal({
               }}
             >
               <Text fontWeight="600" mt={1}>
-                {target}
+                Задача: {target}
               </Text>
               <Text fontWeight="600" mt={1}>
                 Рекомендованное количество подходов: {rounds}

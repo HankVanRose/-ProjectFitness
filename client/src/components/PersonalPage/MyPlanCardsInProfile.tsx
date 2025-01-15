@@ -1,4 +1,3 @@
-import { useAppSelector } from '@/store/hooks/hooks';
 import { SessionType } from '@/types';
 import { Box, Button, Image, Text } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +9,7 @@ interface MyPlanCardsInProfileProps {
 
 export default function MyPlanCardsInProfile({plan, removePlanHandler}: MyPlanCardsInProfileProps) {
   const navigate = useNavigate();
-  
+
     return (
     <Box key={plan.planId} p={4} borderWidth='1px' borderRadius='md' w='full'>
       <Text fontWeight='bold'>

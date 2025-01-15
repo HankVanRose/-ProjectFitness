@@ -10,7 +10,7 @@ const {
 
 router.get('/:planId/user/:userId', async (req, res) => {
   try {
-    
+    console.log(req.params);
     const userDays = await UserDay.findAll({
       where: { userId: req.params.userId },
       attributes: { exclude: ['createdAt', 'updatedAt'] },
@@ -30,7 +30,6 @@ router.get('/:planId/user/:userId', async (req, res) => {
       order: [['id']],
     });
     // console.log('userDays', userDays.map(el => el.get({plain: true})));
-    
 
     const days = await Day.findAll({
       where: { planId: req.params.planId },
@@ -91,7 +90,6 @@ router.post('/', async (req, res) => {
 //! новый план с днем и упражнениями(не знаю будет ли работать если + несколько дней)
 router.post('/newPlan/day/exercises', async (req, res) => {
   const {
-    points,
     days,
     name,
     image,
@@ -118,12 +116,18 @@ router.post('/newPlan/day/exercises', async (req, res) => {
       slogan,
       weeksDescription,
     });
-    //!! POINT NE FLOAT A NUMBER
+    //! POINTs AND CALORIES - NUMBER
     await Promise.all(
       days.map(async (day) => {
         const newDay = await Day.create({
           planId: newPlan.id,
           points: +day.points,
+          calories: +day.calories,
+          title: day.title,
+          description: day.description,
+          type: day.type,
+          target: day.target,
+          rounds: day.rounds,
         });
         const dayExercises = day.Exercises.map((exercise) => ({
           dayId: newDay.id,
