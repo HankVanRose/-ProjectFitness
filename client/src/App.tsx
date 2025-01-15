@@ -23,12 +23,13 @@ import NewPlanForm from './components/NewPlanPage/NewPlanForm';
 import AdminPage from './components/admin/AdminPage';
  
  
-import FitnessCalendar from './components/calendar/FitnessCalendar';
+ 
 import UserPlansPage from './components/UserPlansPage/UserPlansPage';
 import UserDaysList from './components/userdays/UserdayList';
 import PlanPage from './components/planPage/PlanPage';
  
 import CalendarPage from './components/calendar/CalendarPage';
+import ResetPassword from './components/ResetPassword';
  
  
 
@@ -59,6 +60,8 @@ function App() {
           <Route path='/admin' element={<AdminPage />} />
           <Route path='/calendar' element={<CalendarPage />} />
           <Route path='/:userId/userplans' element={< UserPlansPage/>} />
+    
+           
    
 
         </Route>
