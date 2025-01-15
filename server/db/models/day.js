@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       target: DataTypes.TEXT,
       rounds: DataTypes.INTEGER,
+      calories: DataTypes.INTEGER,
     },
     {
       sequelize,

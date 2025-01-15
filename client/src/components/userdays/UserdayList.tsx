@@ -42,6 +42,7 @@ export default function UserDaysList() {
           `${VITE_API}/days/${id}/user/${user!.id}`
         );
         setDays(result.data);
+        console.log(result.data);
       } catch (error) {
         console.error(error);
       } finally {

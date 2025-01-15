@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       equipment: DataTypes.STRING,
       points: DataTypes.INTEGER,
-      calories: DataTypes.STRING,
+      calories: DataTypes.INTEGER,
       muscleImage: DataTypes.TEXT,
     },
     {
