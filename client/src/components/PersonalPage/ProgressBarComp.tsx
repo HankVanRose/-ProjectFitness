@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Container,
   Flex,
   HStack,
@@ -8,20 +7,15 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import {
-  ProgressBar,
-  ProgressLabel,
-  ProgressRoot,
-} from '@/components/ui/progress';
 import { useAppDispatch, useAppSelector } from '../../store/hooks/hooks';
 import { useRef, useState } from 'react';
 import axiosInstance from '@/axiosInstance';
 import { fetchUserCheck } from '@/store/thunkActions';
 import { Avatar } from '@/components/ui/avatar';
 import DownloadButton from '../DonwLoadButton/DownLoad';
+import ProgressBarOnly from './ProgressBarOnly';
 
 export default function ProgressBarComp() {
-  const now = 60;
   const { user } = useAppSelector((state) => state.appSlice);
 
   const dispatch = useAppDispatch();
@@ -121,18 +115,7 @@ export default function ProgressBarComp() {
             />
           </Box>
           <VStack align='stretch' flex={1} mr={10}>
-            <ProgressRoot value={now} size='lg' colorPalette='green' striped>
-              <ProgressLabel justifyContent='space-between'>
-                <Flex gap={10}>
-                  <Text fontSize='xl' fontWeight='bold' pb={8}>
-                    {user?.username?.toUpperCase()}
-                  </Text>
-                  <Text fontSize='xl'>{user?.points} баллов</Text>
-                </Flex>
-              </ProgressLabel>
-              <ProgressBar />
-            </ProgressRoot>
-            <Text textAlign='right'>{`${now}%`}</Text>
+            <ProgressBarOnly />
 
             {/* Calories */}
             <Flex

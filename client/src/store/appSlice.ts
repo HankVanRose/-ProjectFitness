@@ -1,13 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ExercisesType, PlansType, SessionType, UserType } from '../types';
+import {
+  ExercisesType,
+  PlansType,
+  SessionType,
+  UserDayType,
+  UserType,
+} from '../types';
 import {
   fetchUpdateProfile,
   fetchUserCheck,
   fetchUserLogout,
+  fetchUserProgress,
   fetchUserSignin,
   fetchUserSignup,
   userActivePlan,
 } from './thunkActions';
+import { RootState } from './store';
 
 type InitialState = {
   user: UserType | null;
@@ -16,6 +24,8 @@ type InitialState = {
   loading: boolean;
   error: string | null;
   userplan: SessionType[] | null;
+  userDays: UserDayType[];
+  sessions: SessionType[];
 };
 
 const initialState: InitialState = {
@@ -25,6 +35,8 @@ const initialState: InitialState = {
   loading: false,
   error: '',
   userplan: null,
+  userDays: [],
+  sessions: [],
 };
 
 const appSlice = createSlice({
@@ -45,7 +57,7 @@ const appSlice = createSlice({
     },
     setPoints: (state, action: PayloadAction<number>) => {
       if (state.user) {
-        state.user.points += action.payload ;
+        state.user.points += action.payload;
         console.log('Updated points:', state.user.points);
       } else {
         console.warn('User not found! Points not updated.');
@@ -53,7 +65,7 @@ const appSlice = createSlice({
     },
     setCalories: (state, action: PayloadAction<number>) => {
       if (state.user) {
-        state.user.calories += action.payload ;
+        state.user.calories += action.payload;
         console.log('Updated calories:', state.user.calories);
       } else {
         console.warn('User not found! Calories not updated.');
@@ -62,6 +74,19 @@ const appSlice = createSlice({
     setUserplan: (state, action) => {
       state.userplan = action.payload;
     },
+    setDayStatus: (state, action: PayloadAction<{dayId: number; userId: number; isCompleted: boolean}>) => {
+      const { dayId, userId, isCompleted } = action.payload;
+      const existingDay = state.userDays.find(day => day.dayId === dayId && day.userId === userId);
+      if (existingDay) {
+        existingDay.isCompleted = isCompleted;
+      } else {
+        state.userDays.push({
+          userId,
+          dayId,
+          isCompleted
+        });
+      }
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -111,7 +136,6 @@ const appSlice = createSlice({
         state.user = action.payload; //? (|| null)
         state.loading = false;
         state.error = null;
-         
       })
       .addCase(fetchUserCheck.rejected, (state, action) => {
         state.user = null;
@@ -125,12 +149,10 @@ const appSlice = createSlice({
       })
       .addCase(fetchUpdateProfile.fulfilled, (state, action) => {
         if (state.user) {
- 
           state.user = action.payload.user;
-         } 
-          state.loading = false;
-          state.error = null;
- 
+        }
+        state.loading = false;
+        state.error = null;
       })
       .addCase(fetchUpdateProfile.rejected, (state, action) => {
         state.loading = false;
@@ -149,9 +171,24 @@ const appSlice = createSlice({
         state.loading = false;
         state.error = action.payload || 'An unexpected error';
         state.userplan = null;
-      });
+      })
+
+      .addCase(fetchUserProgress.pending, (state) => {
+        state.loading = true;
+        state.error = null; 
+      })
+      .addCase(fetchUserProgress.fulfilled, (state, action) => {
+        state.loading = false; 
+        state.sessions = action.payload.sessions;
+        state.userDays = action.payload.userDays;
+      })
+      .addCase(fetchUserProgress.rejected, (state, action) => {
+        state.loading = false; 
+        state.error = action.payload as string;
+      })
   },
 });
 
 export default appSlice.reducer;
-export const { setError, setLoading, setPoints, setUserplan, setCalories } = appSlice.actions;
+export const { setError, setLoading, setPoints, setUserplan, setCalories, setDayStatus } =
+  appSlice.actions;

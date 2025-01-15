@@ -432,7 +432,7 @@ export default function ProfileData() {
               <SelectTrigger
                 bg={isEditing === 'gender' ? editingBg : undefined}
               >
-                <SelectValueText placeholder='Выберите пол' pl={4}>
+                <SelectValueText placeholder='Выберите пол' pl={1}>
                   {(items) => {
                     const selectedGender = frameworks.items.find(
                       (framework) => framework.value === formData.gender

@@ -41,8 +41,7 @@ export type PlanType = {
   slogan: string;
   numOfTrainings: number;
   weeksDescription?: string;
-  UserDays: any[];
- 
+  UserDays: UserDayType[];
 };
 
 export type SessionType = {
@@ -52,6 +51,7 @@ export type SessionType = {
   Plan?: {
     name: string;
     image: string;
+    numOfTrainings?: number;
   };
 };
 
@@ -66,12 +66,22 @@ export type PlansType = PlanType[];
 export type DayExercise = {
   planId: number;
   points: number;
-  calories?: number
+  calories?: number;
   description?: string;
   title?: string;
   type?: string;
   target?: string;
   rounds?: number;
-  calories?: number;
   Exercises: ExercisesType;
+};
+
+export type UserDayType = {
+  userId: number;
+  dayId: number;
+  isCompleted: boolean;
+};
+
+export type ProgressStateType = {
+  userDays: UserDayType[];
+  sessions: SessionType[];
 };
