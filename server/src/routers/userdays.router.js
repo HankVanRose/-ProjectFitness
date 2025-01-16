@@ -291,4 +291,46 @@ router.get('/soonest/:userId', async (req, res) => {
   }
 });
 
+router.patch('/note/:useDayId', async (req, res) => {
+  try {
+    const { note } = req.body;
+
+
+    console.log('Received request body:', req.body);
+
+    const userDay = await UserDay.findByPk(req.body.userDayId);
+
+    console.log('Found userDay:', userDay);
+   
+    userDay.note = note;
+    await userDay.save();
+
+    const updatedUserDay = await UserDay.findByPk(req.body.userDayId, {
+      include: [
+        {
+          model: Day,
+          include: [
+            {
+              model: Exercise,
+              through: DayExercise,
+            },
+            {
+              model: Plan,
+              attributes: ['name'],
+            },
+          ],
+        },
+      ],
+    });
+
+    res.status(200).json(updatedUserDay);
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({
+      message: 'Error updating training day',
+      error: error.message,
+    });
+  }
+});
+
 module.exports = router;

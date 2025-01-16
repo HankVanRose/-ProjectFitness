@@ -27,6 +27,8 @@ import { MdOutlineCreateNewFolder } from 'react-icons/md';
 import { useColorModeValue } from '../ui/color-mode';
 import { GrPlan } from 'react-icons/gr';
 import { CiCalendar } from 'react-icons/ci';
+import { useNavigate } from 'react-router-dom';
+import { Toaster, toaster } from '@/components/ui/toaster';
 
 export default function NewPlanForm() {
   const { VITE_API } = import.meta.env;
@@ -46,6 +48,7 @@ export default function NewPlanForm() {
   const [days, setDays] = useState<Omit<DayExercise[], 'planId'>>([]);
   const [allExercises, setAllExercises] = useState<ExerciseType[]>([]);
   const [selectDifficulty, setSelectDifficulty] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchExercises = async () => {
@@ -106,7 +109,7 @@ export default function NewPlanForm() {
 
   const handleSubmit = async () => {
     try {
-      await axiosInstance.post(`${VITE_API}/days/newPlan/day/exercises`, {
+      const create = await axiosInstance.post(`${VITE_API}/days/newPlan/day/exercises`, {
         ...plan,
         days,
       });
@@ -125,8 +128,27 @@ export default function NewPlanForm() {
 
       setSelectDifficulty([]);
       setDays([]);
+      if (create) {
+        toaster.create({
+          title: 'Новый план создан',
+          description: 'Ваш план был успешно добавлен в список планов!',
+          type: 'success',
+          duration: 5000,
+        });
+        setTimeout(function () {
+          navigate(`/plans`);
+        }, 2000);
+      } else {
+        toaster.create({
+          title: 'Ошибка.',
+          description:
+            'Произошла ошибка при создании плана. Пожалуйста, попробуйте еще раз.',
+          type: 'warning',
+          duration: 5000,
+        });
+      }
     } catch (error) {
-      setError('Ошибка при добавлении дня');
+      setError('Ошибка при создании плана');
       console.error(error);
     }
   };
@@ -197,6 +219,7 @@ export default function NewPlanForm() {
 
   return (
     <>
+      <Toaster />
       <Grid templateColumns='repeat(2, 1fr)' p={10}>
         <Box display='flex' p={5}>
           <Fieldset.Root size='lg'>
@@ -341,7 +364,7 @@ export default function NewPlanForm() {
             </Fieldset.Content>
 
             <Fieldset.HelperText mt={5}>
-              * Нажмите на эту кнопку только после добавления всех дней
+              * Нажмите на эту кнопку только после добавления всех тренировок
             </Fieldset.HelperText>
             <Button
               type='submit'
@@ -367,14 +390,14 @@ export default function NewPlanForm() {
                 display='flex'
                 alignItems='center'
               >
-                Добавить дни в мой план
+                Добавить тренировки в мой план
                 <IconButton variant={'ghost'} size='xs' borderRadius={10}>
                   <CiCalendar />
                 </IconButton>
               </Fieldset.Legend>
               <Fieldset.HelperText mb={5}>
-                Здесь вы можете вы можете добавить столько дней, сколько хотите
-                в своем плане тренировок
+                Здесь вы можете добавить столько тренировок, сколько хотите
+                выполнить в рамках своего плана
               </Fieldset.HelperText>
             </Stack>
           </Fieldset.Root>
@@ -392,7 +415,7 @@ export default function NewPlanForm() {
                 <Field label='Название'>
                   <Input
                     p={2}
-                    placeholder='Название дня'
+                    placeholder='Название тренировки'
                     value={day.title}
                     onChange={(e) =>
                       handleChangeDay('title', dayIndex, e.target.value)
@@ -411,7 +434,7 @@ export default function NewPlanForm() {
                     }}
                   >
                     <SelectTrigger p={2} borderRadius={4}>
-                      <SelectValueText placeholder='Выберите тип дня'>
+                      <SelectValueText placeholder='Выберите тип тренировки'>
                         {
                           typeOptions.items.find(
                             (item) => item.value === day.type
@@ -429,7 +452,7 @@ export default function NewPlanForm() {
                   </SelectRoot>
                 </Field>
 
-                <Field label='Задача на день'>
+                <Field label='Задача тренировки'>
                   <SelectRoot
                     collection={targetOptions}
                     onValueChange={(ValueChangeDetails) => {
@@ -440,7 +463,7 @@ export default function NewPlanForm() {
                     }}
                   >
                     <SelectTrigger p={2} borderRadius={4}>
-                      <SelectValueText placeholder='Выберите задачу на день'>
+                      <SelectValueText placeholder='Выберите задачу'>
                         {
                           targetOptions.items.find(
                             (item) => item.value === day.target
@@ -476,7 +499,7 @@ export default function NewPlanForm() {
                     <Textarea
                       p={2}
                       rows={2}
-                      placeholder='Описание дня'
+                      placeholder='Описание тренировки'
                       value={day.description}
                       onChange={(e) =>
                         handleChangeDay('description', dayIndex, e.target.value)
@@ -485,7 +508,7 @@ export default function NewPlanForm() {
                   </Field>
                 </Box>
 
-                <Field label='Очки за день'>
+                <Field label='Очки за тренировку'>
                   <Input
                     type='number'
                     placeholder='Очки'
@@ -498,7 +521,7 @@ export default function NewPlanForm() {
                     }
                   />
                 </Field>
-                <Field label='Калории, сожженные за день'>
+                <Field label='Калории, сожженные за тренировку'>
                   <Input
                     type='number'
                     placeholder='Калории'
@@ -591,8 +614,17 @@ export default function NewPlanForm() {
                           </SelectTrigger>
                           <SelectContent p={4} color={textColor}>
                             {exercisesOptions.items.map((option) => (
-                              <SelectItem item={option} key={option.value} justifyContent='flex-start' my={1}>
-                                <Avatar name={option.label} src={option.image} size='lg' />
+                              <SelectItem
+                                item={option}
+                                key={option.value}
+                                justifyContent='flex-start'
+                                my={1}
+                              >
+                                <Avatar
+                                  name={option.label}
+                                  src={option.image}
+                                  size='lg'
+                                />
                                 {option.label}
                               </SelectItem>
                             ))}
@@ -627,7 +659,7 @@ export default function NewPlanForm() {
             variant='surface'
             colorPalette='green'
           >
-            Добавить день <IoAddCircleOutline />
+            Добавить тренировку <IoAddCircleOutline />
           </Button>
         </Box>
       </Grid>

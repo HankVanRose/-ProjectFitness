@@ -74,19 +74,28 @@ const appSlice = createSlice({
     setUserplan: (state, action) => {
       state.userplan = action.payload;
     },
-    setDayStatus: (state, action: PayloadAction<{dayId: number; userId: number; isCompleted: boolean}>) => {
+    setDayStatus: (
+      state,
+      action: PayloadAction<{
+        dayId: number;
+        userId: number;
+        isCompleted: boolean;
+      }>
+    ) => {
       const { dayId, userId, isCompleted } = action.payload;
-      const existingDay = state.userDays.find(day => day.dayId === dayId && day.userId === userId);
+      const existingDay = state.userDays.find(
+        (day) => day.dayId === dayId && day.userId === userId
+      );
       if (existingDay) {
         existingDay.isCompleted = isCompleted;
       } else {
         state.userDays.push({
           userId,
           dayId,
-          isCompleted
+          isCompleted,
         });
       }
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -107,21 +116,17 @@ const appSlice = createSlice({
           }
         }
       })
-
       .addCase(fetchUserSignin.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchUserSignin.fulfilled, (state, action) => {
+        state.loading = false;
         if ('error' in action.payload && action.payload.error) {
           state.error = action.payload.error;
-          state.loading = false;
         } else {
-          if (action.payload.user) {
-            state.user = action.payload.user;
-            state.loading = false;
-            state.error = null;
-          }
+          state.user = action.payload.user || null;
+          state.error = null;
         }
       })
       .addCase(fetchUserLogout.fulfilled, (state) => {
@@ -175,20 +180,26 @@ const appSlice = createSlice({
 
       .addCase(fetchUserProgress.pending, (state) => {
         state.loading = true;
-        state.error = null; 
+        state.error = null;
       })
       .addCase(fetchUserProgress.fulfilled, (state, action) => {
-        state.loading = false; 
+        state.loading = false;
         state.sessions = action.payload.sessions;
         state.userDays = action.payload.userDays;
       })
       .addCase(fetchUserProgress.rejected, (state, action) => {
-        state.loading = false; 
+        state.loading = false;
         state.error = action.payload as string;
-      })
+      });
   },
 });
 
 export default appSlice.reducer;
-export const { setError, setLoading, setPoints, setUserplan, setCalories, setDayStatus } =
-  appSlice.actions;
+export const {
+  setError,
+  setLoading,
+  setPoints,
+  setUserplan,
+  setCalories,
+  setDayStatus,
+} = appSlice.actions;

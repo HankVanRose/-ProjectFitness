@@ -7,6 +7,7 @@ import { useColorModeValue } from '../ui/color-mode';
 import { IoCalendarOutline } from 'react-icons/io5';
 import { GrUserAdmin } from 'react-icons/gr';
 import { Tooltip } from '@/components/ui/tooltip';
+import { ImExit } from 'react-icons/im';
 
 export default function AuthenticatedNav() {
   const { user } = useAppSelector((state) => state.appSlice);
@@ -91,7 +92,7 @@ export default function AuthenticatedNav() {
           </Link>
         </Tooltip>
       )}
-      <Link
+      {/* <Link
         color={textColor}
         textDecoration="none"
         _hover={{
@@ -103,7 +104,7 @@ export default function AuthenticatedNav() {
         onClick={() => navigate('/account')}
       >
         {user?.username ? user?.username.toUpperCase() : 'Профиль'}
-      </Link>
+      </Link> */}
       <HStack>
         <Avatar
           name={user?.username}
@@ -111,6 +112,7 @@ export default function AuthenticatedNav() {
           colorPalette="green"
           _hover={{
             cursor: 'pointer',
+            opacity: 0.8,
           }}
           onClick={() => navigate('/account')}
         />
@@ -124,6 +126,7 @@ export default function AuthenticatedNav() {
         _focus={{ outline: 'none', boxShadow: 'none' }}
         onClick={handleLogOut}
       >
+        <ImExit />
         ВЫЙТИ
       </Link>
     </Flex>

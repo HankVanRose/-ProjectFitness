@@ -26,4 +26,38 @@ router.route('/:id').get(async (req, res) => {
   }
 });
 
+router.post('/', async (req, res) => {
+  try {
+    const {name,
+      image,
+      shortDescription,
+      longDescription,
+      shortMuscleGroup,
+      longMuscleGroup,
+      type,
+      equipment,
+      points,
+      calories,
+      muscleImage} = req.body;
+
+      const newExercise = await Exercise.create({
+        name,
+        image,
+        shortDescription,
+        longDescription,
+        shortMuscleGroup,
+        longMuscleGroup,
+        type,
+        equipment,
+        points,
+        calories,
+        muscleImage,
+      });
+      res.status(201).json(newExercise);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+})
+
 module.exports = router;

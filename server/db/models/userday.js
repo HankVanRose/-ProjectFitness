@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       dayId: DataTypes.INTEGER,
       isCompleted: DataTypes.BOOLEAN,
       plannedOn: DataTypes.DATEONLY,
+      note: DataTypes.TEXT,
     },
     {
       sequelize,

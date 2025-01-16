@@ -8,7 +8,7 @@ import { setError } from '@/store/appSlice';
 import { ColorModeButton, useColorModeValue } from '../ui/color-mode';
 import AuthenticatedNav from './AuthenticatedNav';
 import UnauthenticatedNav from './UnauthenticatedNav';
-import { GrUserAdmin } from "react-icons/gr";
+import { GrUserAdmin } from 'react-icons/gr';
 
 export default function Header() {
   const { user } = useAppSelector((state) => state.appSlice);
@@ -19,6 +19,8 @@ export default function Header() {
     signUp: false,
     signIn: false,
   });
+
+  const navigate = useNavigate();
 
   const toggleModal = useCallback(
     (modalName: 'signUp' | 'signIn') => {
@@ -31,7 +33,6 @@ export default function Header() {
     [dispatch]
   );
 
-
   return (
     <>
       <Box py={2} width="100%">
@@ -42,6 +43,7 @@ export default function Header() {
               fontSize="xl"
               fontWeight="700"
               textDecoration="none"
+              onClick={() => navigate('/')}
             >
               BE FIT
             </Link>
@@ -52,7 +54,6 @@ export default function Header() {
               ) : (
                 <UnauthenticatedNav toggleModal={toggleModal} />
               )}
-            
 
               <ColorModeButton borderRadius="50%" />
             </Flex>

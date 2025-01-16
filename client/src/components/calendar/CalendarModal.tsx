@@ -7,6 +7,7 @@ import {
   Box,
   Spinner,
   List,
+  Input,
 } from '@chakra-ui/react';
 import {
   DialogRoot,
@@ -24,6 +25,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import axiosInstance from '@/axiosInstance';
 import { useAppSelector } from '@/store/hooks/hooks';
+import { PiNotePencilBold } from 'react-icons/pi';
+import { InputGroup } from '../ui/input-group';
+import PatchInput from './PatchInput';
 
 interface UserDay {
   id: number;
@@ -31,6 +35,7 @@ interface UserDay {
   dayId: number;
   isCompleted: boolean;
   plannedOn: string | null;
+  note: string;
   Day: {
     id: number;
     name: string;
@@ -72,6 +77,7 @@ export function CalendarModal({
   const textColor = useColorModeValue('black', 'white');
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.appSlice);
+
   const fetchUnplannedDays = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -194,7 +200,7 @@ export function CalendarModal({
               <Spinner size="md" />
             ) : plannedDays.length > 0 ? (
               <>
-                <Text fontSize="lg" fontWeight="500">
+                <Text fontSize="lg" fontWeight="600">
                   Запланированные тренировки
                 </Text>
                 {plannedDays.map((day) => (
@@ -212,7 +218,7 @@ export function CalendarModal({
                           fontWeight="600"
                           transition="all 0.2s"
                           _hover={{
-                            color: 'yellow.300',
+                            color: 'yellow.500',
                             cursor: 'pointer',
                           }}
                         >
@@ -234,7 +240,7 @@ export function CalendarModal({
                             <List.Item
                               transition="all 0.2s"
                               _hover={{
-                                color: 'yellow.300',
+                                color: 'yellow.500',
                                 cursor: 'pointer',
                               }}
                               key={exercise.id}
@@ -244,6 +250,7 @@ export function CalendarModal({
                               </Link>
                             </List.Item>
                           ))}
+                          <PatchInput userId={user!.id} day={day}></PatchInput>
                         </List.Root>
                       </VStack>
                       <Checkbox
@@ -288,7 +295,7 @@ export function CalendarModal({
                       transition="all 0.2s"
                       my={2}
                       _hover={{
-                        borderColor: 'yellow.300',
+                        borderColor: 'yellow.500',
                       }}
                     >
                       <HStack justify="space-between">
@@ -297,7 +304,7 @@ export function CalendarModal({
                             fontWeight="600"
                             transition="all 0.2s"
                             _hover={{
-                              color: 'yellow.300',
+                              color: 'yellow.500',
                               cursor: 'pointer',
                             }}
                           >
@@ -307,28 +314,33 @@ export function CalendarModal({
                             <Text fontSize="sm" color="gray.600">
                               Количество упражнений: {day.Day?.Exercises.length}
                             </Text>
-                            <List.Root
-                              variant="plain"
-                              fontSize="0.7rem"
-                              color="gray.700"
-                              lineHeight="0.9rem"
-                            >
-                              {day.Day?.Exercises.map((exercise) => (
-                                <List.Item
-                                  transition="all 0.2s"
-                                  key={exercise.id}
-                                  _hover={{
-                                    color: 'yellow.300',
-                                    cursor: 'pointer',
-                                  }}
-                                >
-                                  <Link to={`/exercises/${exercise.id}`}>
-                                    {exercise.name}
-                                  </Link>
-                                </List.Item>
-                              ))}
-                            </List.Root>
                           </Text>
+
+                          <List.Root
+                            variant="plain"
+                            fontSize="0.7rem"
+                            color="gray.700"
+                            lineHeight="0.9rem"
+                          >
+                            {day.Day?.Exercises.map((exercise) => (
+                              <List.Item
+                                transition="all 0.2s"
+                                key={exercise.id}
+                                _hover={{
+                                  color: 'yellow.500',
+                                  cursor: 'pointer',
+                                }}
+                              >
+                                <Link to={`/exercises/${exercise.id}`}>
+                                  {exercise.name}
+                                </Link>
+                              </List.Item>
+                            ))}
+                            <PatchInput
+                              userId={user!.id}
+                              day={day}
+                            ></PatchInput>
+                          </List.Root>
                         </VStack>
                         <Button
                           size="sm"

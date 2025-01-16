@@ -6,6 +6,7 @@ interface UserDay {
   dayId: number;
   isCompleted: boolean;
   plannedOn: string | null;
+  note: string;
   Day: {
     id: number;
     name: string;

@@ -46,7 +46,7 @@ export default function ProgressBarOnly() {
             </Text>
             <Text fontSize='xl'>{user?.points} баллов</Text>
             <Text fontSize='xl'>
-              Завершено {completedDays} из {totalDays} дней
+              Завершено {completedDays} из {totalDays} тренировочных дней
             </Text>
           </Flex>
         </ProgressLabel>
