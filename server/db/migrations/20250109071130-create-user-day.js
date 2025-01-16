@@ -33,6 +33,10 @@ module.exports = {
         type: Sequelize.DATEONLY,
         allowNull: true,
       },
+      note: {
+        type: Sequelize.TEXT,
+        defaultValue: '',
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

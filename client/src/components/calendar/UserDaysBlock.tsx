@@ -114,10 +114,10 @@ export default function UserDaysBlock({ userId }: { userId: number }) {
   const clr = useColorModeValue('black', 'white');
 
   return (
-    <VStack maxH="870px">
+    <VStack maxH="990px">
       {/* Фильтры */}
 
-      <Text fontWeight="700" fontSize="1.2rem">
+      <Text fontWeight="700" fontSize="1.2rem" mb={3}>
         Все ваши тренировки:
       </Text>
       {userDays.length > 0 ? (
@@ -217,7 +217,7 @@ export default function UserDaysBlock({ userId }: { userId: number }) {
       {/* User Days List */}
 
       <Box
-        maxH="800px"
+        maxH="870px"
         overflowY="auto"
         w="100%"
         css={{
