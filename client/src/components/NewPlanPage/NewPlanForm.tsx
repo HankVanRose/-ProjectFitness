@@ -16,7 +16,7 @@ import {
   Text,
   Textarea,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Field } from '@/components/ui/field';
 import { Avatar } from '@/components/ui/avatar';
 import axiosInstance from '@/axiosInstance';
@@ -30,8 +30,9 @@ import { CiCalendar } from 'react-icons/ci';
 import { useNavigate } from 'react-router-dom';
 import { Toaster, toaster } from '@/components/ui/toaster';
 
-export default function NewPlanForm() {
-  const { VITE_API } = import.meta.env;
+ function NewPlanForm() {
+  const { VITE_API } = import.meta.env  
+  
   const [plan, setPlan] = useState<PlanType>({
     name: '',
     shortDescription: '',
@@ -66,26 +67,29 @@ export default function NewPlanForm() {
     fetchExercises();
   }, []);
 
-  const handleChange = (field: keyof PlanType, value: string | number) => {
-    setPlan((prevPlan) => ({ ...prevPlan, [field]: value }));
-  };
+  const handleChange = useCallback(
+    (field: keyof PlanType, value: string | number) => {
+      setPlan((prevPlan) => ({ ...prevPlan, [field]: value }));
+    },
+    []
+  );
 
-  const handleChangeDay = (
-    field: keyof DayExercise,
-    index: number,
-    value: string | number
-  ) => {
-    setDays((prevDays) =>
-      prevDays.map((day, ind) =>
-        ind === index ? { ...day, [field]: value } : day
-      )
-    );
-  };
+  const handleChangeDay = useCallback(
+    (field: keyof DayExercise, index: number, value: string | number) => {
+      setDays((prevDays) => {
+        const newDays = [...prevDays];
+        newDays[index] = { ...newDays[index], [field]: value };
+        return newDays;
+      });
+    },
+    []
+  );
 
-  const addDay = () => {
+  const addDay = useCallback(() => {
     setDays((prevDays) => [
       ...prevDays,
       {
+        planId: 0,
         points: 0,
         description: '',
         title: '',
@@ -93,11 +97,10 @@ export default function NewPlanForm() {
         target: '',
         rounds: 0,
         calories: 0,
-        Exercises: [] as ExerciseType[],
+        Exercises: [],
       } as DayExercise,
     ]);
-  };
-
+  }, []);
   const addExercise = (dayIndex: number) => {
     setDays((prevDays) => {
       const updatedDays = [...prevDays];
@@ -106,131 +109,152 @@ export default function NewPlanForm() {
     });
   };
   // const navigate = useNavigate();
-
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     try {
       const create = await axiosInstance.post(`${VITE_API}/days/newPlan/day/exercises`, {
         ...plan,
         days,
       });
-      setPlan({
-        name: '',
-        shortDescription: '',
-        longDescription: '',
-        equipment: '',
-        difficulty: '',
-        image: '',
-        slogan: '',
-        numOfTrainings: 0,
-        weeksDescription: '',
-        UserDays: [],
-      });
 
-      setSelectDifficulty([]);
-      setDays([]);
       if (create) {
+        setPlan({
+          name: '',
+          shortDescription: '',
+          longDescription: '',
+          equipment: '',
+          difficulty: '',
+          image: '',
+          slogan: '',
+          numOfTrainings: 0,
+          weeksDescription: '',
+          UserDays: [],
+        });
+
+        setSelectDifficulty([]);
+        setDays([]);
+        
         toaster.create({
           title: 'Новый план создан',
           description: 'Ваш план был успешно добавлен в список планов!',
           type: 'success',
           duration: 5000,
         });
-        setTimeout(function () {
+
+        setTimeout(() => {
           navigate(`/plans`);
         }, 2000);
-      } else {
-        toaster.create({
-          title: 'Ошибка.',
-          description:
-            'Произошла ошибка при создании плана. Пожалуйста, попробуйте еще раз.',
-          type: 'warning',
-          duration: 5000,
-        });
       }
     } catch (error) {
-      setError('Ошибка при создании плана');
       console.error(error);
+      toaster.create({
+        title: 'Ошибка.',
+        description: 'Произошла ошибка при создании плана. Пожалуйста, попробуйте еще раз.',
+        type: 'warning',
+        duration: 5000,
+      });
     }
-  };
+  }, [plan, days, navigate]);
 
-  const difficultyOptions = createListCollection({
-    items: [
-      { value: 'easy', label: 'Низкая' },
-      { value: 'medium', label: 'Средняя' },
-      { value: 'hard', label: 'Высокая' },
-    ],
-  });
 
-  const exercisesOptions = createListCollection({
-    items: allExercises.map((exercise) => ({
-      value: exercise.id,
-      points: exercise.points,
-      label: exercise.name,
-      calories: exercise.calories,
-      image: exercise.image,
-    })),
-  });
 
-  const typeOptions = createListCollection({
-    items: [
-      { value: 'ASAP', label: 'ASAP - На скорость' },
-      { value: 'AMRAP', label: 'AMRAP - На количество' },
-      { value: 'No Time', label: 'No Time - Без учета времени' },
-    ],
-  });
+  const difficultyOptions = useMemo(
+    () =>
+      createListCollection({
+        items: [
+          { value: 'easy', label: 'Низкая' },
+          { value: 'medium', label: 'Средняя' },
+          { value: 'hard', label: 'Высокая' },
+        ],
+      }),
+    []
+  );
 
-  const targetOptions = createListCollection({
-    items: [
-      {
-        value: 'Закончить задание за минимальное время',
-        label: 'Закончить задание за минимальное время',
-      },
-      {
-        value: 'Завершить как можно больше раундов за 20 минут',
-        label: 'Завершить как можно больше раундов за 20 минут',
-      },
-      {
-        value: 'Закончить как можно больше раундов за 25 минут',
-        label: 'Закончить как можно больше раундов за 25 минут',
-      },
-      { value: 'грудь + трицепс + дельты', label: 'грудь + трицепс + дельты' },
-      { value: 'спина + грудь + дельты', label: 'спина + грудь + дельты' },
-    ],
-  });
+  const exercisesOptions = useMemo(
+    () =>
+      createListCollection({
+        items: allExercises.map((exercise) => ({
+          value: exercise.id,
+          points: exercise.points,
+          label: exercise.name,
+          calories: exercise.calories,
+          image: exercise.image,
+        })),
+      }),
+    [allExercises]
+  );
+  const typeOptions = useMemo(
+    () =>
+      createListCollection({
+        items: [
+          { value: 'ASAP', label: 'ASAP - На скорость' },
+          { value: 'AMRAP', label: 'AMRAP - На количество' },
+          { value: 'No Time', label: 'No Time - Без учета времени' },
+        ],
+      }),
+    []
+  );
+
+  const targetOptions = useMemo(
+    () =>
+      createListCollection({
+        items: [
+          {
+            value: 'Закончить задание за минимальное время',
+            label: 'Закончить задание за минимальное время',
+          },
+          {
+            value: 'Завершить как можно больше раундов за 20 минут',
+            label: 'Завершить как можно больше раундов за 20 минут',
+          },
+          {
+            value: 'Закончить как можно больше раундов за 25 минут',
+            label: 'Закончить как можно больше раундов за 25 минут',
+          },
+          {
+            value: 'грудь + трицепс + дельты',
+            label: 'грудь + трицепс + дельты',
+          },
+          { value: 'спина + грудь + дельты', label: 'спина + грудь + дельты' },
+        ],
+      }),
+    []
+  );
 
   const textColor = useColorModeValue('black', 'white');
 
-  const updatePoints = (dayIndex: number, field: string, value: number) => {
+  const updatePoints = useCallback((dayIndex: number, field: string, value: number) => {
     setDays((prevDays) => {
-      const updatedDays = [...prevDays];
-      updatedDays[dayIndex] = {
-        ...updatedDays[dayIndex],
+      const newDays = [...prevDays];
+      newDays[dayIndex] = {
+        ...newDays[dayIndex],
         [field]: value,
       };
-      return updatedDays;
+      return newDays;
     });
-  };
+  }, []);
 
-  const updateExercises = (dayIndex: number, exercises: ExerciseType[]) => {
-    const updatedDays = [...days];
-    updatedDays[dayIndex].Exercises = exercises;
-    setDays(updatedDays);
-  };
+  const updateExercises = useCallback((dayIndex: number, exercises: ExerciseType[]) => {
+    setDays((prevDays) => {
+      const newDays = [...prevDays];
+      newDays[dayIndex].Exercises = exercises;
+      return newDays;
+    });
+  }, []);
 
   return (
     <>
       <Toaster />
-      <Grid templateColumns='repeat(2, 1fr)' p={10}>
-        <Box display='flex' p={5}>
-          <Fieldset.Root size='lg'>
+      <Grid templateColumns="repeat(2, 1fr)" p={10}>
+        <Box display="flex" p={5}>
+          <Fieldset.Root size="lg">
             <Stack>
               <Fieldset.Legend
                 fontWeight={600}
-                display='flex'
-                alignItems='center'
+                display="flex"
+                alignItems="center"
               >
                 Создать новый план тренировок{' '}
-                <IconButton variant={'ghost'} size='xs' borderRadius={10}>
+                <IconButton variant={'ghost'} size="xs" borderRadius={10}>
                   <GrPlan />
                 </IconButton>
               </Fieldset.Legend>
@@ -241,29 +265,29 @@ export default function NewPlanForm() {
             </Stack>
 
             <Fieldset.Content>
-              <Grid templateColumns='repeat(2, 1fr)' gap={4}>
-                <Field label='Название'>
+              <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+                <Field label="Название">
                   <Input
                     p={2}
-                    placeholder='Название плана'
+                    placeholder="Название плана"
                     value={plan.name}
                     onChange={(e) => handleChange('name', e.target.value)}
                   />
                 </Field>
 
-                <Field label='URL картинки'>
+                <Field label="URL картинки">
                   <Input
                     p={2}
-                    placeholder='URL картинки'
+                    placeholder="URL картинки"
                     value={plan.image}
                     onChange={(e) => handleChange('image', e.target.value)}
                   />
                 </Field>
 
-                <Field label='Краткое описание'>
+                <Field label="Краткое описание">
                   <Input
                     p={2}
-                    placeholder='Краткое описание'
+                    placeholder="Краткое описание"
                     value={plan.shortDescription}
                     onChange={(e) =>
                       handleChange('shortDescription', e.target.value)
@@ -271,16 +295,16 @@ export default function NewPlanForm() {
                   />
                 </Field>
 
-                <Field label='Необходимое оборудование'>
+                <Field label="Необходимое оборудование">
                   <Input
                     p={2}
-                    placeholder='Укажите оборудование'
+                    placeholder="Укажите оборудование"
                     value={plan.equipment}
                     onChange={(e) => handleChange('equipment', e.target.value)}
                   />
                 </Field>
 
-                <Field label='Сложность'>
+                <Field label="Сложность">
                   <SelectRoot
                     collection={difficultyOptions}
                     value={selectDifficulty}
@@ -293,7 +317,7 @@ export default function NewPlanForm() {
                     }}
                   >
                     <SelectTrigger p={2} borderRadius={4}>
-                      <SelectValueText placeholder='Выберите сложность'>
+                      <SelectValueText placeholder="Выберите сложность">
                         {selectDifficulty.length > 0
                           ? difficultyOptions.items.find(
                               (item) => item.value === plan.difficulty
@@ -311,11 +335,11 @@ export default function NewPlanForm() {
                   </SelectRoot>
                 </Field>
 
-                <Field label='Количество тренировок'>
+                <Field label="Количество тренировок">
                   <Input
                     p={2}
-                    type='number'
-                    placeholder='Количество дней'
+                    type="number"
+                    placeholder="Количество дней"
                     value={plan.numOfTrainings.toString()}
                     onChange={(e) =>
                       handleChange('numOfTrainings', e.target.value)
@@ -324,21 +348,21 @@ export default function NewPlanForm() {
                   />
                 </Field>
 
-                <Field label='Девиз плана'>
+                <Field label="Девиз плана">
                   <Input
                     p={2}
-                    placeholder='Укажите ваш девиз'
+                    placeholder="Укажите ваш девиз"
                     value={plan.slogan}
                     onChange={(e) => handleChange('slogan', e.target.value)}
                   />
                 </Field>
 
-                <Box gridColumn='span 2'>
-                  <Field label='Описание'>
+                <Box gridColumn="span 2">
+                  <Field label="Описание">
                     <Textarea
                       p={2}
                       rows={2}
-                      placeholder='Детальное описание'
+                      placeholder="Детальное описание"
                       value={plan.longDescription}
                       onChange={(e) =>
                         handleChange('longDescription', e.target.value)
@@ -367,15 +391,15 @@ export default function NewPlanForm() {
               * Нажмите на эту кнопку только после добавления всех тренировок
             </Fieldset.HelperText>
             <Button
-              type='submit'
+              type="submit"
               width={200}
-              alignSelf='flex-center'
+              alignSelf="flex-center"
               borderRadius={10}
               mt={4}
               onClick={handleSubmit}
-              minW='10ch'
-              variant='surface'
-              colorPalette='green'
+              minW="10ch"
+              variant="surface"
+              colorPalette="green"
             >
               Создать план <MdOutlineCreateNewFolder />
             </Button>
@@ -387,11 +411,11 @@ export default function NewPlanForm() {
               <Fieldset.Legend
                 fontWeight={600}
                 fontSize={16}
-                display='flex'
-                alignItems='center'
+                display="flex"
+                alignItems="center"
               >
                 Добавить тренировки в мой план
-                <IconButton variant={'ghost'} size='xs' borderRadius={10}>
+                <IconButton variant={'ghost'} size="xs" borderRadius={10}>
                   <CiCalendar />
                 </IconButton>
               </Fieldset.Legend>
@@ -406,16 +430,16 @@ export default function NewPlanForm() {
               key={dayIndex}
               p={3}
               borderWidth={1}
-              borderRadius='lg'
+              borderRadius="lg"
               mb={6}
-              w='full'
-              boxShadow='sm'
+              w="full"
+              boxShadow="sm"
             >
-              <Flex direction='column' gap={4}>
-                <Field label='Название'>
+              <Flex direction="column" gap={4}>
+                <Field label="Название">
                   <Input
                     p={2}
-                    placeholder='Название тренировки'
+                    placeholder="Название тренировки"
                     value={day.title}
                     onChange={(e) =>
                       handleChangeDay('title', dayIndex, e.target.value)
@@ -423,7 +447,7 @@ export default function NewPlanForm() {
                   />
                 </Field>
 
-                <Field label='Тип'>
+                <Field label="Тип">
                   <SelectRoot
                     collection={typeOptions}
                     onValueChange={(ValueChangeDetails) => {
@@ -434,7 +458,7 @@ export default function NewPlanForm() {
                     }}
                   >
                     <SelectTrigger p={2} borderRadius={4}>
-                      <SelectValueText placeholder='Выберите тип тренировки'>
+                      <SelectValueText placeholder="Выберите тип тренировки">
                         {
                           typeOptions.items.find(
                             (item) => item.value === day.type
@@ -452,7 +476,7 @@ export default function NewPlanForm() {
                   </SelectRoot>
                 </Field>
 
-                <Field label='Задача тренировки'>
+                <Field label="Задача тренировки">
                   <SelectRoot
                     collection={targetOptions}
                     onValueChange={(ValueChangeDetails) => {
@@ -463,7 +487,7 @@ export default function NewPlanForm() {
                     }}
                   >
                     <SelectTrigger p={2} borderRadius={4}>
-                      <SelectValueText placeholder='Выберите задачу'>
+                      <SelectValueText placeholder="Выберите задачу">
                         {
                           targetOptions.items.find(
                             (item) => item.value === day.target
@@ -481,11 +505,11 @@ export default function NewPlanForm() {
                   </SelectRoot>
                 </Field>
 
-                <Field label='Рекомендованное количество подходов'>
+                <Field label="Рекомендованное количество подходов">
                   <Input
                     p={2}
-                    type='number'
-                    placeholder='Количество подходов'
+                    type="number"
+                    placeholder="Количество подходов"
                     value={day.rounds}
                     onChange={(e) =>
                       handleChangeDay('rounds', dayIndex, e.target.value)
@@ -494,12 +518,12 @@ export default function NewPlanForm() {
                   />
                 </Field>
 
-                <Box gridColumn='span 2'>
-                  <Field label='Описание'>
+                <Box gridColumn="span 2">
+                  <Field label="Описание">
                     <Textarea
                       p={2}
                       rows={2}
-                      placeholder='Описание тренировки'
+                      placeholder="Описание тренировки"
                       value={day.description}
                       onChange={(e) =>
                         handleChangeDay('description', dayIndex, e.target.value)
@@ -508,35 +532,35 @@ export default function NewPlanForm() {
                   </Field>
                 </Box>
 
-                <Field label='Очки за тренировку'>
+                <Field label="Очки за тренировку">
                   <Input
-                    type='number'
-                    placeholder='Очки'
+                    type="number"
+                    placeholder="Очки"
                     value={day.points}
                     p={3}
                     disabled
-                    borderRadius='xl'
+                    borderRadius="xl"
                     onChange={(e) =>
                       updatePoints(dayIndex, 'points', Number(e.target.value))
                     }
                   />
                 </Field>
-                <Field label='Калории, сожженные за тренировку'>
+                <Field label="Калории, сожженные за тренировку">
                   <Input
-                    type='number'
-                    placeholder='Калории'
+                    type="number"
+                    placeholder="Калории"
                     value={day.calories}
                     p={3}
                     disabled
-                    borderRadius='xl'
+                    borderRadius="xl"
                     onChange={(e) =>
                       updatePoints(dayIndex, 'calories', Number(e.target.value))
                     }
                   />
                 </Field>
 
-                <Box fontSize='0.7rem'>
-                  <Text fontSize='1.2rem' fontWeight={600}>
+                <Box fontSize="0.7rem">
+                  <Text fontSize="1.2rem" fontWeight={600}>
                     Упражнения
                   </Text>
                   <Stack>
@@ -544,10 +568,10 @@ export default function NewPlanForm() {
                       <Field
                         fontWeight={300}
                         key={exerciseIndex}
-                        label='Выберите упражнение'
+                        label="Выберите упражнение"
                       >
                         <SelectRoot
-                          color='gray.600'
+                          color="gray.600"
                           collection={exercisesOptions}
                           onValueChange={(ValueChangeDetails) => {
                             const selectedExerciseId = Array.isArray(
@@ -604,7 +628,7 @@ export default function NewPlanForm() {
                           }}
                         >
                           <SelectTrigger p={2} borderRadius={5}>
-                            <SelectValueText placeholder='Выберите упражнение'>
+                            <SelectValueText placeholder="Выберите упражнение">
                               {exercise
                                 ? exercisesOptions.items.find(
                                     (item) => item.value === exercise.id
@@ -617,13 +641,13 @@ export default function NewPlanForm() {
                               <SelectItem
                                 item={option}
                                 key={option.value}
-                                justifyContent='flex-start'
+                                justifyContent="flex-start"
                                 my={1}
                               >
                                 <Avatar
                                   name={option.label}
                                   src={option.image}
-                                  size='lg'
+                                  size="lg"
                                 />
                                 {option.label}
                               </SelectItem>
@@ -636,9 +660,9 @@ export default function NewPlanForm() {
                 </Box>
 
                 <Button
-                  size='md'
-                  variant='outline'
-                  borderRadius='xl'
+                  size="md"
+                  variant="outline"
+                  borderRadius="xl"
                   onClick={() => addExercise(dayIndex)}
                 >
                   <IoAddCircleOutline />
@@ -652,12 +676,12 @@ export default function NewPlanForm() {
             p={3}
             onClick={addDay}
             width={200}
-            alignSelf='flex-center'
+            alignSelf="flex-center"
             borderRadius={10}
             mt={4}
-            minW='10ch'
-            variant='surface'
-            colorPalette='green'
+            minW="10ch"
+            variant="surface"
+            colorPalette="green"
           >
             Добавить тренировку <IoAddCircleOutline />
           </Button>
@@ -666,3 +690,4 @@ export default function NewPlanForm() {
     </>
   );
 }
+export default React.memo(NewPlanForm);

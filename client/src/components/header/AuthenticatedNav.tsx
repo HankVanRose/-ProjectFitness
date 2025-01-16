@@ -75,7 +75,7 @@ export default function AuthenticatedNav() {
         </Link>
       </Tooltip>
 
-      {user && ( //! Пока не реализовано
+      {user.isAdmin && ( //! Пока не реализовано
         <Tooltip showArrow content="Админка" openDelay={400} closeDelay={100}>
           <Link
             color={textColor}

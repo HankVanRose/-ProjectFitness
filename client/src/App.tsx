@@ -1,41 +1,38 @@
 import './App.css';
-
-import PersonalPage from './components/PersonalPage/PersonalPage';
+import { Suspense, lazy } from 'react';
 
 import { Route, Routes } from 'react-router-dom';
 
 import Layout from './components/Layout';
-import PlansBlock from './components/plansBlock/PlansBlock';
 
 import { useEffect } from 'react';
 import { useAppDispatch } from './store/hooks/hooks';
 import { fetchUserCheck } from './store/thunkActions';
 
-import AllExercisesPage from './components/ExercisePage/AllExercisesPage';
-import SingleExercisePage from './components/ExercisePage/SingleExercisePage';
-
 import HomePage from './components/HomePage/HomePage';
 
 import { useColorModeValue } from './components/ui/color-mode';
-import { Box, Switch } from '@chakra-ui/react';
-
-import NewPlanForm from './components/NewPlanPage/NewPlanForm';
-import AdminPage from './components/admin/AdminPage';
- 
- 
- 
-import UserPlansPage from './components/UserPlansPage/UserPlansPage';
-import UserDaysList from './components/userdays/UserdayList';
-import PlanPage from './components/planPage/PlanPage';
- 
-import CalendarPage from './components/calendar/CalendarPage';
-import ResetPassword from './components/password/ResetPassword';
-import RequestPasswordReset from './components/password/RequestPasswordReset';
-import VerifyOTP from './components/password/VerifyOtp';
-import ExerciseForm from './components/admin/ExerciseForm';
- 
- 
-
+import { Box } from '@chakra-ui/react';
+import { LoadingFallback } from './components/LoadingFallback';
+const PlansBlock = lazy(() => import('./components/plansBlock/PlansBlock'));
+const AllExercisesPage = lazy(
+  () => import('./components/ExercisePage/AllExercisesPage')
+);
+const SingleExercisePage = lazy(
+  () => import('./components/ExercisePage/SingleExercisePage')
+);
+const PersonalPage = lazy(
+  () => import('./components/PersonalPage/PersonalPage')
+);
+const PlanPage = lazy(() => import('./components/planPage/PlanPage'));
+const UserDaysList = lazy(() => import('./components/userdays/UserdayList'));
+const NewPlanForm = lazy(() => import('./components/NewPlanPage/NewPlanForm'));
+const ExerciseForm = lazy(() => import('./components/admin/ExerciseForm'));
+const AdminPage = lazy(() => import('./components/admin/AdminPage'));
+const CalendarPage = lazy(() => import('./components/calendar/CalendarPage'));
+const UserPlansPage = lazy(
+  () => import('./components/UserPlansPage/UserPlansPage')
+);
 
 function App() {
   const dispatch = useAppDispatch();
@@ -48,31 +45,105 @@ function App() {
   const textColor = useColorModeValue('black', 'white');
 
   return (
-
-    <Box bg={bgColor} minH='100vh' color={textColor}>
+    <Box bg={bgColor} minH="100vh" color={textColor}>
       <Routes>
         <Route element={<Layout />}>
-          <Route path='/' element={<HomePage />} />
-          <Route path='/plans' element={<PlansBlock />} />
-          <Route path='/exercises' element={<AllExercisesPage />} />
-          <Route path='/exercises/:id' element={<SingleExercisePage />} />
-          <Route path='/account' element={<PersonalPage />} />
-          <Route path='/plans/:id' element={<PlanPage />} />
-          <Route path='/plans/:id/days' element={<UserDaysList />} />
-          <Route path='/plans/new' element={<NewPlanForm />} />
-          <Route path='/exercise/new' element={<ExerciseForm />} />
-          <Route path='/admin' element={<AdminPage />} />
-          <Route path='/calendar' element={<CalendarPage />} />
-          <Route path='/:userId/userplans' element={< UserPlansPage/>} />
-          
-                <Route path="/request-reset" element={<RequestPasswordReset/>} />
-                <Route path="/verify-otp" element={<VerifyOTP/>} />
-                <Route path="/reset-password" element={<ResetPassword/>} />
-            
-    
-           
-   
-
+          <Route
+            path="/"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <HomePage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/plans"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <PlansBlock />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/exercises"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <AllExercisesPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/exercises/:id"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <SingleExercisePage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/account"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <PersonalPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/plans/:id"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <PlanPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/plans/:id/days"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <UserDaysList />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/plans/new"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <NewPlanForm />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/exercise/new"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <ExerciseForm />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <AdminPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/calendar"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <CalendarPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/:userId/userplans"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <UserPlansPage />
+              </Suspense>
+            }
+          />
         </Route>
       </Routes>
     </Box>
