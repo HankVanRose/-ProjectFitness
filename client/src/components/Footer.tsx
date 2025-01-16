@@ -40,7 +40,6 @@ export default function Footer() {
               src={colorMode === 'dark' ? '/LogoDark.png' : '/LogoLight.png'}
               alt='Logo'
               h={120}
-              
               objectFit='contain'
             />
           </VStack>
@@ -124,7 +123,8 @@ export default function Footer() {
             >
               <Link
                 href='https://t.me/HankvanRose'
-                isExternal
+                target='_blank'
+                rel='noopener noreferrer'
                 color={{ base: 'black', _dark: 'white' }}
                 _hover={{ textDecoration: 'none', opacity: 0.8 }}
                 display='block'
@@ -137,7 +137,8 @@ export default function Footer() {
               </Link>
               <Link
                 href='https://t.me/zemfiravildanova'
-                isExternal
+                target='_blank'
+                rel='noopener noreferrer'
                 color={{ base: 'black', _dark: 'white' }}
                 _hover={{ textDecoration: 'none', opacity: 0.8 }}
                 display='block'
@@ -150,7 +151,8 @@ export default function Footer() {
               </Link>
               <Link
                 href='https://t.me/renthefirst'
-                isExternal
+                target='_blank'
+                rel='noopener noreferrer'
                 color={{ base: 'black', _dark: 'white' }}
                 _hover={{ textDecoration: 'none', opacity: 0.8 }}
                 display='block'
