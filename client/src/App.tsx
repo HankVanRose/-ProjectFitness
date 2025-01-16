@@ -1,0 +1,80 @@
+import './App.css';
+
+import PersonalPage from './components/PersonalPage/PersonalPage';
+
+import { Route, Routes } from 'react-router-dom';
+
+import Layout from './components/Layout';
+import PlansBlock from './components/plansBlock/PlansBlock';
+
+import { useEffect } from 'react';
+import { useAppDispatch } from './store/hooks/hooks';
+import { fetchUserCheck } from './store/thunkActions';
+
+import AllExercisesPage from './components/ExercisePage/AllExercisesPage';
+import SingleExercisePage from './components/ExercisePage/SingleExercisePage';
+
+import HomePage from './components/HomePage/HomePage';
+
+import { useColorModeValue } from './components/ui/color-mode';
+import { Box, Switch } from '@chakra-ui/react';
+
+import NewPlanForm from './components/NewPlanPage/NewPlanForm';
+import AdminPage from './components/admin/AdminPage';
+ 
+ 
+ 
+import UserPlansPage from './components/UserPlansPage/UserPlansPage';
+import UserDaysList from './components/userdays/UserdayList';
+import PlanPage from './components/planPage/PlanPage';
+ 
+import CalendarPage from './components/calendar/CalendarPage';
+import ResetPassword from './components/password/ResetPassword';
+import RequestPasswordReset from './components/password/RequestPasswordReset';
+import VerifyOTP from './components/password/VerifyOtp';
+ 
+ 
+
+
+function App() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchUserCheck());
+  }, [dispatch]);
+
+  const bgColor = useColorModeValue('white', 'black');
+  const textColor = useColorModeValue('black', 'white');
+
+  return (
+
+    <Box bg={bgColor} minH='100vh' color={textColor}>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path='/' element={<HomePage />} />
+          <Route path='/plans' element={<PlansBlock />} />
+          <Route path='/exercises' element={<AllExercisesPage />} />
+          <Route path='/exercises/:id' element={<SingleExercisePage />} />
+          <Route path='/account' element={<PersonalPage />} />
+          <Route path='/plans/:id' element={<PlanPage />} />
+          <Route path='/plans/:id/days' element={<UserDaysList />} />
+          <Route path='/plans/new' element={<NewPlanForm />} />
+          <Route path='/admin' element={<AdminPage />} />
+          <Route path='/calendar' element={<CalendarPage />} />
+          <Route path='/:userId/userplans' element={< UserPlansPage/>} />
+          
+                <Route path="/request-reset" element={<RequestPasswordReset/>} />
+                <Route path="/verify-otp" element={<VerifyOTP/>} />
+                <Route path="/reset-password" element={<ResetPassword/>} />
+            
+    
+           
+   
+
+        </Route>
+      </Routes>
+    </Box>
+  );
+}
+
+export default App;

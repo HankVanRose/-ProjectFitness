@@ -1,0 +1,10 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    scrollbar-color: #000000 #000000; /* «цвет ползунка» «цвет полосы скроллбара» */
+    scrollbar-width:  thin   /* толщина */
+
+}
+
+ 
