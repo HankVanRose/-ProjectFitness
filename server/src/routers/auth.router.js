@@ -8,7 +8,6 @@ const {
   validateSigninData,
 } = require('../middlewares/validateData');
 const nodemailer = require('nodemailer');
- 
 
 router.post('/signup', validateSignupData, async (req, res) => {
   const { username, email, password } = req.body;
@@ -37,18 +36,26 @@ router.post('/signup', validateSignupData, async (req, res) => {
     const { accessToken, refreshToken } = generateToken({ user: plainUser });
 
     const transporter = nodemailer.createTransport({
-      service: 'Gmail', 
+      service: 'Gmail',
       auth: {
-        user: 'vanroseaxl1@gmail.com',  
-        pass: 'njja kzsp nsya xbuv',  
+        user: 'vanroseaxl1@gmail.com',
+        pass: 'njja kzsp nsya xbuv',
       },
     });
 
     const mailOptions = {
-      from: '👻 BEFIT 👻 vanroseaxl1@gmail.com',  
-      to: email,  
+      from: '👻 BEFIT 👻 vanroseaxl1@gmail.com',
+      to: email,
       subject: 'Добро пожаловать!',
-      html: '<h1>Привет, ' + username + '❤️!</h1><p>Спасибо за регистрацию на нашем сайте. Успехов в преображении🔥.</p>',
+      html: `
+        <h1>Привет, ${username} ❤️!</h1>
+        <p>Спасибо за регистрацию на нашем сайте. Успехов в преображении🔥.</p>
+        <p>Выбери свой план тренировок на <a href="http://localhost:5173/plans">Планы тренировок</a>. 
+        
+        </p>
+        <br/>
+         <p>С Уважением команда <a href="http://localhost:5173">BE FIT</a></p>
+      `,
     };
 
     await transporter.sendMail(mailOptions);
