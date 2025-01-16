@@ -24,7 +24,7 @@ module.exports = {
         {
           username: 'Мезенцев Владислав',
           email: 'vladislav@example.com',
-          avatar: 'https://example.com/avatar1.jpg',
+          avatar: 'https://avatars.githubusercontent.com/u/102286085?v=4',
           password: await bcrypt.hash('11111111', 10),
 
           gender: 'male',
@@ -38,7 +38,7 @@ module.exports = {
         {
           username: 'Алексей Шарапов',
           email: 'alexei@example.com',
-          avatar: 'https://example.com/avatar2.jpg',
+          avatar: 'https://avatars.githubusercontent.com/u/113192811?v=4',
           password: await bcrypt.hash('11111111', 10),
 
           gender: 'female',
@@ -52,7 +52,7 @@ module.exports = {
         {
           username: 'Артур Прейс',
           email: 'artur@example.com',
-          avatar: 'https://example.com/avatar3.jpg',
+          avatar: 'https://avatars.githubusercontent.com/u/184398885?v=4',
           password: await bcrypt.hash('11111111', 10),
 
           gender: 'male',
@@ -61,7 +61,7 @@ module.exports = {
           weight: '85kg',
           points: 75,
           calories: 2500,
-          goal: 'Хочу тырым-пырым бабах',
+          goal: 'Хочу т**р***м-пырым бабах *****ах',
         },
         {
           username: 'EmilyDavis',
