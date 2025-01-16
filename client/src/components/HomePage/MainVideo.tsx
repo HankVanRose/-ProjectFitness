@@ -60,7 +60,7 @@ export default function MainVideo() {
             textShadow: '2px 2px 10px rgba(0, 0, 0, 0.5)',
           }}
         >
-          Welcome to BeeFit
+          Welcome to BE FIT
         </h1>
         <p
           style={{
