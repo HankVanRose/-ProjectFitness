@@ -32,19 +32,22 @@ export default function SoonestList({ userId }: { userId: number }) {
           `/api/userdays/soonest/${userId}`
         );
         setUserDays(response.data);
-        console.log(response.data);
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchUserDays();
-  }, []);
+  }, [userId]);
   return (
     <VStack w="100%">
-      <Text fontWeight="700" fontSize="1.2rem" mb={20}>
-        {' '}
-        Ближайшие тренировки:{' '}
+      <Text
+        fontWeight="700"
+        fontSize="1.2rem"
+        mb={userDays.length > 0 ? 20 : 5}
+        textAlign="center"
+      >
+        Ближайшие тренировки:
       </Text>
 
       {userDays.length > 0 ? (
@@ -54,7 +57,7 @@ export default function SoonestList({ userId }: { userId: number }) {
             p={4}
             borderWidth={1}
             borderRadius="md"
-            borderColor={day.isCompleted ? 'gray' : 'gray'}
+            borderColor={'gray'}
             transition="all 0.2s"
             h="200px"
             w="300px"
@@ -128,7 +131,7 @@ export default function SoonestList({ userId }: { userId: number }) {
           </Box>
         ))
       ) : (
-        <Text color="gray.700" textAlign="center">
+        <Text opacity={0.7} textAlign="center">
           Нет запланированных тренировок
         </Text>
       )}

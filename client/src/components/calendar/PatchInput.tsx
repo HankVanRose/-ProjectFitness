@@ -12,16 +12,12 @@ export default function PatchInput({ day, userId }) {
 
   const handleNoteUpdate = async (newNote: string) => {
     try {
-      const response = await axiosInstance.patch(
-        `/api/userdays/note/${day.id}`,
-        {
-          userDayId: day.id,
-          note: newNote,
-          userId,
-        }
-      );
+      await axiosInstance.patch(`/api/userdays/note/${day.id}`, {
+        userDayId: day.id,
+        note: newNote,
+        userId,
+      });
 
-      console.log('Response:', response.data);
       setNote(newNote);
       setIsEditing(false);
     } catch (error) {
@@ -69,12 +65,17 @@ export default function PatchInput({ day, userId }) {
       flex="1"
     >
       <Input
+        _disabled={{
+          opacity: 1,
+          color: 'gray.500',
+        }}
         ref={inputRef}
         border="none"
         _focus={{
           border: 'none',
           boxShadow: 'none',
           outline: 'none',
+          color: 'gray.500',
         }}
         _active={{ border: 'none' }}
         value={note}

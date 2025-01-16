@@ -76,7 +76,6 @@ router.post('/signup', validateSignupData, async (req, res) => {
     });
   }
 });
-
 router.post('/signin', validateSigninData, async (req, res) => {
   const { email, password } = req.body;
 
@@ -84,15 +83,26 @@ router.post('/signin', validateSigninData, async (req, res) => {
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      return res
-        .status(401)
-        .json({ message: 'Нет пользователей с такой почтой' });
+      return res.status(403).json({
+        success: false,
+        message: 'Нет пользователей с такой почтой',
+      });
     }
 
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
-      return res.status(401).json({ message: 'Неправильный пароль' });
+      return res.status(403).json({
+        success: false,
+        message: 'Неправильный пароль',
+      });
+    }
+
+    if (user.isBlocked) {
+      return res.status(403).json({
+        success: false,
+        message: 'Пользователь заблокирован',
+      });
     }
 
     const plainUser = user.get();
@@ -102,7 +112,7 @@ router.post('/signin', validateSigninData, async (req, res) => {
 
     const { accessToken, refreshToken } = generateToken({ user: plainUser });
 
-    return res.cookie('refreshToken', refreshToken, cookieConfig.refresh).json({
+    return res.status(200).cookie('refreshToken', refreshToken, cookieConfig.refresh).json({
       success: true,
       user: plainUser,
       accessToken,

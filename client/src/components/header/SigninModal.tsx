@@ -10,8 +10,9 @@ import {
 } from '@/components/ui/dialog';
 import PasswordInput from './PasswordInput';
 import { useAuth } from '@/hooks/useAuth';
-import { useAppSelector } from '@/store/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks/hooks';
 import { useColorModeValue } from '../ui/color-mode';
+import { fetchUserSignin } from '@/store/thunkActions';
 
 interface SignInModalProps {
   show: boolean;
@@ -25,8 +26,7 @@ export default function SigninModal({ show, handleClose }: SignInModalProps) {
   });
   const bgColor = useColorModeValue('white', 'black');
   const textColor = useColorModeValue('black', 'white');
-
-  const { signin } = useAuth();
+  const dispatch = useAppDispatch();
   const { error } = useAppSelector((store) => store.appSlice);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,17 +38,14 @@ export default function SigninModal({ show, handleClose }: SignInModalProps) {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      const response = await signin(formData);
-      if (response.success) {
-        setFormData({
-          email: '',
-          password: '',
-        });
-        handleClose();
-      }
-    } catch (error) {
-      console.error('Error signing up:', error);
+    const response = await dispatch(fetchUserSignin(formData)).unwrap();
+
+    if (response.success) {
+      setFormData({
+        email: '',
+        password: '',
+      });
+      handleClose();
     }
   };
 
@@ -62,9 +59,9 @@ export default function SigninModal({ show, handleClose }: SignInModalProps) {
       <DialogContent p={2} backgroundColor={bgColor} color={textColor}>
         <DialogHeader>
           <DialogTitle mb={5} fontWeight={600}>
-          Вход
+            Вход
           </DialogTitle>
-          <DialogCloseTrigger borderRadius='md' />
+          <DialogCloseTrigger borderRadius="md" />
         </DialogHeader>
         <DialogBody>
           <form onSubmit={handleSubmit}>
@@ -118,17 +115,17 @@ export default function SigninModal({ show, handleClose }: SignInModalProps) {
             </VStack>
           </form>
 
-          {error && (
-            <Box
-              mt={4}
-              p={3}
-              bgColor="red.500/20"
-              border="1px"
-              borderRadius="md"
-            >
-              <Text color="red.500">{error}</Text>
-            </Box>
-          )}
+          <Box
+            mt={4}
+            p={3}
+            bgColor="red.500/20"
+            border="1px"
+            borderRadius="md"
+            transition="0.5s"
+            opacity={error ? 1 : 0}
+          >
+            <Text color="red.500">{error || 'empty'}</Text>
+          </Box>
         </DialogBody>
       </DialogContent>
     </DialogRoot>

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance, { setAccessToken } from '../axiosInstance';
-import { AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 import { UserType, UserResponseType, SessionType, UserDayType } from '../types';
 
 const fetchUserSignup = createAsyncThunk(
@@ -24,27 +24,56 @@ const fetchUserSignup = createAsyncThunk(
     }
   }
 );
-const fetchUserSignin = createAsyncThunk(
-  'user/signin',
-  async (user: Pick<UserType, 'email' | 'password'>) => {
-    try {
-      const response = await axiosInstance.post<UserResponseType>(
-        `${import.meta.env.VITE_API}/auth/signin`,
-        user
-      );
-      setAccessToken(response.data.accessToken);
-      return { user: response.data.user, success: response.data.success };
-    } catch (error) {
-      if (error instanceof AxiosError && error.response?.data) {
-        return { error: error.response.data.message as string };
+interface SigninSuccessResponse {
+  success: true;
+  user: UserType;
+  accessToken: string;
+}
+
+interface SigninErrorResponse {
+  success: false;
+  message: string;
+}
+
+type SigninResponse = SigninSuccessResponse | SigninErrorResponse;
+
+const fetchUserSignin = createAsyncThunk<
+  { user?: UserType; success?: boolean; error?: string },
+  Pick<UserType, 'email' | 'password'>
+>('user/signin', (user) => {
+  return axios
+    .post<SigninResponse>(
+      `http://localhost:3000${import.meta.env.VITE_API}/auth/signin`,
+      user,
+      {
+        withCredentials: true,
       }
+    ) //! эт пиздец
+    .then((response) => {
+      if (response?.data?.success) {
+        setAccessToken(response.data.accessToken);
+        return {
+          user: response.data.user,
+          success: true,
+        };
+      }
+    })
+    .catch((error) => {
+      if (error instanceof AxiosError) {
+        const errorMessage = error.response?.data?.message;
+        return {
+          success: false,
+          error: errorMessage,
+        };
+      }
+
       return {
+        success: false,
         error:
           'Произошла ошибка, пожалуйста, повторите ещё раз или попробуйте попозже.',
       };
-    }
-  }
-);
+    });
+});
 
 const fetchUserLogout = createAsyncThunk('user/logout', async () => {
   await axiosInstance.get(`${import.meta.env.VITE_API}/auth/signout`);
@@ -121,8 +150,9 @@ const userActivePlan = createAsyncThunk<
   }
 });
 
-const fetchUserProgress = createAsyncThunk('user/progress',
-  async (userId: number,  { rejectWithValue }) => {
+const fetchUserProgress = createAsyncThunk(
+  'user/progress',
+  async (userId: number, { rejectWithValue }) => {
     try {
       const responseUserPlans = await axiosInstance.get<SessionType[]>(
         `${import.meta.env.VITE_API}/session/plans/${userId}`
@@ -133,7 +163,7 @@ const fetchUserProgress = createAsyncThunk('user/progress',
         `${import.meta.env.VITE_API}/userdays/all/${userId}`
       );
       const userDays = responseUserDays.data;
-      return { sessions, userDays }
+      return { sessions, userDays };
     } catch (error) {
       if (error instanceof AxiosError && error.response?.data.message) {
         return rejectWithValue(error.response.data.message);
@@ -141,7 +171,7 @@ const fetchUserProgress = createAsyncThunk('user/progress',
       return rejectWithValue('An unexpected error occurred');
     }
   }
-)
+);
 // const fetchExercises = createAsyncThunk('exercises', async () => {
 //   try {
 //     const response = await axiosInstance.get<PlanType>(
@@ -159,5 +189,5 @@ export {
   fetchUserCheck,
   fetchUpdateProfile,
   userActivePlan,
-  fetchUserProgress
+  fetchUserProgress,
 };
