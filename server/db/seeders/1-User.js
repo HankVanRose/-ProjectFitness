@@ -11,8 +11,7 @@ module.exports = {
           username: 'John Doe',
           email: 'scott@ya.ru',
           password: await bcrypt.hash('11111111', 10),
-          avatar:
-            '/uploads/avatars/1736862219291-340476787.jpg',
+          avatar: '/uploads/avatars/1736862219291-340476787.jpg',
           gender: 'male',
           age: 22,
           height: '178',
@@ -23,8 +22,8 @@ module.exports = {
           isAdmin: true,
         },
         {
-          username: 'JohnDoe',
-          email: 'john@example.com',
+          username: 'Мезенцев Владислав',
+          email: 'vladislav@example.com',
           avatar: 'https://example.com/avatar1.jpg',
           password: await bcrypt.hash('11111111', 10),
 
@@ -32,13 +31,13 @@ module.exports = {
           age: 25,
           height: '175',
           weight: '70',
-          points: 100,
+          points: 1000,
           calories: 2000,
           goal: 'Хочу стать самым сильным защитником своей жены',
         },
         {
-          username: 'SarahSmith',
-          email: 'sarah@example.com',
+          username: 'Алексей Шарапов',
+          email: 'alexei@example.com',
           avatar: 'https://example.com/avatar2.jpg',
           password: await bcrypt.hash('11111111', 10),
 
@@ -46,13 +45,13 @@ module.exports = {
           age: 30,
           height: '165cm',
           weight: '58kg',
-          points: 150,
-          calories: 1800,
+          points: 1000,
+          calories: 2000,
           goal: 'нет цели, как и смысла, жизнь вообще вещь бессмысленная, а цели это лишь самообман, просто хочу убить своё время',
         },
         {
-          username: 'MikeJohnson',
-          email: 'mike@example.com',
+          username: 'Артур Прейс',
+          email: 'artur@example.com',
           avatar: 'https://example.com/avatar3.jpg',
           password: await bcrypt.hash('11111111', 10),
 
@@ -62,7 +61,7 @@ module.exports = {
           weight: '85kg',
           points: 75,
           calories: 2500,
-          goal: 'Хочу быть более выносливым',
+          goal: 'Хочу тырым-пырым бабах',
         },
         {
           username: 'EmilyDavis',
