@@ -59,7 +59,7 @@ export default function SigninModal({ show, handleClose }: SignInModalProps) {
       open={show}
       onOpenChange={handleClose}
     >
-      <DialogContent p={7} backgroundColor={bgColor} color={textColor}>
+      <DialogContent p={2} backgroundColor={bgColor} color={textColor}>
         <DialogHeader>
           <DialogTitle mb={5} fontWeight={600}>
           Вход
