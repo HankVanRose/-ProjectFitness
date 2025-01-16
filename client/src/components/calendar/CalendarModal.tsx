@@ -200,7 +200,7 @@ export function CalendarModal({
               <Spinner size="md" />
             ) : plannedDays.length > 0 ? (
               <>
-                <Text fontSize="lg" fontWeight="500">
+                <Text fontSize="lg" fontWeight="600">
                   Запланированные тренировки
                 </Text>
                 {plannedDays.map((day) => (
@@ -250,10 +250,7 @@ export function CalendarModal({
                               </Link>
                             </List.Item>
                           ))}
-                            <PatchInput
-                                userId={user!.id}
-                                day={day}
-                              ></PatchInput>
+                          <PatchInput userId={user!.id} day={day}></PatchInput>
                         </List.Root>
                       </VStack>
                       <Checkbox
@@ -317,34 +314,34 @@ export function CalendarModal({
                             <Text fontSize="sm" color="gray.600">
                               Количество упражнений: {day.Day?.Exercises.length}
                             </Text>
-                            <List.Root
-                              variant="plain"
-                              fontSize="0.7rem"
-                              color="gray.700"
-                              lineHeight="0.9rem"
-                            >
-                              {day.Day?.Exercises.map((exercise) => (
-                                <List.Item
-                                  transition="all 0.2s"
-                                  key={exercise.id}
-                                  _hover={{
-                                    color: 'yellow.500',
-                                    cursor: 'pointer',
-                                  }}
-                                >
-                                  <Link to={`/exercises/${exercise.id}`}>
-                                    {exercise.name}
-                                  </Link>
-                                </List.Item>
-                              ))}
-                              <PatchInput
-                                userId={user!.id}
-                                day={day}
-                              ></PatchInput>
-                            </List.Root>
                           </Text>
-                        </VStack>
 
+                          <List.Root
+                            variant="plain"
+                            fontSize="0.7rem"
+                            color="gray.700"
+                            lineHeight="0.9rem"
+                          >
+                            {day.Day?.Exercises.map((exercise) => (
+                              <List.Item
+                                transition="all 0.2s"
+                                key={exercise.id}
+                                _hover={{
+                                  color: 'yellow.500',
+                                  cursor: 'pointer',
+                                }}
+                              >
+                                <Link to={`/exercises/${exercise.id}`}>
+                                  {exercise.name}
+                                </Link>
+                              </List.Item>
+                            ))}
+                            <PatchInput
+                              userId={user!.id}
+                              day={day}
+                            ></PatchInput>
+                          </List.Root>
+                        </VStack>
                         <Button
                           size="sm"
                           colorScheme="blue"

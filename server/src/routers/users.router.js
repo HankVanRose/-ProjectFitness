@@ -47,51 +47,83 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/upload-avatar', verifyAccessToken, upload.single('avatar'), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ message: 'Файл не загружен' });
-    }
-    const userId = res.locals.user.id;
-    const user = await User.findByPk(userId);
-    if (!user) {
-      await fs.unlink(req.file.path);
-      return res.status(404).jsom({ message: 'Пользователь не найден' });
-    }
-
-    if (user.avatar) { //удаляем предыдущий файл
-      const oldAvatarPath = path.join(__dirname, '..', user.avatar);
-      try {
-        await fs.unlink(oldAvatarPath);
-      } catch (error) {
-        console.error('Ошибка при удалении старого аватара:', error);
+router.post(
+  '/upload-avatar',
+  verifyAccessToken,
+  upload.single('avatar'),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: 'Файл не загружен' });
       }
-    }
-
-    const avatarUrl = `/uploads/avatars/${req.file.filename}`;
-    await user.update({ avatar: avatarUrl });
-    console.log('Обновлённый пользователь:', await User.findByPk(userId));
-    const { accessToken, refreshToken } = generateToken({ user });
-
-    return res
-      .status(200)
-      .cookie('refreshToken', refreshToken, cookieConfig.refresh)
-      .json({
-        success: true,
-        user: user,
-        accessToken,
-      });
-  } catch (error) {
-    console.error('Upload avatar error:', error);
-    if (req.file) {
-      try {
+      const userId = res.locals.user.id;
+      const user = await User.findByPk(userId);
+      if (!user) {
         await fs.unlink(req.file.path);
-      } catch (unlinkError) {
-        console.error('Error deleting file:', unlinkError);
+        return res.status(404).jsom({ message: 'Пользователь не найден' });
       }
+
+      if (user.avatar) {
+        //удаляем предыдущий файл
+        const oldAvatarPath = path.join(__dirname, '..', user.avatar);
+        try {
+          await fs.unlink(oldAvatarPath);
+        } catch (error) {
+          console.error('Ошибка при удалении старого аватара:', error);
+        }
+      }
+
+      const avatarUrl = `/uploads/avatars/${req.file.filename}`;
+      await user.update({ avatar: avatarUrl });
+      console.log('Обновлённый пользователь:', await User.findByPk(userId));
+      const { accessToken, refreshToken } = generateToken({ user });
+
+      return res
+        .status(200)
+        .cookie('refreshToken', refreshToken, cookieConfig.refresh)
+        .json({
+          success: true,
+          user: user,
+          accessToken,
+        });
+    } catch (error) {
+      console.error('Upload avatar error:', error);
+      if (req.file) {
+        try {
+          await fs.unlink(req.file.path);
+        } catch (unlinkError) {
+          console.error('Error deleting file:', unlinkError);
+        }
+      }
+      res.status(500).json({ message: 'Ошибка при загрузке автара' });
     }
-    res.status(500).json({ message: 'Ошибка при загрузке автара' });
   }
-});
+);
+
+router.put(
+  '/:userId/block',
+  verifyAccessToken,
+  upload.single('avatar'),
+  async (req, res) => {
+    try {
+      const { userId } = req.params;
+
+      const user = await User.findByPk(userId);
+      user.isBlocked = true;
+      await user.save();
+      return res.status(200).json({ message: 'Пользователь заблокирован' });
+    } catch (error) {
+      console.error('Upload avatar error:', error);
+      if (req.file) {
+        try {
+          await fs.unlink(req.file.path);
+        } catch (unlinkError) {
+          console.error('Error deleting file:', unlinkError);
+        }
+      }
+      res.status(500).json({ message: 'Ошибка при загрузке автара' });
+    }
+  }
+);
 
 module.exports = router;

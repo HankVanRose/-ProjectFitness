@@ -309,7 +309,7 @@ export default function UserDaysBlock({ userId }: { userId: number }) {
               </Box>
             ))
           ) : (
-            <Text color="gray.800">Нет тренировок</Text>
+            <Text opacity={0.7}>Нет тренировок</Text>
           )}
         </VStack>
       </Box>

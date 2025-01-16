@@ -35,6 +35,7 @@ interface User {
   calories: number;
   goal: string;
   isAdmin: boolean;
+  isBlocked: boolean;
 }
 
 interface PaginatedResponse {
@@ -110,9 +111,12 @@ const UserTable = () => {
   };
   const handleBlockUser = async (userId: number) => {
     try {
-      //! пока нет ендпоинта
       await axiosInstance.put(`/api/users/${userId}/block`);
-      fetchUsers(currentPage, searchQuery);
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.id === userId ? { ...user, isBlocked: true } : user
+        )
+      );
     } catch (error) {
       console.error('Error blocking user:', error);
     }
@@ -124,13 +128,12 @@ const UserTable = () => {
         <InputGroup
           flex="1"
           startElement={
-            <Box pl={2}>
-              <IoSearch color={lupacolor} size={30} />
+            <Box>
+              <IoSearch color={lupacolor} size={20} />
             </Box>
           }
         >
           <Input
-            pl={12}
             placeholder="Поиск..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -216,11 +219,12 @@ const UserTable = () => {
                   <Table.Cell>
                     <Button
                       size="sm"
-                      colorPalette="green"
+                      colorPalette={user.isBlocked ? 'red' : 'green'}
                       variant="outline"
                       borderRadius={10}
                       p={2}
                       onClick={() => handleBlockUser(user.id)}
+                      disabled={user.isBlocked}
                     >
                       Block User <ImBlocked />
                     </Button>
@@ -232,8 +236,8 @@ const UserTable = () => {
         </Table.Root>
         <Box mt={4} p={5}>
           <HStack justify="space-between" align="center">
-            <Badge colorPalette="green" p={2} fontSize="1rem" >
-              <RiUserSearchLine  /> Количество найденных пользователей:{' '}
+            <Badge colorPalette="green" p={2} fontSize="1rem">
+              <RiUserSearchLine /> Количество найденных пользователей:{' '}
               {totalUsers}
             </Badge>
             <HStack>
