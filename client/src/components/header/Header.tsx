@@ -20,6 +20,8 @@ export default function Header() {
     signIn: false,
   });
 
+  const navigate = useNavigate()
+
   const toggleModal = useCallback(
     (modalName: 'signUp' | 'signIn') => {
       setModals((prev) => ({
@@ -42,6 +44,7 @@ export default function Header() {
               fontSize="xl"
               fontWeight="700"
               textDecoration="none"
+              onClick={() => navigate('/')}
             >
               BE FIT
             </Link>
