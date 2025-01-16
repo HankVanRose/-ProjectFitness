@@ -9,6 +9,7 @@ export type UserType = {
   gender?: string;
   points: number;
   age?: number;
+  isAdmin: boolean;
   goal?: string;
   calories?: number;
 };
