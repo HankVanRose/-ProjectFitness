@@ -244,17 +244,17 @@ import { Toaster, toaster } from '@/components/ui/toaster';
   return (
     <>
       <Toaster />
-      <Grid templateColumns="repeat(2, 1fr)" p={10}>
-        <Box display="flex" p={5}>
-          <Fieldset.Root size="lg">
+      <Grid templateColumns='repeat(2, 1fr)' p={10}>
+        <Box display='flex' p={5}>
+          <Fieldset.Root size='lg'>
             <Stack>
               <Fieldset.Legend
                 fontWeight={600}
-                display="flex"
-                alignItems="center"
+                display='flex'
+                alignItems='center'
               >
                 Создать новый план тренировок{' '}
-                <IconButton variant={'ghost'} size="xs" borderRadius={10}>
+                <IconButton variant={'ghost'} size='xs' borderRadius={10}>
                   <GrPlan />
                 </IconButton>
               </Fieldset.Legend>
@@ -265,29 +265,29 @@ import { Toaster, toaster } from '@/components/ui/toaster';
             </Stack>
 
             <Fieldset.Content>
-              <Grid templateColumns="repeat(2, 1fr)" gap={4}>
-                <Field label="Название">
+              <Grid templateColumns='repeat(2, 1fr)' gap={4}>
+                <Field label='Название'>
                   <Input
                     p={2}
-                    placeholder="Название плана"
+                    placeholder='Название плана'
                     value={plan.name}
                     onChange={(e) => handleChange('name', e.target.value)}
                   />
                 </Field>
 
-                <Field label="URL картинки">
+                <Field label='URL картинки'>
                   <Input
                     p={2}
-                    placeholder="URL картинки"
+                    placeholder='URL картинки'
                     value={plan.image}
                     onChange={(e) => handleChange('image', e.target.value)}
                   />
                 </Field>
 
-                <Field label="Краткое описание">
+                <Field label='Краткое описание'>
                   <Input
                     p={2}
-                    placeholder="Краткое описание"
+                    placeholder='Краткое описание'
                     value={plan.shortDescription}
                     onChange={(e) =>
                       handleChange('shortDescription', e.target.value)
@@ -295,16 +295,16 @@ import { Toaster, toaster } from '@/components/ui/toaster';
                   />
                 </Field>
 
-                <Field label="Необходимое оборудование">
+                <Field label='Необходимое оборудование'>
                   <Input
                     p={2}
-                    placeholder="Укажите оборудование"
+                    placeholder='Укажите оборудование'
                     value={plan.equipment}
                     onChange={(e) => handleChange('equipment', e.target.value)}
                   />
                 </Field>
 
-                <Field label="Сложность">
+                <Field label='Сложность'>
                   <SelectRoot
                     collection={difficultyOptions}
                     value={selectDifficulty}
@@ -317,7 +317,7 @@ import { Toaster, toaster } from '@/components/ui/toaster';
                     }}
                   >
                     <SelectTrigger p={2} borderRadius={4}>
-                      <SelectValueText placeholder="Выберите сложность">
+                      <SelectValueText placeholder='Выберите сложность'>
                         {selectDifficulty.length > 0
                           ? difficultyOptions.items.find(
                               (item) => item.value === plan.difficulty
@@ -335,11 +335,11 @@ import { Toaster, toaster } from '@/components/ui/toaster';
                   </SelectRoot>
                 </Field>
 
-                <Field label="Количество тренировок">
+                <Field label='Количество тренировок'>
                   <Input
                     p={2}
-                    type="number"
-                    placeholder="Количество дней"
+                    type='number'
+                    placeholder='Количество дней'
                     value={plan.numOfTrainings.toString()}
                     onChange={(e) =>
                       handleChange('numOfTrainings', e.target.value)
@@ -348,21 +348,21 @@ import { Toaster, toaster } from '@/components/ui/toaster';
                   />
                 </Field>
 
-                <Field label="Девиз плана">
+                <Field label='Девиз плана'>
                   <Input
                     p={2}
-                    placeholder="Укажите ваш девиз"
+                    placeholder='Укажите ваш девиз'
                     value={plan.slogan}
                     onChange={(e) => handleChange('slogan', e.target.value)}
                   />
                 </Field>
 
-                <Box gridColumn="span 2">
-                  <Field label="Описание">
+                <Box gridColumn='span 2'>
+                  <Field label='Описание'>
                     <Textarea
                       p={2}
                       rows={2}
-                      placeholder="Детальное описание"
+                      placeholder='Детальное описание'
                       value={plan.longDescription}
                       onChange={(e) =>
                         handleChange('longDescription', e.target.value)
@@ -391,15 +391,15 @@ import { Toaster, toaster } from '@/components/ui/toaster';
               * Нажмите на эту кнопку только после добавления всех тренировок
             </Fieldset.HelperText>
             <Button
-              type="submit"
+              type='submit'
               width={200}
-              alignSelf="flex-center"
+              alignSelf='flex-center'
               borderRadius={10}
               mt={4}
               onClick={handleSubmit}
-              minW="10ch"
-              variant="surface"
-              colorPalette="green"
+              minW='10ch'
+              variant='surface'
+              colorPalette='green'
             >
               Создать план <MdOutlineCreateNewFolder />
             </Button>
@@ -411,11 +411,11 @@ import { Toaster, toaster } from '@/components/ui/toaster';
               <Fieldset.Legend
                 fontWeight={600}
                 fontSize={16}
-                display="flex"
-                alignItems="center"
+                display='flex'
+                alignItems='center'
               >
                 Добавить тренировки в мой план
-                <IconButton variant={'ghost'} size="xs" borderRadius={10}>
+                <IconButton variant={'ghost'} size='xs' borderRadius={10}>
                   <CiCalendar />
                 </IconButton>
               </Fieldset.Legend>
@@ -430,16 +430,16 @@ import { Toaster, toaster } from '@/components/ui/toaster';
               key={dayIndex}
               p={3}
               borderWidth={1}
-              borderRadius="lg"
+              borderRadius='lg'
               mb={6}
-              w="full"
-              boxShadow="sm"
+              w='full'
+              boxShadow='sm'
             >
-              <Flex direction="column" gap={4}>
-                <Field label="Название">
+              <Flex direction='column' gap={4}>
+                <Field label='Название'>
                   <Input
                     p={2}
-                    placeholder="Название тренировки"
+                    placeholder='Название тренировки'
                     value={day.title}
                     onChange={(e) =>
                       handleChangeDay('title', dayIndex, e.target.value)
@@ -447,7 +447,7 @@ import { Toaster, toaster } from '@/components/ui/toaster';
                   />
                 </Field>
 
-                <Field label="Тип">
+                <Field label='Тип'>
                   <SelectRoot
                     collection={typeOptions}
                     onValueChange={(ValueChangeDetails) => {
@@ -458,7 +458,7 @@ import { Toaster, toaster } from '@/components/ui/toaster';
                     }}
                   >
                     <SelectTrigger p={2} borderRadius={4}>
-                      <SelectValueText placeholder="Выберите тип тренировки">
+                      <SelectValueText placeholder='Выберите тип тренировки'>
                         {
                           typeOptions.items.find(
                             (item) => item.value === day.type
@@ -476,7 +476,7 @@ import { Toaster, toaster } from '@/components/ui/toaster';
                   </SelectRoot>
                 </Field>
 
-                <Field label="Задача тренировки">
+                <Field label='Задача тренировки'>
                   <SelectRoot
                     collection={targetOptions}
                     onValueChange={(ValueChangeDetails) => {
@@ -487,7 +487,7 @@ import { Toaster, toaster } from '@/components/ui/toaster';
                     }}
                   >
                     <SelectTrigger p={2} borderRadius={4}>
-                      <SelectValueText placeholder="Выберите задачу">
+                      <SelectValueText placeholder='Выберите задачу'>
                         {
                           targetOptions.items.find(
                             (item) => item.value === day.target
@@ -505,11 +505,11 @@ import { Toaster, toaster } from '@/components/ui/toaster';
                   </SelectRoot>
                 </Field>
 
-                <Field label="Рекомендованное количество подходов">
+                <Field label='Рекомендованное количество подходов'>
                   <Input
                     p={2}
-                    type="number"
-                    placeholder="Количество подходов"
+                    type='number'
+                    placeholder='Количество подходов'
                     value={day.rounds}
                     onChange={(e) =>
                       handleChangeDay('rounds', dayIndex, e.target.value)
@@ -518,12 +518,12 @@ import { Toaster, toaster } from '@/components/ui/toaster';
                   />
                 </Field>
 
-                <Box gridColumn="span 2">
-                  <Field label="Описание">
+                <Box gridColumn='span 2'>
+                  <Field label='Описание'>
                     <Textarea
                       p={2}
                       rows={2}
-                      placeholder="Описание тренировки"
+                      placeholder='Описание тренировки'
                       value={day.description}
                       onChange={(e) =>
                         handleChangeDay('description', dayIndex, e.target.value)
@@ -532,35 +532,37 @@ import { Toaster, toaster } from '@/components/ui/toaster';
                   </Field>
                 </Box>
 
-                <Field label="Очки за тренировку">
+                <Field label='Очки за тренировку'>
                   <Input
-                    type="number"
-                    placeholder="Очки"
+                    type='number'
+                    placeholder='Очки'
                     value={day.points}
                     p={3}
                     disabled
-                    borderRadius="xl"
+                    _disabled={{ opacity: 1, color: 'inherit' }}
+                    borderRadius='xl'
                     onChange={(e) =>
                       updatePoints(dayIndex, 'points', Number(e.target.value))
                     }
                   />
                 </Field>
-                <Field label="Калории, сожженные за тренировку">
+                <Field label='Калории, сожженные за тренировку'>
                   <Input
-                    type="number"
-                    placeholder="Калории"
+                    type='number'
+                    placeholder='Калории'
                     value={day.calories}
                     p={3}
                     disabled
-                    borderRadius="xl"
+                    _disabled={{ opacity: 1, color: 'inherit' }}
+                    borderRadius='xl'
                     onChange={(e) =>
                       updatePoints(dayIndex, 'calories', Number(e.target.value))
                     }
                   />
                 </Field>
 
-                <Box fontSize="0.7rem">
-                  <Text fontSize="1.2rem" fontWeight={600}>
+                <Box fontSize='0.7rem'>
+                  <Text fontSize='1.2rem' fontWeight={600}>
                     Упражнения
                   </Text>
                   <Stack>
@@ -568,10 +570,11 @@ import { Toaster, toaster } from '@/components/ui/toaster';
                       <Field
                         fontWeight={300}
                         key={exerciseIndex}
-                        label="Выберите упражнение"
+                        label='Выберите упражнение'
                       >
                         <SelectRoot
-                          color="gray.600"
+                          opacity={1}
+                          color='inherit'
                           collection={exercisesOptions}
                           onValueChange={(ValueChangeDetails) => {
                             const selectedExerciseId = Array.isArray(
@@ -627,8 +630,8 @@ import { Toaster, toaster } from '@/components/ui/toaster';
                             updatePoints(dayIndex, 'calories', totalCalories);
                           }}
                         >
-                          <SelectTrigger p={2} borderRadius={5}>
-                            <SelectValueText placeholder="Выберите упражнение">
+                          <SelectTrigger p={2} borderRadius={5} >
+                            <SelectValueText placeholder='Выберите упражнение'>
                               {exercise
                                 ? exercisesOptions.items.find(
                                     (item) => item.value === exercise.id
@@ -636,18 +639,18 @@ import { Toaster, toaster } from '@/components/ui/toaster';
                                 : ''}
                             </SelectValueText>
                           </SelectTrigger>
-                          <SelectContent p={4} color={textColor}>
+                          <SelectContent p={4} color={textColor} >
                             {exercisesOptions.items.map((option) => (
                               <SelectItem
                                 item={option}
                                 key={option.value}
-                                justifyContent="flex-start"
+                                justifyContent='flex-start'
                                 my={1}
                               >
                                 <Avatar
                                   name={option.label}
                                   src={option.image}
-                                  size="lg"
+                                  size='lg'
                                 />
                                 {option.label}
                               </SelectItem>
@@ -660,9 +663,9 @@ import { Toaster, toaster } from '@/components/ui/toaster';
                 </Box>
 
                 <Button
-                  size="md"
-                  variant="outline"
-                  borderRadius="xl"
+                  size='md'
+                  variant='outline'
+                  borderRadius='xl'
                   onClick={() => addExercise(dayIndex)}
                 >
                   <IoAddCircleOutline />
@@ -676,12 +679,12 @@ import { Toaster, toaster } from '@/components/ui/toaster';
             p={3}
             onClick={addDay}
             width={200}
-            alignSelf="flex-center"
+            alignSelf='flex-center'
             borderRadius={10}
             mt={4}
-            minW="10ch"
-            variant="surface"
-            colorPalette="green"
+            minW='10ch'
+            variant='surface'
+            colorPalette='green'
           >
             Добавить тренировку <IoAddCircleOutline />
           </Button>

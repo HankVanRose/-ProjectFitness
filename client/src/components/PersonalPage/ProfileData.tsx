@@ -17,8 +17,6 @@ import {
   VStack,
   Text,
   Heading,
-  Grid,
-  GridItem,
 } from '@chakra-ui/react';
 import { InputGroup } from '@/components/ui/input-group';
 import { FiEdit, FiCheck, FiEyeOff, FiEye } from 'react-icons/fi';
@@ -290,7 +288,7 @@ export default function ProfileData() {
 
     updateModifiedFields.forEach((field) => {
       if (field !== 'id' && formData[field] !== undefined) {
-        (dataToUpdate[field as keyof UserType] as string | number | undefined) =
+        (dataToUpdate[field as keyof UserType] as string | number | boolean | undefined) =
           formData[field];
       }
     });
@@ -624,6 +622,7 @@ export default function ProfileData() {
               </VStack>
             )}
             <Button
+            mt={4}
               minW='10ch'
               variant='surface'
               colorPalette='green'

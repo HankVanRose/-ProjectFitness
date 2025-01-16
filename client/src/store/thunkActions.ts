@@ -113,14 +113,24 @@ const fetchUpdateProfile = createAsyncThunk(
       if ('password' in filteredData && filteredData.password === '') {
         delete filteredData.password;
       }
+      // console.log('Отправляемые данные:', filteredData);
       const response = await axiosInstance.patch<UserResponseType>(
         `${import.meta.env.VITE_API}/auth/profile`,
-        filteredData
+        filteredData,
       );
-      console.log('Ответ от сервера:', response.data);
+      console.log('Ответ от сервера:', response);
+      if (response.status >= 400) {
+        return rejectWithValue(
+          response.data.message || 'Ошибка при обновлении профиля'
+        );
+      }
       setAccessToken(response.data.accessToken);
       return response.data;
     } catch (error) {
+      // console.error('Ошибка в fetchUpdateProfile:', error);
+      // console.log('error.toJSON():', error.toJSON());
+      // console.log('error.response:', error.response);
+
       if (error instanceof AxiosError && error.response?.data) {
         return rejectWithValue(error.response.data.message);
       }
