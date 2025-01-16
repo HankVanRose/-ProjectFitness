@@ -1,15 +1,17 @@
 import axiosInstance from '@/axiosInstance';
 import { useAppSelector } from '@/store/hooks/hooks';
-import { Box, Container, SimpleGrid } from '@chakra-ui/react';
+import { Box, Button, Container, SimpleGrid } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import UserPlanCard from './UserPlanCard';
+import { useNavigate } from 'react-router-dom';
 
 export default function UserPlansPage() {
   const { user } = useAppSelector((state) => state.appSlice);
   const [userPlans, setUserPlans] = useState([]);
   const { VITE_API } = import.meta.env;
   const [isLoading, setIsLoading] = useState(true);
-  const { userplan } = useAppSelector((state) => state.appSlice);
+  const navigate = useNavigate();
+  // const { userplan } = useAppSelector((state) => state.appSlice);
 
   //id
   useEffect(() => {
@@ -32,11 +34,14 @@ export default function UserPlansPage() {
     if (user?.id) allPlans();
   }, [user]);
 
+  const redirectPlanHandlet = () => {
+    navigate('/plans');
+  };
   // onClick={() => navigate(`/plans/${plan.planId}/days`)}
 
-  return (
+  return userPlans.length > 0 ? (
     <Container maxW="full" px={4}>
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} p={4}>
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} p={4}>
         {userPlans.map((plan) => (
           <Box key={plan.id} p={4} borderRadius="md">
             <UserPlanCard
@@ -46,6 +51,29 @@ export default function UserPlansPage() {
             />
           </Box>
         ))}
+      </SimpleGrid>
+    </Container>
+  ) : (
+    <Container maxW="full" px={4} flex={1} py={5} justifyContent="center">
+      <SimpleGrid mx="auto">
+        <Box display="flex" justifyContent="center" py={4}>
+          Пока нет добавленных планов
+        </Box>
+        <Box display="flex" justifyContent="center" py={4}>
+        <Button
+          display="flex"
+          justifyContent="center"
+          minW="10ch"
+          maxW="150px"
+          variant="surface"
+          colorPalette="green"
+          borderRadius="sm"
+          onClick={redirectPlanHandlet}
+          className="mt-3"
+        >
+          Добавить план
+        </Button>
+        </Box>
       </SimpleGrid>
     </Container>
   );

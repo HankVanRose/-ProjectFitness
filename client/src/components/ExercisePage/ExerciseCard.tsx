@@ -1,10 +1,10 @@
 import { Box, Text, Button, Skeleton } from '@chakra-ui/react';
 import { ExerciseType } from '../../types';
 import { useNavigate } from 'react-router-dom';
- 
+
 import { useState, useEffect, memo } from 'react';
 
- function ExerciseCard({ image, id, name }: ExerciseType) {
+function ExerciseCard({ image, id, name }: ExerciseType) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -33,13 +33,7 @@ import { useState, useEffect, memo } from 'react';
     >
       {isLoading ? (
         <Box height="100%">
-          <Skeleton height="80%" width="100%" borderRadius="10px" />
-          <Skeleton
-            height="40px"
-            width="80%"
-            marginTop="10px"
-            borderRadius="5px"
-          />
+          <Skeleton height="100%" width="100%" borderRadius="10px" />
         </Box>
       ) : (
         <Box
@@ -65,8 +59,6 @@ import { useState, useEffect, memo } from 'react';
             </Text>
 
             <Box display="flex" flexDirection="column" marginTop="auto">
-             
-
               <Button
                 marginTop="10px"
                 backgroundColor="green.500"
@@ -85,4 +77,4 @@ import { useState, useEffect, memo } from 'react';
   );
 }
 
-export default memo(ExerciseCard)
+export default memo(ExerciseCard);

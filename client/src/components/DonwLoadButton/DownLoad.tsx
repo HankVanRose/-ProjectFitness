@@ -27,7 +27,19 @@ const DownloadButton = () => {
     }
   };
 
-  return <Button onClick={handleDownload}>Скачать Excel</Button>;
+  return (
+    <Button
+      minW='10ch'
+      variant='surface'
+      colorPalette='green'
+      borderRadius='sm'
+      className='mt-3'
+      px={2}
+      onClick={handleDownload}
+    >
+      Скачать Excel
+    </Button>
+  );
 };
 
 export default DownloadButton;

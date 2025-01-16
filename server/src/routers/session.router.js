@@ -43,7 +43,7 @@ router.get('/plans/:userId', async (req, res) => {
       include: [
         {
           model: Plan,
-          attributes: ['name', 'image'],
+          attributes: ['name', 'image', 'numOfTrainings'],
         },
       ],
     });
@@ -139,7 +139,7 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
     const { accessToken, refreshToken } = generateToken({ user: findUser });
 
     userDay.isCompleted = isCompleted;
-
+ 
     if (!userDay.plannedOn) {
       const today = new Date();
       const date = new Date(today.setDate(today.getDate() - 1))
@@ -177,6 +177,7 @@ router.patch('/:dayId', verifyAccessToken, async (req, res) => {
       await session.save();
     }
 
+ 
     await userDay.save();
     res
       .status(200)

@@ -141,18 +141,18 @@ export default function ProfileData() {
     });
   };
 
-  const handleGoalChange = (e: { value: string[] }) => {
-    const selectedGoal = e.value[0];
-    setFormData((prev) => ({
-      ...prev,
-      goal: selectedGoal,
-    }));
-    setModifiedFields((prev) => {
-      const newModifiedFields = new Set(prev);
-      newModifiedFields.add('goal');
-      return newModifiedFields;
-    });
-  };
+  // const handleGoalChange = (e: { value: string[] }) => {
+  //   const selectedGoal = e.value[0];
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     goal: selectedGoal,
+  //   }));
+  //   setModifiedFields((prev) => {
+  //     const newModifiedFields = new Set(prev);
+  //     newModifiedFields.add('goal');
+  //     return newModifiedFields;
+  //   });
+  // };
 
   const validateEmail = useCallback((email: string | undefined): boolean => {
     if (!email) {
@@ -395,14 +395,14 @@ export default function ProfileData() {
     ],
   });
 
-  const goals = createListCollection({
-    items: [
-      { value: 'Сбросить вес', label: 'Сбросить вес' },
-      { value: 'Стать сильнее', label: 'Стать сильнее' },
-      { value: 'Уменьшить стресс', label: 'Уменьшить стресс' },
-      { value: 'Повысить выносливость', label: 'Повысить выносливость' },
-    ],
-  });
+  // const goals = createListCollection({
+  //   items: [
+  //     { value: 'Сбросить вес', label: 'Сбросить вес' },
+  //     { value: 'Стать сильнее', label: 'Стать сильнее' },
+  //     { value: 'Уменьшить стресс', label: 'Уменьшить стресс' },
+  //     { value: 'Повысить выносливость', label: 'Повысить выносливость' },
+  //   ],
+  // });
 
   const content = () => {
     switch (activeTab) {
@@ -432,7 +432,7 @@ export default function ProfileData() {
               <SelectTrigger
                 bg={isEditing === 'gender' ? editingBg : undefined}
               >
-                <SelectValueText placeholder='Выберите пол' pl={4}>
+                <SelectValueText placeholder='Выберите пол' pl={1}>
                   {(items) => {
                     const selectedGender = frameworks.items.find(
                       (framework) => framework.value === formData.gender
@@ -454,8 +454,9 @@ export default function ProfileData() {
 
             {editableField('height', 'Рост')}
             {editableField('weight', 'Вес')}
+            {editableField('goal', 'Цель')}
 
-            <SelectRoot
+            {/* <SelectRoot
               mb={6}
               collection={goals}
               value={formData.goal ? [formData.goal] : []}
@@ -482,7 +483,7 @@ export default function ProfileData() {
                   </SelectItem>
                 ))}
               </SelectContent>
-            </SelectRoot>
+            </SelectRoot> */}
 
             <Button
               minW='10ch'
