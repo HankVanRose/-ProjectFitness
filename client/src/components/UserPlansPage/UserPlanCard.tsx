@@ -32,7 +32,7 @@ export default function UserPlanCard({ id, name, image }: PlanType) {
     >
       {isLoading ? (
         <Box height="100%">
-          <Skeleton height="80%" width="100%" borderRadius="10px" />
+          <Skeleton height="100%" width="100%" borderRadius="10px" />
           <Skeleton
             height="40px"
             width="100%"
