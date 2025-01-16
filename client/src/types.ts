@@ -14,7 +14,7 @@ export type UserType = {
 };
 
 export type ExerciseType = {
-  id: number;
+  id?: number;
   name: string;
   shortDescription: string;
   longDescription: string;

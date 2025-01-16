@@ -32,6 +32,7 @@ import CalendarPage from './components/calendar/CalendarPage';
 import ResetPassword from './components/password/ResetPassword';
 import RequestPasswordReset from './components/password/RequestPasswordReset';
 import VerifyOTP from './components/password/VerifyOtp';
+import ExerciseForm from './components/admin/ExerciseForm';
  
  
 
@@ -59,6 +60,7 @@ function App() {
           <Route path='/plans/:id' element={<PlanPage />} />
           <Route path='/plans/:id/days' element={<UserDaysList />} />
           <Route path='/plans/new' element={<NewPlanForm />} />
+          <Route path='/exercise/new' element={<ExerciseForm />} />
           <Route path='/admin' element={<AdminPage />} />
           <Route path='/calendar' element={<CalendarPage />} />
           <Route path='/:userId/userplans' element={< UserPlansPage/>} />

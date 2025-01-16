@@ -640,9 +640,9 @@ export default function ProfileData() {
       case 2:
         return (
           <>
-            <Stack>
+            <Stack flex={1} direction='row' gap={8} >
               <Button
-                minW='10ch'
+                minW='25ch'
                 variant='surface'
                 colorPalette='green'
                 borderRadius='sm'
@@ -651,6 +651,17 @@ export default function ProfileData() {
                 mb={6}
               >
                 Создать новый план
+              </Button>
+              <Button
+                minW='25ch'
+                variant='surface'
+                colorPalette='green'
+                borderRadius='sm'
+                onClick={() => navigate('/exercise/new')}
+                className='mt-3'
+                mb={6}
+              >
+                Создать новое упражнение
               </Button>
             </Stack>
             {userplan?.length === 0 ? (
