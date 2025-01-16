@@ -40,10 +40,10 @@ export default function UserPlansPage() {
   // onClick={() => navigate(`/plans/${plan.planId}/days`)}
 
   return userPlans.length > 0 ? (
-    <Container maxW='full' px={4}>
+    <Container maxW="full" px={4}>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} p={4}>
         {userPlans.map((plan) => (
-          <Box key={plan.id} p={4} borderRadius='md'>
+          <Box key={plan.id} p={4} borderRadius="md">
             <UserPlanCard
               image={plan.Plan?.image}
               id={plan.planId}
@@ -54,22 +54,26 @@ export default function UserPlansPage() {
       </SimpleGrid>
     </Container>
   ) : (
-    <Container maxW='full' px={4} flex={1} py={5} justifyContent='center'>
-      <SimpleGrid mx='auto'>
-        <Box justifyContent='center' py={4}>
+    <Container maxW="full" px={4} flex={1} py={5} justifyContent="center">
+      <SimpleGrid mx="auto">
+        <Box display="flex" justifyContent="center" py={4}>
           Пока нет добавленных планов
         </Box>
+        <Box display="flex" justifyContent="center" py={4}>
         <Button
-          minW='10ch'
-          maxW='150px'
-          variant='surface'
-          colorPalette='green'
-          borderRadius='sm'
+          display="flex"
+          justifyContent="center"
+          minW="10ch"
+          maxW="150px"
+          variant="surface"
+          colorPalette="green"
+          borderRadius="sm"
           onClick={redirectPlanHandlet}
-          className='mt-3'
+          className="mt-3"
         >
           Добавить план
         </Button>
+        </Box>
       </SimpleGrid>
     </Container>
   );
