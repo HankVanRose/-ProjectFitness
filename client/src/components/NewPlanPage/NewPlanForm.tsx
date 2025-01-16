@@ -109,7 +109,7 @@ export default function NewPlanForm() {
 
   const handleSubmit = async () => {
     try {
-      await axiosInstance.post(`${VITE_API}/days/newPlan/day/exercises`, {
+      const create = await axiosInstance.post(`${VITE_API}/days/newPlan/day/exercises`, {
         ...plan,
         days,
       });
@@ -128,25 +128,28 @@ export default function NewPlanForm() {
 
       setSelectDifficulty([]);
       setDays([]);
-      toaster.create({
-        title: 'Новый план создан',
-        description: 'Ваш план был успешно добавлен в список планов!',
-        type: 'success',
-        duration: 5000,
-      });
-      setTimeout(function () {
-        navigate(`/plans/`);
-      }, 2000);
+      if (create) {
+        toaster.create({
+          title: 'Новый план создан',
+          description: 'Ваш план был успешно добавлен в список планов!',
+          type: 'success',
+          duration: 5000,
+        });
+        setTimeout(function () {
+          navigate(`/plans`);
+        }, 2000);
+      } else {
+        toaster.create({
+          title: 'Ошибка.',
+          description:
+            'Произошла ошибка при создании плана. Пожалуйста, попробуйте еще раз.',
+          type: 'warning',
+          duration: 5000,
+        });
+      }
     } catch (error) {
-      setError('Ошибка при добавлении плана');
+      setError('Ошибка при создании плана');
       console.error(error);
-      toaster.create({
-        title: 'Ошибка.',
-        description:
-          'Произошла ошибка при создании плана. Пожалуйста, попробуйте еще раз.',
-        type: 'Warning',
-        duration: 5000,
-      });
     }
   };
 
