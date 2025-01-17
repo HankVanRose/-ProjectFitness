@@ -101,7 +101,8 @@ router.post('/signin', validateSigninData, async (req, res) => {
     if (user.isBlocked) {
       return res.status(403).json({
         success: false,
-        message: 'Пользователь заблокирован',
+        message:
+          'Пользователь заблокирован. Свяжитесь с администраторами',
       });
     }
 
@@ -144,6 +145,7 @@ router.get('/signout', (req, res) => {
 
 router.patch('/profile', async (req, res) => {
   const { id, email, password, ...otherData } = req.body;
+  // console.log('Полученные данные:', req.body);
   try {
     const user = await User.findByPk(id);
     if (!user) {
@@ -152,6 +154,7 @@ router.patch('/profile', async (req, res) => {
 
     if (email) {
       const existingUser = await User.findOne({ where: { email } });
+      // console.log('Найденный пользователь:', existingUser);
       if (existingUser && existingUser.id !== id) {
         return res
           .status(400)

@@ -42,6 +42,7 @@ function ExerciseCard({ image, id, name }: ExerciseType) {
             backgroundColor: 'white',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center'
           }}
           height="100%"
         >

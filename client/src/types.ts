@@ -9,6 +9,7 @@ export type UserType = {
   gender?: string;
   points: number;
   age?: number;
+  isAdmin: boolean;
   goal?: string;
   calories?: number;
 };
@@ -59,6 +60,7 @@ export type UserResponseType = {
   user: UserType;
   success: boolean;
   accessToken: string;
+  message?: string;
 };
 
 export type PlansType = PlanType[];

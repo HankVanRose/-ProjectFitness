@@ -90,8 +90,8 @@ export default function SigninModal({ show, handleClose }: SignInModalProps) {
               </Box>
 
               <Box w="100%" mt={4}>
-                <Flex justify="space-between" align="center">
-                  <Button
+                <Flex justify="end" align="center">
+                  {/* <Button
                     onClick={() => {
                       //!
                     }}
@@ -100,7 +100,7 @@ export default function SigninModal({ show, handleClose }: SignInModalProps) {
                     borderRadius="md"
                   >
                     Забыли пароль?
-                  </Button>
+                  </Button> */}
                   <Button
                     p={3}
                     borderRadius="md"

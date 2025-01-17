@@ -64,54 +64,56 @@ export default function SingleExercisePage() {
   return (
     <Box
       color={{ base: 'black', _dark: 'white' }}
-      padding="20px"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      minHeight="100vh"
+      padding='20px'
+      display='flex'
+      alignItems='center'
+      justifyContent='center'
+      minHeight='100vh'
     >
-      <Container maxW="container.lg">
-        <VStack spacing={10} align="stretch">
-          <Heading textAlign="center" fontSize="2.5rem" fontWeight="bold">
+      <Container maxW='container.lg'>
+        <VStack align='stretch'>
+          <Heading textAlign='center' fontSize='2.5rem' fontWeight='bold'>
             BE FIT УПРАЖНЕНИЕ: {singleExercise.name?.toUpperCase()}
           </Heading>
           <Image
             src={singleExercise.image}
             alt={singleExercise.name?.toUpperCase()}
-            borderRadius="md"
-            maxHeight="768px"
-            objectFit="cover"
+            my={4}
+            borderRadius='md'
+            maxHeight='768px'
+            objectFit='cover'
           />
-          <Stack spacing={4} textAlign="justify" marginX="100px" marginY="15px">
-            <Heading fontSize="2rem">
+          <Stack textAlign='justify' marginX='100px' marginY='15px'>
+            <Heading fontSize='2rem'>
               ЧТО ТАКОЕ: {singleExercise.name?.toUpperCase()}?
             </Heading>
-            <Text fontSize="1.3rem" lineHeight="1.6" textAlign="justify">
+            <Text fontSize='1.3rem' lineHeight='1.6' textAlign='justify'>
               {singleExercise.shortDescription}
             </Text>
-            <Heading fontSize="2rem">
+            <Heading fontSize='2rem'>
               ЕЩЕ НЕМНОГО О: {singleExercise.name?.toUpperCase()}?
             </Heading>
-            <Text fontSize="1.3rem" lineHeight="1.6" textAlign="justify">
+            <Text fontSize='1.3rem' lineHeight='1.6' textAlign='justify'>
               {singleExercise.longDescription}
             </Text>
-            <Heading fontSize="2rem">ОСНОВНЫЕ ГРУППЫ МЫШЦ</Heading>
-            <Text fontSize="1.3rem" lineHeight="1.6" textAlign="justify">
+            <Heading fontSize='2rem'>ОСНОВНЫЕ ГРУППЫ МЫШЦ</Heading>
+            <Text fontSize='1.3rem' lineHeight='1.6' textAlign='justify'>
               {singleExercise.longMuscleGroup}
             </Text>
             <Image
               src={singleExercise.muscleImage}
               alt={singleExercise.name?.toUpperCase()}
-              borderRadius="md"
-              maxHeight="768px"
-              objectFit="cover"
+              my={4}
+              borderRadius='md'
+              maxHeight='768px'
+              objectFit='cover'
             />
-            <Heading fontSize="2rem">НЕОБХОДИМОЕ ОБОРУДОВАНИЕ:</Heading>
-            <Text fontSize="1.3rem" lineHeight="1.6" textAlign="justify">
+            <Heading fontSize='2rem'>НЕОБХОДИМОЕ ОБОРУДОВАНИЕ:</Heading>
+            <Text fontSize='1.3rem' lineHeight='1.6' textAlign='justify'>
               {singleExercise.equipment?.toUpperCase()}
             </Text>
 
-            <Heading fontSize="2rem">
+            <Heading fontSize='2rem'>
               КОЛИЧЕСТВО КАЛЛОРИЙ СЖИГАЕМЫХ ЗА ДЕЙСТВИЕ:
             </Heading>
             <div
@@ -123,18 +125,18 @@ export default function SingleExercisePage() {
             >
               {caloriesSymbol}
               <Text
-                fontSize="1.3rem"
-                lineHeight="1.6"
-                textAlign="justify"
-                marginRight="0.25rem"
-                marginLeft="0.5rem"
+                fontSize='1.3rem'
+                lineHeight='1.6'
+                textAlign='justify'
+                marginRight='0.25rem'
+                marginLeft='0.5rem'
                 fontWeight={700}
               >
                 {singleExercise.calories} кКал.
               </Text>
             </div>
 
-            <Heading fontSize="2rem">
+            <Heading fontSize='2rem'>
               КОЛИЧЕСТВО БАЛЛОВ ЗА ВЫПОЛНЕННОЕ ДЕЙСТВИЕ:
             </Heading>
             <div
@@ -146,12 +148,12 @@ export default function SingleExercisePage() {
             >
               {exp}
               <Text
-                fontSize="1.3rem"
-                lineHeight="1.6"
-                textAlign="justify"
-                marginRight="0.25rem"
+                fontSize='1.3rem'
+                lineHeight='1.6'
+                textAlign='justify'
+                marginRight='0.25rem'
                 fontWeight={700}
-                marginLeft="0.5rem"
+                marginLeft='0.5rem'
               >
                 {singleExercise.points} pts.
               </Text>
@@ -160,9 +162,9 @@ export default function SingleExercisePage() {
             <Button
               color={{ base: 'white', _dark: 'white' }}
               marginY={20}
-              variant="outline"
-              backgroundColor="green.700"
-              borderColor="green.700"
+              variant='outline'
+              backgroundColor='green.700'
+              borderColor='green.700'
               borderRadius={10}
               height={50}
               onClick={redirectHandler}

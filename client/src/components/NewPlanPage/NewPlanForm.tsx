@@ -16,7 +16,7 @@ import {
   Text,
   Textarea,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Field } from '@/components/ui/field';
 import { Avatar } from '@/components/ui/avatar';
 import axiosInstance from '@/axiosInstance';
@@ -30,8 +30,9 @@ import { CiCalendar } from 'react-icons/ci';
 import { useNavigate } from 'react-router-dom';
 import { Toaster, toaster } from '@/components/ui/toaster';
 
-export default function NewPlanForm() {
-  const { VITE_API } = import.meta.env;
+ function NewPlanForm() {
+  const { VITE_API } = import.meta.env  
+  
   const [plan, setPlan] = useState<PlanType>({
     name: '',
     shortDescription: '',
@@ -66,26 +67,29 @@ export default function NewPlanForm() {
     fetchExercises();
   }, []);
 
-  const handleChange = (field: keyof PlanType, value: string | number) => {
-    setPlan((prevPlan) => ({ ...prevPlan, [field]: value }));
-  };
+  const handleChange = useCallback(
+    (field: keyof PlanType, value: string | number) => {
+      setPlan((prevPlan) => ({ ...prevPlan, [field]: value }));
+    },
+    []
+  );
 
-  const handleChangeDay = (
-    field: keyof DayExercise,
-    index: number,
-    value: string | number
-  ) => {
-    setDays((prevDays) =>
-      prevDays.map((day, ind) =>
-        ind === index ? { ...day, [field]: value } : day
-      )
-    );
-  };
+  const handleChangeDay = useCallback(
+    (field: keyof DayExercise, index: number, value: string | number) => {
+      setDays((prevDays) => {
+        const newDays = [...prevDays];
+        newDays[index] = { ...newDays[index], [field]: value };
+        return newDays;
+      });
+    },
+    []
+  );
 
-  const addDay = () => {
+  const addDay = useCallback(() => {
     setDays((prevDays) => [
       ...prevDays,
       {
+        planId: 0,
         points: 0,
         description: '',
         title: '',
@@ -93,11 +97,10 @@ export default function NewPlanForm() {
         target: '',
         rounds: 0,
         calories: 0,
-        Exercises: [] as ExerciseType[],
+        Exercises: [],
       } as DayExercise,
     ]);
-  };
-
+  }, []);
   const addExercise = (dayIndex: number) => {
     setDays((prevDays) => {
       const updatedDays = [...prevDays];
@@ -106,116 +109,137 @@ export default function NewPlanForm() {
     });
   };
   // const navigate = useNavigate();
-
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     try {
       const create = await axiosInstance.post(`${VITE_API}/days/newPlan/day/exercises`, {
         ...plan,
         days,
       });
-      setPlan({
-        name: '',
-        shortDescription: '',
-        longDescription: '',
-        equipment: '',
-        difficulty: '',
-        image: '',
-        slogan: '',
-        numOfTrainings: 0,
-        weeksDescription: '',
-        UserDays: [],
-      });
 
-      setSelectDifficulty([]);
-      setDays([]);
       if (create) {
+        setPlan({
+          name: '',
+          shortDescription: '',
+          longDescription: '',
+          equipment: '',
+          difficulty: '',
+          image: '',
+          slogan: '',
+          numOfTrainings: 0,
+          weeksDescription: '',
+          UserDays: [],
+        });
+
+        setSelectDifficulty([]);
+        setDays([]);
+        
         toaster.create({
           title: 'Новый план создан',
           description: 'Ваш план был успешно добавлен в список планов!',
           type: 'success',
           duration: 5000,
         });
-        setTimeout(function () {
+
+        setTimeout(() => {
           navigate(`/plans`);
         }, 2000);
-      } else {
-        toaster.create({
-          title: 'Ошибка.',
-          description:
-            'Произошла ошибка при создании плана. Пожалуйста, попробуйте еще раз.',
-          type: 'warning',
-          duration: 5000,
-        });
       }
     } catch (error) {
-      setError('Ошибка при создании плана');
       console.error(error);
+      toaster.create({
+        title: 'Ошибка.',
+        description: 'Произошла ошибка при создании плана. Пожалуйста, попробуйте еще раз.',
+        type: 'warning',
+        duration: 5000,
+      });
     }
-  };
+  }, [plan, days, navigate]);
 
-  const difficultyOptions = createListCollection({
-    items: [
-      { value: 'easy', label: 'Низкая' },
-      { value: 'medium', label: 'Средняя' },
-      { value: 'hard', label: 'Высокая' },
-    ],
-  });
 
-  const exercisesOptions = createListCollection({
-    items: allExercises.map((exercise) => ({
-      value: exercise.id,
-      points: exercise.points,
-      label: exercise.name,
-      calories: exercise.calories,
-      image: exercise.image,
-    })),
-  });
 
-  const typeOptions = createListCollection({
-    items: [
-      { value: 'ASAP', label: 'ASAP - На скорость' },
-      { value: 'AMRAP', label: 'AMRAP - На количество' },
-      { value: 'No Time', label: 'No Time - Без учета времени' },
-    ],
-  });
+  const difficultyOptions = useMemo(
+    () =>
+      createListCollection({
+        items: [
+          { value: 'easy', label: 'Низкая' },
+          { value: 'medium', label: 'Средняя' },
+          { value: 'hard', label: 'Высокая' },
+        ],
+      }),
+    []
+  );
 
-  const targetOptions = createListCollection({
-    items: [
-      {
-        value: 'Закончить задание за минимальное время',
-        label: 'Закончить задание за минимальное время',
-      },
-      {
-        value: 'Завершить как можно больше раундов за 20 минут',
-        label: 'Завершить как можно больше раундов за 20 минут',
-      },
-      {
-        value: 'Закончить как можно больше раундов за 25 минут',
-        label: 'Закончить как можно больше раундов за 25 минут',
-      },
-      { value: 'грудь + трицепс + дельты', label: 'грудь + трицепс + дельты' },
-      { value: 'спина + грудь + дельты', label: 'спина + грудь + дельты' },
-    ],
-  });
+  const exercisesOptions = useMemo(
+    () =>
+      createListCollection({
+        items: allExercises.map((exercise) => ({
+          value: exercise.id,
+          points: exercise.points,
+          label: exercise.name,
+          calories: exercise.calories,
+          image: exercise.image,
+        })),
+      }),
+    [allExercises]
+  );
+  const typeOptions = useMemo(
+    () =>
+      createListCollection({
+        items: [
+          { value: 'ASAP', label: 'ASAP - На скорость' },
+          { value: 'AMRAP', label: 'AMRAP - На количество' },
+          { value: 'No Time', label: 'No Time - Без учета времени' },
+        ],
+      }),
+    []
+  );
+
+  const targetOptions = useMemo(
+    () =>
+      createListCollection({
+        items: [
+          {
+            value: 'Закончить задание за минимальное время',
+            label: 'Закончить задание за минимальное время',
+          },
+          {
+            value: 'Завершить как можно больше раундов за 20 минут',
+            label: 'Завершить как можно больше раундов за 20 минут',
+          },
+          {
+            value: 'Закончить как можно больше раундов за 25 минут',
+            label: 'Закончить как можно больше раундов за 25 минут',
+          },
+          {
+            value: 'грудь + трицепс + дельты',
+            label: 'грудь + трицепс + дельты',
+          },
+          { value: 'спина + грудь + дельты', label: 'спина + грудь + дельты' },
+        ],
+      }),
+    []
+  );
 
   const textColor = useColorModeValue('black', 'white');
 
-  const updatePoints = (dayIndex: number, field: string, value: number) => {
+  const updatePoints = useCallback((dayIndex: number, field: string, value: number) => {
     setDays((prevDays) => {
-      const updatedDays = [...prevDays];
-      updatedDays[dayIndex] = {
-        ...updatedDays[dayIndex],
+      const newDays = [...prevDays];
+      newDays[dayIndex] = {
+        ...newDays[dayIndex],
         [field]: value,
       };
-      return updatedDays;
+      return newDays;
     });
-  };
+  }, []);
 
-  const updateExercises = (dayIndex: number, exercises: ExerciseType[]) => {
-    const updatedDays = [...days];
-    updatedDays[dayIndex].Exercises = exercises;
-    setDays(updatedDays);
-  };
+  const updateExercises = useCallback((dayIndex: number, exercises: ExerciseType[]) => {
+    setDays((prevDays) => {
+      const newDays = [...prevDays];
+      newDays[dayIndex].Exercises = exercises;
+      return newDays;
+    });
+  }, []);
 
   return (
     <>
@@ -515,6 +539,7 @@ export default function NewPlanForm() {
                     value={day.points}
                     p={3}
                     disabled
+                    _disabled={{ opacity: 1, color: 'inherit' }}
                     borderRadius='xl'
                     onChange={(e) =>
                       updatePoints(dayIndex, 'points', Number(e.target.value))
@@ -528,6 +553,7 @@ export default function NewPlanForm() {
                     value={day.calories}
                     p={3}
                     disabled
+                    _disabled={{ opacity: 1, color: 'inherit' }}
                     borderRadius='xl'
                     onChange={(e) =>
                       updatePoints(dayIndex, 'calories', Number(e.target.value))
@@ -547,7 +573,8 @@ export default function NewPlanForm() {
                         label='Выберите упражнение'
                       >
                         <SelectRoot
-                          color='gray.600'
+                          opacity={1}
+                          color='inherit'
                           collection={exercisesOptions}
                           onValueChange={(ValueChangeDetails) => {
                             const selectedExerciseId = Array.isArray(
@@ -603,7 +630,7 @@ export default function NewPlanForm() {
                             updatePoints(dayIndex, 'calories', totalCalories);
                           }}
                         >
-                          <SelectTrigger p={2} borderRadius={5}>
+                          <SelectTrigger p={2} borderRadius={5} >
                             <SelectValueText placeholder='Выберите упражнение'>
                               {exercise
                                 ? exercisesOptions.items.find(
@@ -612,7 +639,7 @@ export default function NewPlanForm() {
                                 : ''}
                             </SelectValueText>
                           </SelectTrigger>
-                          <SelectContent p={4} color={textColor}>
+                          <SelectContent p={4} color={textColor} >
                             {exercisesOptions.items.map((option) => (
                               <SelectItem
                                 item={option}
@@ -666,3 +693,4 @@ export default function NewPlanForm() {
     </>
   );
 }
+export default React.memo(NewPlanForm);

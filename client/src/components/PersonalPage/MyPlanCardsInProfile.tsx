@@ -15,7 +15,7 @@ export default function MyPlanCardsInProfile({plan, removePlanHandler}: MyPlanCa
       <Text fontWeight='bold'>
         Название плана: {plan.Plan?.name || 'Не указано'}
       </Text>
-      <Text>Статус: {plan.isCompleted ? 'Завершен' : 'В процессе'}</Text>
+      {/* <Text>Статус: {plan.isCompleted ? 'Завершен' : 'В процессе'}</Text> */}
       {plan.Plan?.image && (
         <Image
           src={plan.Plan.image}

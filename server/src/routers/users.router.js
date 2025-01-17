@@ -111,7 +111,7 @@ router.put(
       const user = await User.findByPk(userId);
       user.isBlocked = true;
       await user.save();
-      return res.status(200).json({ message: 'Пользователь заблокирован' });
+      return res.status(200).json({ message: 'Пользователь заблокирован. Свяжитесь с администраторами' });
     } catch (error) {
       console.error('Upload avatar error:', error);
       if (req.file) {

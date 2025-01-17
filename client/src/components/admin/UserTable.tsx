@@ -128,12 +128,13 @@ const UserTable = () => {
         <InputGroup
           flex="1"
           startElement={
-            <Box>
+            <Box ml={1}>
               <IoSearch color={lupacolor} size={20} />
             </Box>
           }
         >
           <Input
+          ml={2}
             placeholder="Поиск..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -210,7 +211,7 @@ const UserTable = () => {
                       }}
                     >
                       <Text cursor="pointer">
-                        {user?.goal.length > 15
+                        {user?.goal && user?.goal.length > 15
                           ? user?.goal.slice(0, 15) + '...'
                           : user?.goal}
                       </Text>

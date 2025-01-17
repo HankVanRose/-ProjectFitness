@@ -800,7 +800,7 @@ module.exports = {
       },
       {
         name: 'Выбросы одной гири двумя руками',
-        image: 'https://example.com/image-kettlebell-throws.png',
+        image: 'https://recordregion.ru/wp-content/uploads/7/f/8/7f8295381655962a1dcc782854e68f30.jpeg',
         shortDescription:
           'Выбросы гири двумя руками — упражнение для развития силы и координации.',
         shortMuscleGroup: 'Основные группы мышц: руки, плечи, корпус, ноги.',
