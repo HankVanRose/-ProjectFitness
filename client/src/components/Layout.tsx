@@ -10,7 +10,9 @@ export default function Layout() {
         <Header />
       </Box>
 
-      <Outlet />
+      <div style={{ minHeight: '100vh' }}>
+        <Outlet />
+      </div>
 
       <Box as="footer" p={4}>
         <Footer />
