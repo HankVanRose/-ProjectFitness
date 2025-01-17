@@ -1,12 +1,12 @@
 import './App.css';
 import { Suspense, lazy } from 'react';
 
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom'; // Add Navigate
 
 import Layout from './components/Layout';
 
 import { useEffect } from 'react';
-import { useAppDispatch } from './store/hooks/hooks';
+import { useAppDispatch, useAppSelector } from './store/hooks/hooks'; // Add useAppSelector
 import { fetchUserCheck } from './store/thunkActions';
 
 import HomePage from './components/HomePage/HomePage';
@@ -34,15 +34,34 @@ const UserPlansPage = lazy(
   () => import('./components/UserPlansPage/UserPlansPage')
 );
 
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const user = useAppSelector((state) => state.appSlice.user); 
+
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
+};
+
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const user = useAppSelector((state) => state.appSlice.user); 
+
+  if (!user?.isAdmin) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
+};
+
 function App() {
   const dispatch = useAppDispatch();
+  const bgColor = useColorModeValue('white', 'black');
+  const textColor = useColorModeValue('black', 'white');
 
   useEffect(() => {
     dispatch(fetchUserCheck());
   }, [dispatch]);
-
-  const bgColor = useColorModeValue('white', 'black');
-  const textColor = useColorModeValue('black', 'white');
 
   return (
     <Box bg={bgColor} minH="100vh" color={textColor}>
@@ -56,92 +75,125 @@ function App() {
               </Suspense>
             }
           />
+
           <Route
             path="/plans"
             element={
-              <Suspense fallback={<LoadingFallback />}>
-                <PlansBlock />
-              </Suspense>
+              <ProtectedRoute>
+                <Suspense fallback={<LoadingFallback />}>
+                  <PlansBlock />
+                </Suspense>
+              </ProtectedRoute>
             }
           />
+
           <Route
             path="/exercises"
             element={
-              <Suspense fallback={<LoadingFallback />}>
-                <AllExercisesPage />
-              </Suspense>
+              <ProtectedRoute>
+                <Suspense fallback={<LoadingFallback />}>
+                  <AllExercisesPage />
+                </Suspense>
+              </ProtectedRoute>
             }
           />
+
           <Route
             path="/exercises/:id"
             element={
-              <Suspense fallback={<LoadingFallback />}>
-                <SingleExercisePage />
-              </Suspense>
+              <ProtectedRoute>
+                <Suspense fallback={<LoadingFallback />}>
+                  <SingleExercisePage />
+                </Suspense>
+              </ProtectedRoute>
             }
           />
+
           <Route
             path="/account"
             element={
-              <Suspense fallback={<LoadingFallback />}>
-                <PersonalPage />
-              </Suspense>
+              <ProtectedRoute>
+                <Suspense fallback={<LoadingFallback />}>
+                  <PersonalPage />
+                </Suspense>
+              </ProtectedRoute>
             }
           />
-          <Route
-            path="/plans/:id"
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <PlanPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/plans/:id/days"
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <UserDaysList />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/plans/new"
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <NewPlanForm />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/exercise/new"
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <ExerciseForm />
-              </Suspense>
-            }
-          />
+
           <Route
             path="/admin"
             element={
-              <Suspense fallback={<LoadingFallback />}>
-                <AdminPage />
-              </Suspense>
+              <AdminRoute>
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminPage />
+                </Suspense>
+              </AdminRoute>
             }
           />
+
+          <Route
+            path="/exercise/new"
+            element={
+              <AdminRoute>
+                <Suspense fallback={<LoadingFallback />}>
+                  <ExerciseForm />
+                </Suspense>
+              </AdminRoute>
+            }
+          />
+
+          <Route
+            path="/plans/:id"
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<LoadingFallback />}>
+                  <PlanPage />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/plans/:id/days"
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<LoadingFallback />}>
+                  <UserDaysList />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/plans/new"
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<LoadingFallback />}>
+                  <NewPlanForm />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/calendar"
             element={
-              <Suspense fallback={<LoadingFallback />}>
-                <CalendarPage />
-              </Suspense>
+              <ProtectedRoute>
+                <Suspense fallback={<LoadingFallback />}>
+                  <CalendarPage />
+                </Suspense>
+              </ProtectedRoute>
             }
           />
+
           <Route
             path="/:userId/userplans"
             element={
-              <Suspense fallback={<LoadingFallback />}>
-                <UserPlansPage />
-              </Suspense>
+              <ProtectedRoute>
+                <Suspense fallback={<LoadingFallback />}>
+                  <UserPlansPage />
+                </Suspense>
+              </ProtectedRoute>
             }
           />
         </Route>
