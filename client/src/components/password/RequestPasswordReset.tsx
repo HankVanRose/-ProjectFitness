@@ -11,7 +11,7 @@ const RequestPasswordReset = () => {
             const response = await axiosInstance.post('/api/auth/request-reset', { email });
             setStatus('Письмо с подтверждением отправлено!');
         } catch (error) {
-            setStatus('Произошла ошибка, попробуйте снова.');
+            setStatus('Произошла ошибка, попробуйте сноваs.');
         }
     };
 
