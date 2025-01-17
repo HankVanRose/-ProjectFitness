@@ -132,7 +132,7 @@ export default function NewMainPage() {
                   >
                     <Box as="span" display="flex" alignItems="center" gap={2}>
                       <FiArrowRight />
-                      Начать Трансформацию!
+                      Начать Трансформацию
                     </Box>
                   </Button>
                 </MotionBox>
@@ -143,7 +143,7 @@ export default function NewMainPage() {
         <Separator size="lg" />
 
         <Box py={20} bg={useColorModeValue('gray.50', 'gray.900')}>
-          <Container maxW="container.xl">
+          <Flex   justify="center" alignItems={'center'}>
             <Stack>
               <Stack textAlign="center">
                 <Heading>Почему выбирают BE FIT?</Heading>
@@ -155,7 +155,7 @@ export default function NewMainPage() {
 
               <Flex flexWrap="wrap" justify="center" gap={8} mt={5}>
                 {features.map((feature, index) => (
-                  <MotionBox
+                  <MotionBox  
                     key={feature.title}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -184,7 +184,7 @@ export default function NewMainPage() {
                 ))}
               </Flex>
             </Stack>
-          </Container>
+          </Flex>
         </Box>
       </Box>
       <Separator size="lg" />

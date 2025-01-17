@@ -38,7 +38,7 @@ module.exports = {
         {
           username: 'Алексей Шарапов',
           email: 'alexei@example.com',
-          avatar: 'https://avatars.githubusercontent.com/u/113192811?v=4',
+          avatar: '../../public/lexa.jpg',
           password: await bcrypt.hash('11111111', 10),
 
           gender: 'female',
